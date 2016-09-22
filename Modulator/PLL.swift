@@ -20,34 +20,33 @@ class PLL {
         self.baud = baud
     }
     
-    func findSamples(data: [Float]) {
+    func findSamples(_ data: [Float]) {
         
     }
     
-    private func findZeroCrossings(data: [Float]) -> [Int32] {
+    fileprivate func findZeroCrossings(_ data: [Float]) -> [Int32] {
         let coefficients: [Double] = [1.0, -1.0, 0.0, 0, 0]
         let biquadFilter: vDSP_biquad_Setup = vDSP_biquad_CreateSetup(
-            coefficients, 1)
+            coefficients, 1)!
         var delayState: [Float] = [0, 0]
         
         var limit : Float = 0;
         var signValue : Float = 1;
-        var signData = [Float](count: data.count, repeatedValue: 0.0)
+        var signData = [Float](repeating: 0.0, count: data.count)
         
         vDSP_vlim(data, 1, &limit, &signValue, &signData, 1, vDSP_Length(data.count))
         
-        var diffData = [Float](count: data.count + 2, repeatedValue: 0.0)
+        var diffData = [Float](repeating: 0.0, count: data.count + 2)
         let N: vDSP_Length = UInt(data.count)
         vDSP_biquad(biquadFilter, &delayState, signData, 1, &diffData, 1, N)
         
         
-        var indexData = [Float](count: data.count + 2, repeatedValue: 0.0)
+        var indexData = [Float](repeating: 0.0, count: data.count + 2)
         var rampStart : Float = 0
         var rampStep : Float = 0.5
         vDSP_vrampmul(diffData, 1, &rampStart, &rampStep, &indexData, 1, vDSP_Length(data.count + 2))
         
-        var outputIndices = [Float](count: data.count + 2, repeatedValue
-            : 0.0)
+        var outputIndices = [Float](repeating: 0.0, count: data.count + 2)
         
         vDSP_vcmprs(indexData, 1, indexData, 1, &outputIndices, 1, vDSP_Length(data.count + 2))
         
@@ -60,7 +59,7 @@ class PLL {
         }
         
         outputIndices.removeLast(data.count + 1 - counter)
-        var output = [Int32](count: outputIndices.count, repeatedValue: 0)
+        var output = [Int32](repeating: 0, count: outputIndices.count)
         
         vDSP_vfixr32(outputIndices, 1, &output, 1, vDSP_Length(outputIndices.count))
         

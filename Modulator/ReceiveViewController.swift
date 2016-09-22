@@ -14,7 +14,7 @@ class ReceiveViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         NSLog("Lit")
-        let ai : AudioInput = AudioInput(sampleBlockSize: 1024)
+        let ai : SAMicrophoneInput = SAMicrophoneInput()
         ai.startAudioIn()
     }
 

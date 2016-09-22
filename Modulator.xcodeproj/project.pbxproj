@@ -18,11 +18,14 @@
 		6120EE891D38BB0F003F92E8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6120EE871D38BB0F003F92E8 /* LaunchScreen.storyboard */; };
 		6120EE941D38BB0F003F92E8 /* ModulatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6120EE931D38BB0F003F92E8 /* ModulatorTests.swift */; };
 		6120EE9F1D38BB0F003F92E8 /* ModulatorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6120EE9E1D38BB0F003F92E8 /* ModulatorUITests.swift */; };
-		6120EEB81D38C13A003F92E8 /* AudioOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6120EEB71D38C13A003F92E8 /* AudioOutput.swift */; };
-		612468291D5AF72000D1E42A /* AudioInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612468281D5AF72000D1E42A /* AudioInput.swift */; };
 		6124682B1D5AF73900D1E42A /* Listener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6124682A1D5AF73900D1E42A /* Listener.swift */; };
+		612646011D92848F0081C6CE /* ComplexFIRFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612646001D92848F0081C6CE /* ComplexFIRFilter.swift */; };
+		612646031D9298AF0081C6CE /* BufferUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612646021D9298AF0081C6CE /* BufferUtils.swift */; };
+		615410551D920B8800A7ABFF /* SAMicrophoneInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 615410541D920B8800A7ABFF /* SAMicrophoneInput.m */; };
 		61878FBB1D40B850003EE788 /* PLL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61878FBA1D40B850003EE788 /* PLL.swift */; };
 		61878FBD1D40BD73003EE788 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61878FBC1D40BD73003EE788 /* Accelerate.framework */; };
+		61E758FA1D930F220009E22B /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E758F91D930F220009E22B /* Utils.swift */; };
+		61E758FC1D93A7560009E22B /* UtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E758FB1D93A7560009E22B /* UtilsTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,11 +76,16 @@
 		6120EE9A1D38BB0F003F92E8 /* ModulatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ModulatorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6120EE9E1D38BB0F003F92E8 /* ModulatorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModulatorUITests.swift; sourceTree = "<group>"; };
 		6120EEA01D38BB0F003F92E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6120EEB71D38C13A003F92E8 /* AudioOutput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AudioOutput.swift; path = ../AudioOutput.swift; sourceTree = "<group>"; };
-		612468281D5AF72000D1E42A /* AudioInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioInput.swift; sourceTree = "<group>"; };
 		6124682A1D5AF73900D1E42A /* Listener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Listener.swift; sourceTree = "<group>"; };
+		612646001D92848F0081C6CE /* ComplexFIRFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComplexFIRFilter.swift; sourceTree = "<group>"; };
+		612646021D9298AF0081C6CE /* BufferUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferUtils.swift; sourceTree = "<group>"; };
+		615410521D920B8700A7ABFF /* Modulator-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Modulator-Bridging-Header.h"; sourceTree = "<group>"; };
+		615410531D920B8800A7ABFF /* SAMicrophoneInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMicrophoneInput.h; sourceTree = "<group>"; };
+		615410541D920B8800A7ABFF /* SAMicrophoneInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMicrophoneInput.m; sourceTree = "<group>"; };
 		61878FBA1D40B850003EE788 /* PLL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PLL.swift; sourceTree = "<group>"; };
 		61878FBC1D40BD73003EE788 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		61E758F91D930F220009E22B /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		61E758FB1D93A7560009E22B /* UtilsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilsTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				611B8E8E1D6C31C60062E704 /* FIRFilterTests.swift */,
+				61E758FB1D93A7560009E22B /* UtilsTests.swift */,
 			);
 			name = ModelTests;
 			sourceTree = "<group>";
@@ -173,11 +182,15 @@
 		612468271D5AF6F700D1E42A /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				6120EEB71D38C13A003F92E8 /* AudioOutput.swift */,
-				612468281D5AF72000D1E42A /* AudioInput.swift */,
+				615410531D920B8800A7ABFF /* SAMicrophoneInput.h */,
+				615410541D920B8800A7ABFF /* SAMicrophoneInput.m */,
 				6124682A1D5AF73900D1E42A /* Listener.swift */,
 				611B8E891D6A378C0062E704 /* FilterContainer.swift */,
 				611B8E8B1D6A3D530062E704 /* FIRFilter.swift */,
+				615410521D920B8700A7ABFF /* Modulator-Bridging-Header.h */,
+				612646001D92848F0081C6CE /* ComplexFIRFilter.swift */,
+				612646021D9298AF0081C6CE /* BufferUtils.swift */,
+				61E758F91D930F220009E22B /* Utils.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -246,19 +259,22 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = dimnsionofsound;
 				TargetAttributes = {
 					6120EE7A1D38BB0F003F92E8 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = YR937RG9QX;
+						LastSwiftMigration = 0800;
 					};
 					6120EE8E1D38BB0F003F92E8 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
 						TestTargetID = 6120EE7A1D38BB0F003F92E8;
 					};
 					6120EE991D38BB0F003F92E8 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
 						TestTargetID = 6120EE7A1D38BB0F003F92E8;
 					};
 				};
@@ -315,13 +331,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				612646011D92848F0081C6CE /* ComplexFIRFilter.swift in Sources */,
 				61878FBB1D40B850003EE788 /* PLL.swift in Sources */,
 				611B8E8A1D6A378C0062E704 /* FilterContainer.swift in Sources */,
+				615410551D920B8800A7ABFF /* SAMicrophoneInput.m in Sources */,
 				6124682B1D5AF73900D1E42A /* Listener.swift in Sources */,
+				61E758FA1D930F220009E22B /* Utils.swift in Sources */,
 				6120EE811D38BB0F003F92E8 /* ReceiveViewController.swift in Sources */,
-				6120EEB81D38C13A003F92E8 /* AudioOutput.swift in Sources */,
 				611B8E8C1D6A3D530062E704 /* FIRFilter.swift in Sources */,
-				612468291D5AF72000D1E42A /* AudioInput.swift in Sources */,
+				612646031D9298AF0081C6CE /* BufferUtils.swift in Sources */,
 				6120EE7F1D38BB0F003F92E8 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -333,6 +351,7 @@
 				6120EE941D38BB0F003F92E8 /* ModulatorTests.swift in Sources */,
 				611B8E8F1D6C31C60062E704 /* FIRFilterTests.swift in Sources */,
 				611B8E911D6C375B0062E704 /* Utils.swift in Sources */,
+				61E758FC1D93A7560009E22B /* UtilsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,8 +412,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -439,8 +460,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -459,6 +482,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -468,6 +492,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = YR937RG9QX;
@@ -477,6 +502,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.dimnsionofsound.Modulator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Modulator/Modulator-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -484,6 +512,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = YR937RG9QX;
@@ -493,6 +522,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.dimnsionofsound.Modulator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Modulator/Modulator-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -504,6 +535,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dimnsionofsound.ModulatorTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Modulator.app/Modulator";
 			};
 			name = Debug;
@@ -516,6 +548,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dimnsionofsound.ModulatorTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Modulator.app/Modulator";
 			};
 			name = Release;
@@ -527,6 +560,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dimnsionofsound.ModulatorUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = Modulator;
 			};
 			name = Debug;
@@ -538,6 +572,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dimnsionofsound.ModulatorUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = Modulator;
 			};
 			name = Release;

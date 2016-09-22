@@ -12,19 +12,19 @@ import AVFoundation
 
 var myInstance : AudioInput?
 
-func processBufferGlobal(inUserData : UnsafeMutablePointer<Void>,
+func processBufferGlobal(_ inUserData : UnsafeMutableRawPointer?,
                        _ inAQ : AudioQueueRef,
                        _ inBuffer : AudioQueueBufferRef,
                        _ inStartTime : UnsafePointer<AudioTimeStamp>,
                        _ inNumberPacketDescriptions : UInt32,
-                       _ inPacketDescriptions : UnsafePointer<AudioStreamPacketDescription>) -> (){
+                       _ inPacketDescriptions : UnsafePointer<AudioStreamPacketDescription>?) -> (){
    myInstance!.processBuffer(inUserData, inAQ, inBuffer, inStartTime, inNumberPacketDescriptions, inPacketDescriptions)
 }
 
 struct AQInputState {
     var mDataFormat : AudioStreamBasicDescription?
     var mQueue : AudioQueueRef?
-    var mBuffers : [AudioQueueBufferRef]?
+    var mBuffers : [AudioQueueBufferRef?]?
     var bufferByteSize : UInt32?
     var mIsRunning : Bool?
 }
@@ -36,9 +36,10 @@ class AudioInput {
     var sampleBlockSize : UInt32
     
     init(sampleBlockSize: UInt32 = 2048) {
+        var dummyBufferRef : AudioQueueBufferRef? = AudioQueueBufferRef(bitPattern: 0)
         state = AQInputState()
         state.mQueue = AudioQueueRef(bitPattern: 0)
-        state.mBuffers = [AudioQueueBufferRef](count: kNumberBuffers, repeatedValue: AudioQueueBufferRef(bitPattern: 0))
+        state.mBuffers = [AudioQueueBufferRef?](repeating: dummyBufferRef, count: kNumberBuffers)
         self.sampleBlockSize = sampleBlockSize
         myInstance = self
     }
@@ -52,8 +53,16 @@ class AudioInput {
         
         assert(state.mQueue == AudioQueueRef(bitPattern: 0), "Queue is already set up")
         
+        var theQueue = state.mQueue
+        
         let status : OSStatus =
-            AudioQueueNewInput(&format!, processBufferGlobal, &state, nil, nil, 0, &state.mQueue!)
+            AudioQueueNewInput(&format!,
+                            processBufferGlobal,
+                            &state,
+                            nil,
+                            nil,
+                            0,
+                            &theQueue)
         
         allocateBuffers()
         
@@ -75,14 +84,17 @@ class AudioInput {
     */
     
     
-    func processBuffer(inUserData : UnsafeMutablePointer<Void>?,
+    func processBuffer(_ inUserData : UnsafeMutableRawPointer?,
                        _ inAQ : AudioQueueRef,
                        _ inBuffer : AudioQueueBufferRef,
                        _ inStartTime : UnsafePointer<AudioTimeStamp>,
                        _ inNumberPacketDescriptions : UInt32,
                        _ inPacketDescriptions : UnsafePointer<AudioStreamPacketDescription>?) -> Void{
-        NSLog("First sample: " + String(inBuffer.memory.mAudioData[0]))
-        NSLog("Length: " + String(inBuffer.memory.mAudioDataByteSize))
+        
+        let firstInt = inBuffer.pointee.mAudioData.load(as: Int16.self)
+        
+        NSLog("First sample: " + String(firstInt))
+        NSLog("Length: " + String(inBuffer.pointee.mAudioDataByteSize))
         
         var status : OSStatus = AudioQueueEnqueueBuffer(inAQ, inBuffer, 0, nil)
         if (status != noErr) {
@@ -145,7 +157,7 @@ class AudioInput {
         
     }
     
-    func bufferSizeForSamples(samples : UInt32) -> UInt32 {
+    func bufferSizeForSamples(_ samples : UInt32) -> UInt32 {
         let maxPacketSize = format?.mBytesPerPacket
         return maxPacketSize! * samples;
     }
@@ -157,7 +169,7 @@ class AudioInput {
             if (status != noErr) {
                 NSLog("Error allocating buffers, \(status)")
             }
-            status = AudioQueueEnqueueBuffer(state.mQueue!, state.mBuffers![i], 0, nil)
+            status = AudioQueueEnqueueBuffer(state.mQueue!, state.mBuffers![i]!, 0, nil)
             if (status != noErr) {
                 NSLog("Error enqueuing buffers, \(status)")
             }

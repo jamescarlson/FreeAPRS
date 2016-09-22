@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import Accelerate
 @testable import Modulator
 
 class ModulatorTests: XCTestCase {
@@ -21,15 +22,44 @@ class ModulatorTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testFFTPerformance() {
+        // This is an example of a performance test case.
+        var fftsetup = vDSP_create_fftsetup(vDSP_Length(12), FFTRadix(kFFTRadix2))
+
+        var dummyData = [Float](repeating: 1, count: 4096)
+        var dummyImagData = [Float](repeating: -1, count: 4096)
+        
+        var dummyDataForOutput = [Float](repeating: 0, count:4096)
+        var dummyDataForImagOutpt = [Float](repeating: 0, count: 4096)
+        
+        
+        var inputComplexData = DSPSplitComplex(realp: &dummyData, imagp: &dummyImagData)
+        var outputComplexData = DSPSplitComplex(realp: &dummyDataForOutput, imagp: &dummyDataForImagOutpt)
+        
+        self.measure {
+            // Put the code you want to measure the time of here.
+            for i in 0..<10000 {
+                vDSP_fft_zop(fftsetup!, &inputComplexData, 1, &outputComplexData, 1, 12, -1)
+            }
+            
+        }
     }
     
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock {
-            // Put the code you want to measure the time of here.
+    func testDFTPerformance() {
+        var dftsetup = vDSP_DFT_zop_CreateSetup(nil, 4096, vDSP_DFT_Direction.FORWARD)
+        
+        var dummyData = [Float](repeating: 1, count: 4096)
+        var dummyImagData = [Float](repeating: -1, count: 4096)
+        
+        var dummyDataForOutput = [Float](repeating: 0, count:4096)
+        var dummyDataForImagOutpt = [Float](repeating: 0, count: 4096)
+        
+        
+        self.measure {
+            for i in 0..<10000 {
+                vDSP_DFT_Execute(dftsetup!, dummyData, dummyImagData, &dummyDataForOutput, &dummyDataForImagOutpt)
+            }
+            
         }
     }
     

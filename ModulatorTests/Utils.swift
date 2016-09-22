@@ -8,11 +8,11 @@
 
 import Foundation
 
-public func approximatelyEqualTo(a : Float, b : Float, eps: Float) -> Bool {
+public func approximatelyEqualTo(_ a : Float, b : Float, eps: Float) -> Bool {
     return fabs(a - b) <= eps
 }
 
-public func arrayApproximatelyEqualTo(a : [Float], b : [Float], eps: Float) -> Bool {
+public func arrayApproximatelyEqualTo(_ a : [Float], b : [Float], eps: Float) -> Bool {
     if (a.count != b.count) {
         return false
     }

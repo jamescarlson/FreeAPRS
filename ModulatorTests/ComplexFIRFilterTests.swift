@@ -9,9 +9,10 @@
 import Foundation
 
 import XCTest
+import Accelerate
 @testable import Modulator
 
-class FIRFilterTests: XCTestCase {
+class ComplexFIRFilterTests : XCTestCase {
     
     let absoluteAdditivePrecision = Float(0.01)
     
@@ -27,42 +28,47 @@ class FIRFilterTests: XCTestCase {
     
     func testBasicConvolve() {
         
-        var impulse20Samples = [Float](repeating: 0.0, count: 20)
+        var impulse20Samples = SplitComplex(repeating: 0.0, count: 16)
         let oneThird = Float(1.0 / 3.0)
-        let averageThree = [Float](repeating: oneThird, count: 3)
-        impulse20Samples[0] = 1.0
-        let filterAvgThree = FIRFilter(kernel: averageThree)
-    
-        var expected = [Float](repeating: 0.0, count: 20)
-        expected[0] = oneThird
-        expected[1] = oneThird
-        expected[2] = oneThird
+        let oneThirdI = DSPComplex(real: 0, imag: (1.0 / 3.0))
+        let averageThreeReal = SplitComplex(real: [Float](repeating: oneThird, count: 3),
+                                        imag: [Float](repeating: 0.0, count: 3))
+        impulse20Samples[0] = DSPComplex(real: 0, imag: 1)
+        let filterAvgThree = ComplexFIRFilter(kernel: averageThreeReal)
         
-        let result = filterAvgThree.filter(&impulse20Samples)
+        var expected = SplitComplex(repeating: 0.0, count: 16)
+        expected[0] = oneThirdI
+        expected[1] = oneThirdI
+        expected[2] = oneThirdI
         
-        XCTAssert(arrayApproximatelyEqualTo(expected, b: result, eps: absoluteAdditivePrecision), "Output should be three samples of 1/3 value.")
+        let result = filterAvgThree.filter(impulse20Samples)
+        
+        XCTAssert(zArrayApproximatelyEqualTo(a: result, b: expected, eps: absoluteAdditivePrecision), "Output should be three samples of 1/3 value.")
     }
     
     func testOverlapAddKernelShorterThanInput() {
         
-        var impulse20Samples = [Float](repeating: 0.0, count: 20)
+        var impulse20Samples = SplitComplex(repeating: 0.0, count: 20)
         let oneThird = Float(1.0 / 3.0)
-        let averageThree = [Float](repeating: oneThird, count: 3)
-        impulse20Samples[0] = 1.0
-        impulse20Samples[19] = 1.0
-        let filterAvgThree = FIRFilter(kernel: averageThree)
+        let oneThirdI = DSPComplex(real: 0, imag: (1.0 / 3.0))
+        let averageThreeReal = SplitComplex(real: [Float](repeating: oneThird, count: 3),
+                                            imag: [Float](repeating: 0.0, count: 3))
+        impulse20Samples[0] = DSPComplex(real: 0, imag: 1)
+        impulse20Samples[19] = DSPComplex(real: 0, imag: 1)
+        let filterAvgThree = ComplexFIRFilter(kernel: averageThreeReal)
         
-        var expected = [Float](repeating: 0.0, count: 20)
-        expected[0] = oneThird * 2
-        expected[1] = oneThird * 2
-        expected[2] = oneThird
-        expected[19] = oneThird
         
-        filterAvgThree.filter(&impulse20Samples)
-        let result = filterAvgThree.filter(&impulse20Samples)
+        var expected = SplitComplex(repeating: 0.0, count: 20)
+        expected[0] = oneThirdI * 2
+        expected[1] = oneThirdI * 2
+        expected[2] = oneThirdI
+        expected[19] = oneThirdI
         
-        XCTAssert(arrayApproximatelyEqualTo(expected, b: result, eps: absoluteAdditivePrecision), "Output of second filtering should have additions from previous convolution.")
-    
+        filterAvgThree.filter(impulse20Samples)
+        let result = filterAvgThree.filter(impulse20Samples)
+        
+        XCTAssert(zArrayApproximatelyEqualTo(a: expected, b: result, eps: absoluteAdditivePrecision), "Output of second filtering should have additions from previous convolution.")
+        
     }
     
     func testOverlapAddKernelLongerThanInputSameBlockLength() {
@@ -118,27 +124,27 @@ class FIRFilterTests: XCTestCase {
         
         XCTAssert(arrayApproximatelyEqualTo(expectedRest, b: resultRest, eps: absoluteAdditivePrecision), "Should get overlap from earlier")
     }
-
+    
     
     func testFIRLowPassCreate() {
         let expectedKernel = [Float](
             [  0.00000000e+00,  -7.16752468e-06,  -8.74319329e-05,
-                -3.25254595e-04,  -7.82753799e-04,  -1.47886031e-03,
-                -2.37249093e-03,  -3.35277359e-03,  -4.23859134e-03,
-                -4.78858276e-03,  -4.72138030e-03,  -3.74445793e-03,
-                -1.58868150e-03,   1.95531383e-03,   7.00331452e-03,
-                1.35506657e-02,   2.14561570e-02,   3.04393811e-02,
-                4.00928192e-02,   4.99082297e-02,   5.93152167e-02,
-                6.77283631e-02,   7.45981994e-02,   7.94607040e-02,
-                8.19800622e-02,   8.19800622e-02,   7.94607040e-02,
-                7.45981994e-02,   6.77283631e-02,   5.93152167e-02,
-                4.99082297e-02,   4.00928192e-02,   3.04393811e-02,
-                2.14561570e-02,   1.35506657e-02,   7.00331452e-03,
-                1.95531383e-03,  -1.58868150e-03,  -3.74445793e-03,
-                -4.72138030e-03,  -4.78858276e-03,  -4.23859134e-03,
-                -3.35277359e-03,  -2.37249093e-03,  -1.47886031e-03,
-                -7.82753799e-04,  -3.25254595e-04,  -8.74319329e-05,
-                -7.16752468e-06,   0.00000000e+00])
+               -3.25254595e-04,  -7.82753799e-04,  -1.47886031e-03,
+               -2.37249093e-03,  -3.35277359e-03,  -4.23859134e-03,
+               -4.78858276e-03,  -4.72138030e-03,  -3.74445793e-03,
+               -1.58868150e-03,   1.95531383e-03,   7.00331452e-03,
+               1.35506657e-02,   2.14561570e-02,   3.04393811e-02,
+               4.00928192e-02,   4.99082297e-02,   5.93152167e-02,
+               6.77283631e-02,   7.45981994e-02,   7.94607040e-02,
+               8.19800622e-02,   8.19800622e-02,   7.94607040e-02,
+               7.45981994e-02,   6.77283631e-02,   5.93152167e-02,
+               4.99082297e-02,   4.00928192e-02,   3.04393811e-02,
+               2.14561570e-02,   1.35506657e-02,   7.00331452e-03,
+               1.95531383e-03,  -1.58868150e-03,  -3.74445793e-03,
+               -4.72138030e-03,  -4.78858276e-03,  -4.23859134e-03,
+               -3.35277359e-03,  -2.37249093e-03,  -1.47886031e-03,
+               -7.82753799e-04,  -3.25254595e-04,  -8.74319329e-05,
+               -7.16752468e-06,   0.00000000e+00])
         let filter2000hz48000fs = FIRFilter(filterType: FilterType.lowpass, length: 50, fs: 48000, cutoff: 2000)
         XCTAssert(arrayApproximatelyEqualTo(expectedKernel, b: filter2000hz48000fs.kernel, eps: absoluteAdditivePrecision),
                   "Sinc filter should match up")
@@ -204,12 +210,12 @@ class FIRFilterTests: XCTestCase {
     }
     
     /*
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-    */
+     func testPerformanceExample() {
+     // This is an example of a performance test case.
+     self.measure {
+     // Put the code you want to measure the time of here.
+     }
+     }
+     */
     
 }

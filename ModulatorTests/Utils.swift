@@ -30,6 +30,19 @@ public func arrayApproximatelyEqualTo(_ a : [Float], b : [Float], eps: Float) ->
     return true
 }
 
+public func arrayEqualTo(a: [UInt8], b: [UInt8]) -> Bool {
+    if (a.count != b.count) {
+        return false
+    }
+    
+    for index in 0..<a.count {
+        if (a[index] != b[index]) {
+            return false
+        }
+    }
+    return true
+}
+
 public func zArrayApproximatelyEqualTo(a: SplitComplex, b: SplitComplex, eps: Float) -> Bool {
     if (a.count != b.count) {
         return false
@@ -40,4 +53,17 @@ public func zArrayApproximatelyEqualTo(a: SplitComplex, b: SplitComplex, eps: Fl
         }
     }
     return true
+}
+
+public func diffBools(a: [Bool], b:[Bool]) -> [Bool] {
+    var output = [Bool]()
+    let minLength = min(a.count, b.count)
+    let maxLength = max(a.count, b.count)
+    
+    for index in 0..<minLength {
+        output.append(a[index] == b[index])
+    }
+    
+    output.append(contentsOf: [Bool](repeating: false, count: maxLength - minLength))
+    return output
 }

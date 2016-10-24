@@ -10,6 +10,25 @@
 //  than in realtime. 
 
 import Foundation
+import Accelerate
+
+func realToDSPSplitComplex(input: inout [Float]) -> DSPSplitComplex {
+    /* Points the real part to the input and creates a new imaginary array */
+    var imagp = [Float](repeating: 0.0, count: input.count)
+    let output = DSPSplitComplex(realp: &input, imagp: &imagp)
+    return output
+}
+
+func magnitude(input: inout DSPSplitComplex, length: Int) -> [Float] {
+    /* Returns the magnitude each complex element. */
+    
+    var output = [Float](repeating: 0.0, count: length)
+    
+    vDSP_zvabs(&input, 1, &output, 1, vDSP_Length(length))
+    
+    return output
+}
+
 
 func fftSize(forCount: Int) -> Int {
     return 1 + Int(log2(Float(forCount - 1)))

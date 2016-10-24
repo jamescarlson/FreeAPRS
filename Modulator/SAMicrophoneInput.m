@@ -12,35 +12,42 @@
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 #include <Accelerate/Accelerate.h>
+#import <Modulator-Swift.h>
+
 #define FAIL_ON_ERR(_X_) if ((status = (_X_)) != noErr) { goto failed; }
 
-@implementation SAMicrophoneInput
+@interface SAMicrophoneInput()
 
+@property (strong, nonatomic) AudioDispatcher* dispatcher;
+
+@end
+
+
+
+@implementation SAMicrophoneInput
 
 const int kNumberBuffers = 3;
 
 struct AQInputState {
-AudioStreamBasicDescription  mDataFormat;                   // 2
-AudioQueueRef                mQueue;                        // 3
-AudioQueueBufferRef          mBuffers[kNumberBuffers];      // 4
-AudioFileID                  mAudioFile;                    // 5
-UInt32                       bufferByteSize;                // 6
-SInt64                       mCurrentPacket;                // 7
-bool                         mIsRunning;
+AudioStreamBasicDescription mDataFormat;                   // 2
+AudioQueueRef               mQueue;                        // 3
+AudioQueueBufferRef         mBuffers[kNumberBuffers];      // 4
+AudioFileID                 mAudioFile;                    // 5
+UInt32                      bufferByteSize;                // 6
+SInt64                      mCurrentPacket;                // 7
+bool                        mIsRunning;
+__unsafe_unretained
+    AudioDispatcher*        audioDispatcher;
 };
 
-SAMicrophoneInput *selfAlias;
+
 FFTSetup fftSupport;
 struct AQInputState state;
 
 #pragma mark -- Audio session stuff
 
-SAMicrophoneInput *selfAlias;
-- (void) initializeSelfAlias {
-    selfAlias = self;
-}
 
-- (SAMicrophoneInput *)init {
+- (SAMicrophoneInput *)initWith:(AudioDispatcher *) audioDispatcher{
     if (self = [super init]) {
         [[NSNotificationCenter defaultCenter]
          addObserver:self
@@ -53,7 +60,7 @@ SAMicrophoneInput *selfAlias;
                 name:@"AVAudioSessionMediaServicesWereResetNotification"
               object:nil];
         NSLog(@"SAMicrophoneInput was initialized");
-        [self initializeSelfAlias];
+        self.dispatcher = audioDispatcher;
     }
     return self;
 }
@@ -136,7 +143,7 @@ SAMicrophoneInput *selfAlias;
 
 - (void) setupBasicDescription {
     UInt32 formatFlags = (0
-                          | kAudioFormatFlagIsPacked
+                          //| kAudioFormatFlagIsPacked
                           | kAudioFormatFlagIsSignedInteger
                           | 0 //kAudioFormatFlagsNativeEndian
                           );
@@ -165,6 +172,7 @@ SAMicrophoneInput *selfAlias;
     [self setupBasicDescription];
     state.mIsRunning = YES;
     state.bufferByteSize = [self deriveBufferSizeForSamples:FFT_LEN];
+    state.audioDispatcher = self.dispatcher;
 }
 
 - (void) allocateBuffers {
@@ -217,12 +225,13 @@ static void HandleInputBuffer (
 ) {
     //do stuff
     
-    SInt16 *frame = inBuffer->mAudioData;
-    if (state.mIsRunning == 0) {
+    int16_t *frame = inBuffer->mAudioData;
+    if (state.mIsRunning == 0 || frame == NULL) {
         NSLog(@"Audio queue callback called when AQ was not running");
         return;
     }
-    NSLog(@"First sample: %d", frame[0]);
+    
+    [state.audioDispatcher processWithSamples:frame];
     
     AudioQueueEnqueueBuffer(inAQ, inBuffer, 0, NULL);
 }

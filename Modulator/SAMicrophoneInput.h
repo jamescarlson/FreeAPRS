@@ -7,15 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
+
 #define FFT_LEN 8192
+
+@class AudioDispatcher;
 
 @interface SAMicrophoneInput : NSObject
 
 @property (nonatomic) long sampleRate;
 
-
 - (BOOL) startAudioIn;
 - (BOOL) endAudioIn;
+- (instancetype) initWith:(AudioDispatcher *) audioDispatcher;
 
 @end
 

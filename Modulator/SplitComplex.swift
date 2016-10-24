@@ -18,7 +18,21 @@ struct SplitComplex {
             return withUnsafePointer(to: &self.dspSC, { (ptr) -> UnsafePointer<DSPSplitComplex> in
                 return ptr } )
         }
-    }//TODO: What is going on here
+    }
+    var abs : [Float] {
+        mutating get {
+            var result = [Float](repeating: 0.0, count: self.count)
+            vDSP_zvabs(self.dspSCConst, 1, &result, 1, vDSP_Length(self.count))
+            return result
+        }
+    }
+    
+    //TODO: What is going on here
+    /* Upon testing with the stored property version of this, every dspSCConst
+    I found inside of ComplexFIRFilter's tests had poitners that were off by 
+    around 1184 bytes, right from the start. I'm sleepy and I don't want to 
+    debug this anymore so I'm just gonna let the hack live until I feel like
+    getting back to it. RIP... */
     
     init(real: [Float], imag: [Float]) {
         assert(real.count == imag.count)

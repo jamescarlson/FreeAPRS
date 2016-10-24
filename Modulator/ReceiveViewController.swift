@@ -14,7 +14,14 @@ class ReceiveViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         NSLog("Lit")
-        let ai : SAMicrophoneInput = SAMicrophoneInput()
+        
+        let opQueue = OperationQueue()
+        let op = BlockOperation(block: { () -> () in
+            NSLog("yayy block crew")
+            })
+        
+        let dispatcher = AudioDispatcher(operationQueue: opQueue, audioProcessOperation: op)
+        let ai : SAMicrophoneInput = SAMicrophoneInput(dispatcher)
         ai.startAudioIn()
     }
 

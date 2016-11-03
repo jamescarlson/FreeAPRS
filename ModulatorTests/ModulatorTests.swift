@@ -24,7 +24,7 @@ class ModulatorTests: XCTestCase {
     
     func testFFTPerformance() {
         // This is an example of a performance test case.
-        var fftsetup = vDSP_create_fftsetup(vDSP_Length(12), FFTRadix(kFFTRadix2))
+        let fftsetup = vDSP_create_fftsetup(vDSP_Length(12), FFTRadix(kFFTRadix2))
 
         var dummyData = [Float](repeating: 1, count: 4096)
         var dummyImagData = [Float](repeating: -1, count: 4096)
@@ -38,7 +38,7 @@ class ModulatorTests: XCTestCase {
         
         self.measure {
             // Put the code you want to measure the time of here.
-            for i in 0..<10000 {
+            for _ in 0..<10000 {
                 vDSP_fft_zop(fftsetup!, &inputComplexData, 1, &outputComplexData, 1, 12, -1)
             }
             
@@ -46,17 +46,17 @@ class ModulatorTests: XCTestCase {
     }
     
     func testDFTPerformance() {
-        var dftsetup = vDSP_DFT_zop_CreateSetup(nil, 4096, vDSP_DFT_Direction.FORWARD)
+        let dftsetup = vDSP_DFT_zop_CreateSetup(nil, 4096, vDSP_DFT_Direction.FORWARD)
         
-        var dummyData = [Float](repeating: 1, count: 4096)
-        var dummyImagData = [Float](repeating: -1, count: 4096)
+        let dummyData = [Float](repeating: 1, count: 4096)
+        let dummyImagData = [Float](repeating: -1, count: 4096)
         
         var dummyDataForOutput = [Float](repeating: 0, count:4096)
         var dummyDataForImagOutpt = [Float](repeating: 0, count: 4096)
         
         
         self.measure {
-            for i in 0..<10000 {
+            for _ in 0..<10000 {
                 vDSP_DFT_Execute(dftsetup!, dummyData, dummyImagData, &dummyDataForOutput, &dummyDataForImagOutpt)
             }
             

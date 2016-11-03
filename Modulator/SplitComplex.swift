@@ -9,99 +9,128 @@
 import Foundation
 import Accelerate
 
-struct SplitComplex {
-    var real : [Float]
-    var imag : [Float]
+class SplitComplex {
+    var real : UnsafeMutablePointer<Float>
+    var imag : UnsafeMutablePointer<Float>
     var dspSC : DSPSplitComplex
-    var dspSCConst : UnsafePointer<DSPSplitComplex> {
-        mutating get {
-            return withUnsafePointer(to: &self.dspSC, { (ptr) -> UnsafePointer<DSPSplitComplex> in
-                return ptr } )
-        }
-    }
+    var dspSCPtr : UnsafeMutablePointer<DSPSplitComplex>
+    var dspSCConst : UnsafePointer<DSPSplitComplex>
     var abs : [Float] {
-        mutating get {
+        get {
             var result = [Float](repeating: 0.0, count: self.count)
             vDSP_zvabs(self.dspSCConst, 1, &result, 1, vDSP_Length(self.count))
             return result
         }
     }
+    let count : Int
     
     //TODO: What is going on here
     /* Upon testing with the stored property version of this, every dspSCConst
     I found inside of ComplexFIRFilter's tests had poitners that were off by 
     around 1184 bytes, right from the start. I'm sleepy and I don't want to 
     debug this anymore so I'm just gonna let the hack live until I feel like
-    getting back to it. RIP... */
+    getting back to it. RIP... 
+     
+     
+    Just gonna stop using arrays and allocate the memory myself.
+     */
     
     init(real: [Float], imag: [Float]) {
         assert(real.count == imag.count)
-        self.real = real
-        self.imag = imag
-        self.dspSC = DSPSplitComplex(realp: &self.real, imagp: &self.imag)
+        self.real = UnsafeMutablePointer<Float>.allocate(capacity: real.count)
+        self.imag = UnsafeMutablePointer<Float>.allocate(capacity: imag.count)
+        
+        self.real.initialize(from: real)
+        self.imag.initialize(from: imag)
+        self.dspSC = DSPSplitComplex(realp: self.real, imagp: self.imag)
+        self.dspSCPtr = UnsafeMutablePointer<DSPSplitComplex>(&dspSC)
+        self.dspSCConst = UnsafePointer<DSPSplitComplex>(dspSCPtr)
+        self.count = real.count
     }
     
     init(sp: SplitComplex, count: Int) {
         assert (sp.count < count)
-        self.real = [Float](repeating: 0, count: count)
-        self.imag = [Float](repeating: 0, count: count)
-        self.dspSC = DSPSplitComplex(realp: &self.real, imagp: &self.imag)
-
-        /*
-        vDSP_zvmov(sp.dspSCConst,   1,
-                   &self.dspSC,     1,
-                   vDSP_Length(sp.count))
-        */
-        for index in 0..<sp.count {
-            self[index] = sp[index]
-        }
+        self.count = sp.count
+        
+        self.real = UnsafeMutablePointer<Float>.allocate(capacity: count)
+        self.imag = UnsafeMutablePointer<Float>.allocate(capacity: count)
+        
+        self.real.initialize(to: 0.0, count: count)
+        self.real.initialize(from: sp.real, count: sp.count)
+        self.imag.initialize(to: 0.0, count: count)
+        self.imag.initialize(from: sp.imag, count: sp.count)
+        
+        
+        self.dspSC = DSPSplitComplex(realp: self.real, imagp: self.imag)
+        self.dspSCPtr = UnsafeMutablePointer<DSPSplitComplex>(&dspSC)
+        self.dspSCConst = UnsafePointer<DSPSplitComplex>(dspSCPtr)
     }
     
-    init(count: Int) {
+    convenience init(count: Int) {
         self.init(repeating: 0.0, count: count)
     }
     
     init(repeating: Float, count: Int) {
-        self.real = [Float](repeating: repeating, count: count)
-        self.imag = [Float](repeating: repeating, count: count)
-        self.dspSC = DSPSplitComplex(realp: &self.real, imagp: &self.imag)
+        self.count = count
+        self.real = UnsafeMutablePointer<Float>.allocate(capacity: count)
+        self.imag = UnsafeMutablePointer<Float>.allocate(capacity: count)
+        
+        self.real.initialize(to: repeating, count: count)
+        self.imag.initialize(to: repeating, count: count)
+        
+        self.dspSC = DSPSplitComplex(realp: self.real, imagp: self.imag)
+        self.dspSCPtr = UnsafeMutablePointer<DSPSplitComplex>(&dspSC)
+        self.dspSCConst = UnsafePointer<DSPSplitComplex>(dspSCPtr)
 
     }
     
     init(real: [Float]) {
-        self.real = real
-        self.imag = [Float](repeating: 0.0, count: real.count)
-        self.dspSC = DSPSplitComplex(realp: &self.real, imagp: &self.imag)
+        self.count = real.count
+        self.real = UnsafeMutablePointer<Float>.allocate(capacity: real.count)
+        self.imag = UnsafeMutablePointer<Float>.allocate(capacity: real.count)
+        
+        self.real.initialize(from: real)
+        self.imag.initialize(to: 0.0, count: real.count)
+
+        self.dspSC = DSPSplitComplex(realp: self.real, imagp: self.imag)
+        self.dspSCPtr = UnsafeMutablePointer<DSPSplitComplex>(&dspSC)
+        self.dspSCConst = UnsafePointer<DSPSplitComplex>(dspSCPtr)
 
     }
     
-    var count : Int {
-        get {
-            assert(real.count == imag.count)
-            return real.count
-        }
+    init(real: UnsafePointer<Float>, imag: UnsafePointer<Float>, count: Int) {
+        self.count = count
+        self.real = UnsafeMutablePointer<Float>.allocate(capacity: count)
+        self.imag = UnsafeMutablePointer<Float>.allocate(capacity: count)
+        
+        self.real.initialize(from: real, count: count)
+        self.imag.initialize(from: imag, count: count)
+        
+        self.dspSC = DSPSplitComplex(realp: self.real, imagp: self.imag)
+        self.dspSCPtr = UnsafeMutablePointer<DSPSplitComplex>(&dspSC)
+        self.dspSCConst = UnsafePointer<DSPSplitComplex>(dspSCPtr)
     }
     
-    mutating func testPtrMatch() -> Bool {
-        var p : UnsafePointer<DSPSplitComplex>
+    func testPtrMatch() -> Bool {
+        var rv : Bool
             = withUnsafePointer(to: &self.dspSC, {
-                (ptr) -> UnsafePointer<DSPSplitComplex> in
-                    return ptr
+                (ptr) -> Bool in
+                if (ptr != self.dspSCConst) {
+                    print(ptr)
+                    print(self.dspSCConst)
+                    return false
+                }
+                return true
                 })
-        if (p != self.dspSCConst) {
-            print(p)
-            print(self.dspSCConst)
-            return false
-        }
-        return true
+        return rv
     }
     
     /* Vectorized scale by real. */
     static func *(left: Float, right: SplitComplex) -> SplitComplex {
         var result = SplitComplex(count: right.count)
         var scalar = left
-        vDSP_vsmul(right.real, 1, &scalar, &result.real, 1, vDSP_Length(right.count))
-        vDSP_vsmul(right.imag, 1, &scalar, &result.imag, 1, vDSP_Length(right.count))
+        vDSP_vsmul(right.real, 1, &scalar, result.real, 1, vDSP_Length(right.count))
+        vDSP_vsmul(right.imag, 1, &scalar, result.imag, 1, vDSP_Length(right.count))
         return result
     }
     
@@ -112,9 +141,10 @@ struct SplitComplex {
     /* Non-vectorized pointwise multiply. Should only be used in setup. */
     static func *(left: SplitComplex, right: [Float]) -> SplitComplex {
         assert(left.count == right.count)
-        var result = SplitComplex(real: left.real, imag: left.imag)
-        result.real = slowPointwiseMultiply(left.real, y: right)
-        result.imag = slowPointwiseMultiply(left.imag, y: right)
+        let realOutputArray = slowPointwiseMultiply(left.real, y: right, count: left.count)
+        let imagOutputArray = slowPointwiseMultiply(left.imag, y: right, count: left.count)
+        
+        let result = SplitComplex(real: realOutputArray, imag: imagOutputArray)
         return result
     }
     
@@ -126,7 +156,7 @@ struct SplitComplex {
     /* Needing the left and right to be inouts irks me...
     Sice dspSCConst is a mutating getter (ha...) they must be. See explanation
     in the property. */
-    static func *( left: inout SplitComplex, right: inout SplitComplex) -> SplitComplex {
+    static func *(left: SplitComplex, right: SplitComplex) -> SplitComplex {
         /* Re{ A * B } = Re{A} * Re{B} - Im{A} * Im{B}
          Im{ A * B } = Re{A} * Im{B} + Re{B} * Im{A} */
         assert(left.count == right.count)
@@ -149,9 +179,19 @@ struct SplitComplex {
     
     subscript(start: Int, exclusiveEnd: Int) -> SplitComplex {
         get {
-            return SplitComplex(real: Array(self.real[start..<exclusiveEnd]),
-                                imag: Array(self.imag[start..<exclusiveEnd]))
+            let advancedReal = self.real.advanced(by: start)
+            let advancedImag = self.imag.advanced(by: start)
+            return SplitComplex(real: advancedReal,
+                                imag: advancedImag,
+                                count: exclusiveEnd - start)
         }
+    }
+    
+    deinit {
+        self.real.deinitialize(count: self.count)
+        self.imag.deinitialize(count: self.count)
+        self.real.deallocate(capacity: self.count)
+        self.imag.deallocate(capacity: self.count)
     }
 }
 

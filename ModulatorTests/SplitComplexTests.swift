@@ -26,7 +26,7 @@ class SplitComplexTests: XCTestCase {
     func testAbs() {
         var input = SplitComplex(real: [Float(0.0), Float(0.7071), Float(4.0)],
                                  imag: [Float(1.0), Float(0.7071), Float(3.0)])
-        var expected = [Float(1.0), Float(1.0), Float(5.0)]
+        let expected = [Float(1.0), Float(1.0), Float(5.0)]
         XCTAssert(arrayApproximatelyEqualTo(input.abs, b: expected, eps: absoluteAdditivePrecision))
     }
     

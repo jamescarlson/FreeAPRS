@@ -22,15 +22,19 @@
         - Once we see 6 ones in a row, then a zero, we know it's a flag and can cut off the end of the packet
         - Put packet into output queue if it is greater in length than 152 bytes, or shorter than 3168 bytes.
         - go back into search mode 
-- Dumps de-stuffed bytes from between successive flags (if they are >= 19 bytes between flags) into the APRSPacketBuilder, after unstuffing, which will separate the packet fields and compute the CRC. If the packet doesn't build, then nil will be returned. 
+- Dumps de-stuffed bytes from between successive flags (if they are >= 19 bytes between flags) into the APRSPacket. which will separate the packet fields and compute the CRC. If the packet is not valid, then nil will be returned. 
+
+- Might want to change PLL adjustment rate when locked on to a flag?
+- Ideally can detect APRS packets that have only a single flag in front of them. 
+    - See how many flags are required for detection at different PLL adjustment rates
+    - Smaller alpha - faster lock on - More sampling jitter which is ultimately bad but if there aren't enough flags then it's unlit
+
+'
 
 
-## Concurrency
-- Start out with non-concurrent chain of signal processing. If it isn't fast enough, try vectorization and cache blocking or other techniques to speed it up. Then if that does not work, we can look at multithreading or operation/dispatch queues to see if that would solve the problem.
-    - 
+## Concurrency and Processing Chain
+- An AudioDispatcher takes in an AudioProcessOperationFactory and dumps Float samples (converted from SInt16) into an AudioProcessOperation's inputSamples. It then sends it off to work in an OperationQueue. The completion of the operation will append a decoded APRSPacket to a settable queue. 
 
-## Processing chain:
-- First implementation is going to be probably all in line with the audio queue callback or close to it. Then once that is working, I would like to look at splitting things up into units that take parts of the signal from queues on their own, but still work in a way that is performance optimal.
 
 ### Considerations for queue based semi-automatic blocks
 - Like gnu radio, can have synchronous (1:1), decimator (N:1), interpolator(1:M), and general (N:M), or completely nondeterministic (?:?) blocks. Queues will most likely connect these together but we want to ensure performance
@@ -39,4 +43,35 @@
     - Synchronous blocks are probably the easiest case, can just wait until queue has a large enough amount of items in it (and enforce that chunks of a certain size are contiguous in memory just wrap around) and just vector process the entire thing since it's 1:1
     - Decimator blocks that need to put out chunks of a certain size must wait until the queue has a chunk of N times that size before processing (could result in lots of data accumulating, and resizing/copying if queue was not allocated to be large enough).
     - Interpolator is going to dump a lot of data at once
-    - 
+
+- This seems like a little too much for this app, but creating a framework with blocks that do this in a swift style is something I may want to look into in the future.
+
+# Future Applications/Frameworks where thigns from this project may be used
+- 
+
+
+# UI
+
+Receive view should show full-screenable map, possible indicators N/S/E/W to show that other packets have been registered in areas of the map not shown.
+
+Allow sliding (or just full map, half map, and no map) views, the other part being the received packet list
+
+Settable filtering of packets on map and in list
+- Only show packets recieved in the last x amount of time
+- Only show packets from callign x
+- (In list only) only show packets that are not location updates
+- Only show mic-e encoded data
+- Collapse digipeated packets
+- 
+
+Might want to redesign APRSPacket Class to allow easier filtering in this way
+- Core data/ database style filter
+- 
+
+
+
+
+
+
+
+

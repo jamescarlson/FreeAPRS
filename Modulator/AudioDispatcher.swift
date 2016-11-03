@@ -11,11 +11,11 @@ import Foundation
 @objc class AudioDispatcher : NSObject {
     let operationQueue : OperationQueue
     
-    let audioProcessOperation : Operation
+    let opFactory : AudioProcessOperationFactory
     
-    init(operationQueue: OperationQueue, audioProcessOperation: Operation) {
+    init(operationQueue: OperationQueue, opFactory: AudioProcessOperationFactory) {
         self.operationQueue = operationQueue
-        self.audioProcessOperation = audioProcessOperation
+        self.opFactory = opFactory
     }
     
     
@@ -30,8 +30,18 @@ import Foundation
      
     */
     
-    @objc func process(samples: UnsafePointer<Int16>) {
+    @objc func process(samples: UnsafePointer<Int16>, length: Int, channels: Int) {
         //Do something
-        NSLog("processing some audio samples its lit")
+        
+        let bufferPointer = UnsafeBufferPointer(start: samples, count: length)
+        let samples = [Int16](bufferPointer)
+        
+        let floatSamples = int16toFloat(samples, channels: channels)
+        
+        let operation = opFactory.getOperation()
+        operation.inputSamples = floatSamples
+        
+        operationQueue.addOperation(operation)
+        
     }
 }

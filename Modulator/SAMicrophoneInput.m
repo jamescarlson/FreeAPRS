@@ -61,6 +61,7 @@ struct AQInputState state;
               object:nil];
         NSLog(@"SAMicrophoneInput was initialized");
         self.dispatcher = audioDispatcher;
+        [[AVAudioSession sharedInstance] addObserver:self forKeyPath:@"sampleRate" options:NSKeyValueObservingOptionNew context:NULL];
     }
     return self;
 }
@@ -141,16 +142,28 @@ struct AQInputState state;
 #pragma mark - Get ready for Audio queues
 #pragma mark Setup functions for AQ.
 
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary<NSKeyValueChangeKey,id> *)change
+                       context:(void *)context {
+    if ([keyPath isEqualToString:@"sampleRate"]) {
+        self.sampleRate = [[AVAudioSession sharedInstance] sampleRate];
+        NSLog(@"observed sample rate change, is now %f", self.sampleRate);
+    }
+}
+
 - (void) setupBasicDescription {
     UInt32 formatFlags = (0
-                          //| kAudioFormatFlagIsPacked
+                          | kAudioFormatFlagIsPacked
                           | kAudioFormatFlagIsSignedInteger
                           | 0 //kAudioFormatFlagsNativeEndian
                           );
     [[AVAudioSession sharedInstance] setPreferredInputNumberOfChannels:1 error:nil];
+    [[AVAudioSession sharedInstance] setPreferredSampleRate:44100 error:nil];
     NSInteger numChannelsP = [[AVAudioSession sharedInstance] inputNumberOfChannels];
     int numChannels = numChannelsP;
     NSLog(@"Number of channels: %d", numChannels);
+    NSLog(@"sampleRate: %f", [[AVAudioSession sharedInstance] sampleRate]);
     
     
     state.mDataFormat = (AudioStreamBasicDescription) {
@@ -179,16 +192,16 @@ struct AQInputState state;
     OSStatus status = noErr;
     for (int i = 0; i < kNumberBuffers; i += 1) {           // 1
         FAIL_ON_ERR(AudioQueueAllocateBuffer (                       // 2
-                                  state.mQueue,                               // 3
-                                  state.bufferByteSize,                       // 4
-                                  &state.mBuffers[i]                          // 5
+                                  state.mQueue,                              // 3
+                                  state.bufferByteSize,                      // 4
+                                  &state.mBuffers[i]                         // 5
                                               ));
         
         FAIL_ON_ERR(AudioQueueEnqueueBuffer (                        // 6
                                  state.mQueue,                               // 7
                                  state.mBuffers[i],                          // 8
-                                 0,                                           // 9
-                                 NULL                                         // 10
+                                 0,                                          // 9
+                                 NULL                                        // 10
                                  ));
     }
 failed:
@@ -231,7 +244,12 @@ static void HandleInputBuffer (
         return;
     }
     
-    [state.audioDispatcher processWithSamples:frame];
+    SAMicrophoneInput *this = (__bridge SAMicrophoneInput *)aqData;
+    
+    int lengthSamples = inBuffer->mAudioDataByteSize / 2;
+    
+    [this.dispatcher processWithSamples:frame length:lengthSamples
+                               channels:state.mDataFormat.mChannelsPerFrame];
     
     AudioQueueEnqueueBuffer(inAQ, inBuffer, 0, NULL);
 }
@@ -250,7 +268,7 @@ static void HandleInputBuffer (
     
     FAIL_ON_ERR(AudioQueueNewInput(&state.mDataFormat,
                        HandleInputBuffer,
-                       &state,
+                       CFBridgingRetain(self),
                        CFRunLoopGetMain(),
                        nil,
                        0,
@@ -298,6 +316,7 @@ failed:
 -(void) dealloc {
     //Don't crash the app! Get out of notification center before going away~~~
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[AVAudioSession sharedInstance] removeObserver:self forKeyPath:@"sampleRate"];
 }
 
 

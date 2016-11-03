@@ -114,11 +114,11 @@ class FIRFilter {
     
     /* Computes or retrieves an already computed FFT of size
         FORLOG2SIZE of the kernel of this FIRFilter. */
-    func getKernelFft(forLog2Size: Int) -> DSPSplitComplex {
+    func getKernelFft(forLog2Size: Int) -> SplitComplex {
         
-        if let returnValue = kernelFftStorage[forLog2Size] {
+        if var returnValue = kernelFftStorage[forLog2Size] {
             
-            return returnValue.dspSC
+            return returnValue
             
         } else {
             
@@ -143,7 +143,7 @@ class FIRFilter {
  
             /* original kernel ---> deinterlaced into inputArray */
             vDSP_ctoz(dspComplexPtrToKernelSamples, 2,
-                      &inputArray.dspSC,            1,
+                      inputArray.dspSCPtr,            1,
                       vDSP_Length(kernel.count / 2))
             
             /* Fix what we may have added earlier to make vDSP_ctoz work right. */
@@ -159,11 +159,11 @@ class FIRFilter {
             
             /* Do the actual FFT */
             vDSP_fft_zrop(thisFftSetup,
-                          &inputArray.dspSC,    1,
-                          &output.dspSC,        1,
+                          inputArray.dspSCConst,    1,
+                          output.dspSCPtr,        1,
                           vDSP_Length(forLog2Size), 1)
 
-            return output.dspSC
+            return output
         }
     }
     
@@ -177,6 +177,9 @@ class FIRFilter {
         } else {
             
             fftSetupSize = forLog2Size
+            
+            vDSP_destroy_fftsetup(fftSetup)
+            
             fftSetup = vDSP_create_fftsetup(vDSP_Length(forLog2Size),
                                             FFTRadix(kFFTRadix2))!
             return fftSetup
@@ -233,11 +236,11 @@ class FIRFilter {
             
             /* Deinterlace inputSamples into temporaryInputComplex */
             vDSP_ctoz(dspComplexPtrToInputSamples,      2,
-                      &temporaryInputComplex.dspSC,     1,
+                      temporaryInputComplex.dspSCPtr,     1,
                       vDSP_Length(inputSamples.count / 2))
             
             /* Retrieve FFT of kernel */
-            var kernelFrDomain : DSPSplitComplex
+            var kernelFrDomain : SplitComplex
                 = getKernelFft(forLog2Size: thisFftSize)
             
             /* Create space for the FFT of the input samples */
@@ -245,8 +248,8 @@ class FIRFilter {
             
             /* Do the FFT of the input. */
             vDSP_fft_zrop(thisFftSetup,
-                          &temporaryInputComplex.dspSC, 1,
-                          &inputFrDomain.dspSC,         1,
+                          temporaryInputComplex.dspSCConst, 1,
+                          inputFrDomain.dspSCPtr,         1,
                           vDSP_Length(thisFftSize),     1)
             
             /* Now multiply pointwise the Kernel FFT and the input data FFT
@@ -257,13 +260,13 @@ class FIRFilter {
              
             Trying to save memory here but it does look slightly more confusing. */
             
-            let newDC = inputFrDomain.real[0] * kernelFrDomain.realp[0]
-            let newNY = inputFrDomain.imag[0] * kernelFrDomain.imagp[0]
+            let newDC = inputFrDomain.real[0] * kernelFrDomain.real[0]
+            let newNY = inputFrDomain.imag[0] * kernelFrDomain.imag[0]
             
             /* Do the actual multiplication */
-            vDSP_zvmul(&inputFrDomain.dspSC,            1,
-                       &kernelFrDomain,                 1,
-                       &temporaryInputComplex.dspSC,    1,
+            vDSP_zvmul(inputFrDomain.dspSCConst,          1,
+                       kernelFrDomain.dspSCConst,         1,
+                       temporaryInputComplex.dspSCPtr,    1,
                        vDSP_Length(halfBufferLength), 1)
             
             temporaryInputComplex.real[0] = newDC
@@ -274,8 +277,8 @@ class FIRFilter {
             inputFrDomain */
             
             vDSP_fft_zrop(thisFftSetup,
-                          &temporaryInputComplex.dspSC, 1,
-                          &inputFrDomain.dspSC,         1,
+                          temporaryInputComplex.dspSCConst, 1,
+                          inputFrDomain.dspSCPtr,         1,
                           vDSP_Length(thisFftSize), -1)
             
             /* Yes this does look rather scary
@@ -290,7 +293,7 @@ class FIRFilter {
                 = UnsafeMutablePointer<DSPComplex>(mutating: thisDSPComplexConst)
             
             /* Unpack the data using ztoc */
-            vDSP_ztoc(&inputFrDomain.dspSC, 1,
+            vDSP_ztoc(inputFrDomain.dspSCConst, 1,
                       thisDSPComplex,       2,
                       vDSP_Length(tempOutBuffer.count / 2))
             
@@ -372,6 +375,10 @@ class FIRFilter {
                 return outputSamples
             }
         }
+    }
+    
+    deinit {
+        vDSP_destroy_fftsetup(fftSetup)
     }
     
 }

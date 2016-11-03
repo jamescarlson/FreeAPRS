@@ -8,8 +8,8 @@
 
 import Foundation
 
-/* A circular buffer queue is designed to minimze the asymptotic complexity
- of queueing and dequeueing elemetnts. 
+/* A circular buffer queue is designed to minimze the amortized asymptotic 
+ complexity of queueing and dequeueing elements. 
  
  An Array stores the elements in the queue and when enqueueing, an element is
  written at the "write" index, which is then advanced, wrapping around if
@@ -20,7 +20,7 @@ import Foundation
  enqueue more elements than the capacity, the array is resized to support it.
  */
 
-class CirclarBufferQueue <T> {
+class CircularBufferQueue <T> {
     private var elements : [T?]
     private var writeIndex = 0
     private var readIndex = 0
@@ -29,7 +29,7 @@ class CirclarBufferQueue <T> {
         elements = [T?](repeating: nil, count: withCapacity)
     }
     
-    public func push(e: T) {
+    public func push(_ e: T) {
         if (size() >= elements.count) {
             
             /*Double the array size to get more space
@@ -40,14 +40,18 @@ class CirclarBufferQueue <T> {
         }
         
         elements[writeIndex % elements.count] = e
+        writeIndex += 1
+        NSLog("\(e)")
     }
     
-    public func pop(e: T) -> T? {
+    public func pop() -> T? {
         if (isEmpty()) {
             return nil;
         }
         
-        return elements[readIndex % elements.count]
+        let output = elements[readIndex % elements.count]
+        readIndex += 1
+        return output
     }
     
     public func isEmpty() -> Bool {

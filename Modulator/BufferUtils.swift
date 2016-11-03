@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Accelerate
 
 func convertToUnsafeFromFloatArray (ptr: UnsafePointer<Float>) -> UnsafeRawPointer {
     return UnsafeRawPointer(ptr)
@@ -142,6 +143,29 @@ func CRCAX25(data: [Bool]) -> UInt16 {
 func CRCAX25(data: [UInt8]) -> UInt16 {
     
     return CRCAX25(data: bytesToBoolsLittleEndian(input: data))
+}
+
+func sign(input: [Float]) -> [Bool] {
+    var output = [Bool]()
+    output.reserveCapacity(input.count)
+    
+    for x in input {
+        output.append( x > 0.0 )
+    }
+    
+    return output
+}
+
+func int16toFloat(_ input: [Int16], channels: Int) -> [Float] {
+    var output = [Float](repeating: 0, count: input.count)
+
+    if (channels == 2) {
+        vDSP_vflt16(UnsafePointer<Int16>(input).advanced(by: 1), vDSP_Stride(channels), &output, 1, vDSP_Length(input.count / channels))
+    } else {
+        vDSP_vflt16(input, 1, &output, 1, vDSP_Length(input.count))
+    }
+    
+    return output
 }
 
 extension String

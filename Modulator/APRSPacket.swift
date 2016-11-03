@@ -58,7 +58,7 @@ func | (left: [UInt8], right: UInt8) -> [UInt8] {
 
 
 
-struct APRSPacket {
+struct APRSPacket : CustomStringConvertible {
     /* APRS Frames, for our use, are only Information frames. They look like
         this, each byte is sent LSB first, down along the packet, with bit
         stuffing. Bit stuffing is not shown here.
@@ -158,6 +158,7 @@ struct APRSPacket {
     let FCS : UInt16 //Computed on initialization
     private var allBytes : [UInt8]
     private var stuffedBits : [Bool]
+    private var passesCRC = true
     
     init?(destination: String,
           destinationSSID: UInt8,
@@ -309,6 +310,22 @@ struct APRSPacket {
         return Array(stuffedBits[8..<stuffedBits.count - 8])
     }
     
+    var description: String {
+        
+        let passesCRCString = (passesCRC) ? "" : "🆖"
+        var digipeaterString = ""
+        let destSuffix = (destinationSSID == 0) ? "" : "-" + String(destinationSSID)
+        let sourceSuffix = (sourceSSID == 0) ? "" : "-" + String(sourceSSID)
+        
+        for x in 0..<digipeaters.count {
+            digipeaterString.append("," +
+                digipeaters[x] + "-" + String(digipeaterSSIDs[x]) +
+                (digipeatersHasBeenRepeated[x] ? "*" : ""))
+        }
+        
+        return "\(passesCRCString)\(source)\(sourceSuffix)>\(destination)\(destSuffix)\(digipeaterString):\(information)"
+    }
+    
     /* Given a string of bits from between two flags, unstuff the bits
         and create an APRSPacket if everything matches up. */
     init?(fromStuffedBitArray: [Bool]) {
@@ -397,6 +414,12 @@ struct APRSPacket {
             && numRepeaters < 8) {
             
                 var digipeater = ""
+                
+                if (doEndIndex + 7 > unstuffedBytes.count) {
+                    // Decoded that digipeater info was longer than in actuality
+                    return nil
+                }
+                
                 for x in unstuffedBytes[doEndIndex + 1..<doEndIndex + 7] {
                     let u = UnicodeScalar(x >> 1)
                     digipeater.append(Character(u))
@@ -420,6 +443,12 @@ struct APRSPacket {
         // move 2 bytes past control and protocol fields
         
         var information = ""
+        
+        if (currentIndex > unstuffedBytes.count - 2) {
+            return nil
+            //Information field was shorter than expected
+        }
+        
         for x in unstuffedBytes[currentIndex..<unstuffedBytes.count - 2] {
             let u = UnicodeScalar(x)
             information.append(Character(u))
@@ -430,6 +459,136 @@ struct APRSPacket {
         
     }
     
-    
+    /* Given a string of bits from between two flags, unstuff the bits
+     and create an APRSPacket if everything matches up. */
+    init?(fromStuffedBitArrayUnchecked: [Bool]) {
+        
+        
+        /* ====== First need to unstuff the input bits. ====== */
+        
+        self.stuffedBits = byteToBoolsLittleEndian(input: flag)
+        self.stuffedBits.append(contentsOf: fromStuffedBitArrayUnchecked)
+        self.stuffedBits.append(contentsOf: byteToBoolsLittleEndian(input: flag))
+        
+        var unstuffedBits = [Bool]()
+        
+        var contiguous_ones = 0
+        
+        for bit in fromStuffedBitArrayUnchecked {
+            if (contiguous_ones >= 5) {
+                if (bit) {
+                    return nil // Bit stuffing failure
+                }
+                contiguous_ones = 0
+                continue
+            }
+            unstuffedBits.append(bit)
+            if (bit) {
+                contiguous_ones += 1
+            } else {
+                contiguous_ones = 0
+            }
+        }
+        
+        if (unstuffedBits.count % 8 != 0) {
+            return nil
+        }
+        
+        
+        /* ====== Now parse all the fields ====== */
+        
+        
+        allBytes = [UInt8]()
+        allBytes.append(flag)
+        
+        let unstuffedBytes = boolsToBytesLittleEndian(input: unstuffedBits)
+        allBytes.append(contentsOf: unstuffedBytes)
+        allBytes.append(flag)
+        
+        let testFCS = CRCAX25(data: Array(unstuffedBytes[0..<unstuffedBytes.count - 2]))
+        
+        /* Check FCS */
+        if (UInt8(testFCS & 0b11111111) != unstuffedBytes[unstuffedBytes.count - 2]) {
+            passesCRC = false
+        }
+        if (UInt8(testFCS >> 8) != unstuffedBytes[unstuffedBytes.count - 1]) {
+            passesCRC = false
+        }
+        
+        var destination = ""
+        for x in unstuffedBytes[0..<6] { //Destination
+            let u = UnicodeScalar(x >> 1)
+            destination.append(Character(u))
+        }
+        self.destination = destination.trim()
+        
+        self.destinationCommand = (unstuffedBytes[6] >> 7) == 1
+        self.destinationSSID = UInt8((unstuffedBytes[6] >> 1) & 0b1111)
+        
+        var source = ""
+        for x in unstuffedBytes[7..<13] { //Source
+            let u = UnicodeScalar(x >> 1)
+            source.append(Character(u))
+        }
+        self.source = source.trim()
+        
+        self.sourceCommand = (unstuffedBytes[13] >> 7) == 1
+        self.sourceSSID = UInt8((unstuffedBytes[13] >> 1) & 0b1111)
+        
+        var doEndIndex = 13
+        var numRepeaters = 0
+        
+        var digipeaters = [String]()
+        var digipeaterSSIDs = [UInt8]()
+        var digipeatersHasBeenRepeated = [Bool]()
+        
+        while ((UInt8(unstuffedBytes[doEndIndex] & 1) != 1)
+            && numRepeaters < 8) {
+                
+                var digipeater = ""
+                
+                if (doEndIndex + 7 > unstuffedBytes.count) {
+                    // Decoded that digipeater info was longer than in actuality
+                    return nil
+                }
+                
+                for x in unstuffedBytes[doEndIndex + 1..<doEndIndex + 7] {
+                    let u = UnicodeScalar(x >> 1)
+                    digipeater.append(Character(u))
+                }
+                let digipeaterHasBeenRepeated = (unstuffedBytes[doEndIndex + 7] >> 7) == 1
+                let digipeaterSSID = UInt8((unstuffedBytes[doEndIndex + 7] >> 1) & 0b1111)
+                
+                digipeaters.append(digipeater.trim())
+                digipeatersHasBeenRepeated.append(digipeaterHasBeenRepeated)
+                digipeaterSSIDs.append(digipeaterSSID)
+                
+                doEndIndex += 7
+                numRepeaters += 1
+        }
+        
+        self.digipeaters = digipeaters
+        self.digipeaterSSIDs = digipeaterSSIDs
+        self.digipeatersHasBeenRepeated = digipeatersHasBeenRepeated
+        
+        let currentIndex = doEndIndex + 1 + 2 //Move out of Digipeaters, and
+        // move 2 bytes past control and protocol fields
+        
+        var information = ""
+        
+        if (currentIndex > unstuffedBytes.count - 2) {
+            return nil
+            //Information field was shorter than expected
+        }
+        
+        for x in unstuffedBytes[currentIndex..<unstuffedBytes.count - 2] {
+            let u = UnicodeScalar(x)
+            information.append(Character(u))
+        }
+        
+        self.information = information
+        self.FCS = testFCS
+    }
+
     
 }

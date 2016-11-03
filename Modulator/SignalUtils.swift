@@ -43,6 +43,15 @@ func slowPointwiseMultiply(_ x: [Float], y: [Float]) -> [Float] {
     return result
 }
 
+func slowPointwiseMultiply(_ x: UnsafePointer<Float>, y: UnsafePointer<Float>, count: Int) -> [Float] {
+
+    var result : [Float] = [Float](repeating: 0.0, count: count)
+    for i in 0..<count {
+        result[i] = x[i] * y[i]
+    }
+    return result
+}
+
 func scale(_ x: [Float], y: Float) -> [Float] {
     var result : [Float] = [Float](repeating: 0.0, count: x.count)
     for i in 0..<x.count {
@@ -58,7 +67,11 @@ func sinc(_ length: Int, fs: Float, cutoff: Float) -> [Float] {
     let increment = 2.0 * Float(M_PI) * scale
     var start : Float = -1 * increment * Float(length - 1) / 2
     for i in 0..<length {
-        result[i] = 2 * scale * sin(start) / start
+        if (start == 0) {
+            result[i] = 2 * scale
+        } else {
+            result[i] = 2 * scale * sin(start) / start
+        }
         start += increment
     }
     

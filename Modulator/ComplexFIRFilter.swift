@@ -7,6 +7,8 @@
 //
 
 
+/* TODO: clean up code style here */
+
 import Foundation
 import Accelerate
 
@@ -117,11 +119,11 @@ class ComplexFIRFilter {
     
     /* Computes or retrieves an already computed FFT of size
      FORLOG2SIZE of the kernel of this FIRFilter. */
-    func getKernelFft(forLog2Size: Int) -> DSPSplitComplex {
+    func getKernelFft(forLog2Size: Int) -> UnsafeMutablePointer<DSPSplitComplex> {
         
-        if let returnValue = kernelFftStorage[forLog2Size] {
+        if var returnValue = kernelFftStorage[forLog2Size] {
             
-            return returnValue.dspSC
+            return returnValue.dspSCPtr
             
         } else {
             let bufferSize = 1 << forLog2Size
@@ -138,11 +140,11 @@ class ComplexFIRFilter {
             
             /* Do the actual FFT */
             vDSP_fft_zop(thisFftSetup,
-                          &input.dspSC,     1,
-                          &output.dspSC,        1,
+                          input.dspSCPtr,     1,
+                          output.dspSCPtr,        1,
                           vDSP_Length(forLog2Size), 1)
             
-            return output.dspSC
+            return output.dspSCPtr
         }
     }
     
@@ -156,6 +158,9 @@ class ComplexFIRFilter {
         } else {
             
             fftSetupSize = forLog2Size
+            
+            vDSP_destroy_fftsetup(fftSetup)
+            
             fftSetup = vDSP_create_fftsetup(vDSP_Length(forLog2Size),
                                             FFTRadix(kFFTRadix2))!
             return fftSetup
@@ -171,13 +176,13 @@ class ComplexFIRFilter {
         var outputSamples : SplitComplex
         
         let originalInputLength = inputSamples.count
-        let fullLength = inputSamples.count + kernel.real.count - 1
+        let fullLength = inputSamples.count + kernel.count - 1
         var tempOutBuffer = SplitComplex(repeating: 0.0 , count: fullLength)
         
         /* Do FFT Convolution */
       
         let thisFftSize : Int
-            = fftSize(forCount: originalInputLength + kernel.real.count - 1)
+            = fftSize(forCount: originalInputLength + kernel.count - 1)
         
         /* Make sure FFTSetup is big enough */
         let thisFftSetup = getFftSetup(forLog2Size: thisFftSize)
@@ -187,7 +192,7 @@ class ComplexFIRFilter {
         var paddedInput = SplitComplex(sp: inputSamples, count: bufferLength)
         
         /* Retrieve FFT of kernel */
-        var kernelFrDomain : DSPSplitComplex
+        var kernelFrDomain : UnsafeMutablePointer<DSPSplitComplex>
             = getKernelFft(forLog2Size: thisFftSize)
         
         /* Create space for the FFT of the input samples */
@@ -196,7 +201,7 @@ class ComplexFIRFilter {
         /* Do the FFT of the input. */
         vDSP_fft_zop(thisFftSetup,
                       paddedInput.dspSCConst,   1,
-                      &inputFrDomain.dspSC,     1,
+                      inputFrDomain.dspSCPtr,     1,
                       vDSP_Length(thisFftSize), 1)
         
         /* Now multiply pointwise the Kernel FFT and the input data FFT
@@ -204,11 +209,10 @@ class ComplexFIRFilter {
          Put it in the old paddedInput to save a bit (heh) of memory
          Trying to save memory here but it does look slightly more confusing. */
         
-        inputFrDomain.testPtrMatch()
         
         vDSP_zvmul(inputFrDomain.dspSCConst,    1,
-                   &kernelFrDomain,             1,
-                   &paddedInput.dspSC,          1,
+                   kernelFrDomain,             1,
+                   paddedInput.dspSCPtr,          1,
                    vDSP_Length(bufferLength), 1)
         
         /* Now do the Inverse FFT to get back the convolved data
@@ -217,7 +221,7 @@ class ComplexFIRFilter {
         
         vDSP_fft_zop(thisFftSetup,
                       paddedInput.dspSCConst,   1,
-                      &inputFrDomain.dspSC,     1,
+                      inputFrDomain.dspSCPtr,     1,
                       vDSP_Length(thisFftSize), -1)
         
         /* Scale the output back down to it's mathematical value. */
@@ -233,6 +237,10 @@ class ComplexFIRFilter {
         overlapBuffer = tempOutBuffer[originalInputLength, fullLength]
         outputSamples = tempOutBuffer[0, originalInputLength]
         return outputSamples
+    }
+    
+    deinit {
+        vDSP_destroy_fftsetup(fftSetup)
     }
 
 }

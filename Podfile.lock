@@ -1,0 +1,12 @@
+PODS:
+  - Bitter (2.0.5)
+
+DEPENDENCIES:
+  - Bitter
+
+SPEC CHECKSUMS:
+  Bitter: e334be7bdfa3c357fe12da3cc1ee1e44dab73d65
+
+PODFILE CHECKSUM: 97987ee18cc493ee922825bd2b0dee088baeb827
+
+COCOAPODS: 1.1.0.rc.2

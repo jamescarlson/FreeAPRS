@@ -24,17 +24,6 @@ class SplitComplex {
     }
     let count : Int
     
-    //TODO: What is going on here
-    /* Upon testing with the stored property version of this, every dspSCConst
-    I found inside of ComplexFIRFilter's tests had poitners that were off by 
-    around 1184 bytes, right from the start. I'm sleepy and I don't want to 
-    debug this anymore so I'm just gonna let the hack live until I feel like
-    getting back to it. RIP... 
-     
-     
-    Just gonna stop using arrays and allocate the memory myself.
-     */
-    
     init(real: [Float], imag: [Float]) {
         assert(real.count == imag.count)
         self.real = UnsafeMutablePointer<Float>.allocate(capacity: real.count)

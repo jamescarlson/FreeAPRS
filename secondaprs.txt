@@ -1,0 +1,97 @@
+private let source : String
+    private let destination : String
+    private let sourceSSID : UInt8
+    private let destinationSSID : UInt8
+    private let digipeaters: [String]
+    private let digipeaterSSIDs : [UInt8]
+    private let digipeatersHasBeenRepeated : [Bool]
+    private let information : String
+    private var FCS : UInt16 //Computed on initialization
+    public var allBytes : [UInt8]
+    
+    init?(destination: String,
+          source: String,
+          sourceSSID: UInt8,
+          destinationSSID: UInt8,
+          digipeaters: [String],
+          digipeaterSSIDs: [UInt8],
+          digipeatersHasBeenRepeated: [Bool],
+          information: String) {
+        
+        if (destination.utf8.count > 6 ||
+            !destination.isUppercaseAlphanumeric) { return nil }
+        self.destination = destination
+        
+        if (source.utf8.count > 6 ||
+            !source.isUppercaseAlphanumeric) { return nil }
+        self.source = source
+        
+        if (sourceSSID > 15) { return nil }
+        self.sourceSSID = sourceSSID
+        
+        if (destinationSSID > 15) { return nil }
+        self.destinationSSID = destinationSSID
+        
+        if (digipeaters.count != digipeaterSSIDs.count) { return nil }
+        if (digipeaters.count != digipeatersHasBeenRepeated.count) { return nil }
+        
+        for i in 0..<digipeaters.count {
+            if (digipeaters[i].utf8.count > 6 ||
+                !digipeaters[i].isUppercaseAlphanumeric) { return nil }
+            if (digipeaterSSIDs[i] > 15) { return nil }
+        }
+        self.digipeaters = digipeaters
+        self.digipeaterSSIDs = digipeaterSSIDs
+        self.digipeatersHasBeenRepeated = digipeatersHasBeenRepeated
+        
+        if (information.utf8.count > 256 ) { return nil }
+        self.information = information
+        
+        /* Create byte representation without bit stuffing. */
+        allBytes = [UInt8]()
+        allBytes.append(flag)
+        
+        /* Make sure source and destination addresses are 6 bytes. */
+        allBytes.append(contentsOf: self.destination.utf8 <<! 1)
+        allBytes.append(contentsOf:
+            String(repeating: " ",
+                   count : 6 - self.destination.utf8.count).utf8 <<! 1)
+        allBytes.append((self.destinationSSID << 1) | 0b01100000)
+        
+        allBytes.append(contentsOf: self.source.utf8 <<! 1)
+        allBytes.append(contentsOf:
+            String(repeating: " ",
+                   count : 6 - self.source.utf8.count).utf8 <<! 1)
+        allBytes.append((self.sourceSSID << 1) | 0b01100000)
+        
+        for i in 0..<digipeaters.count {
+            
+            allBytes.append(contentsOf: self.digipeaters[i].utf8 <<! 1)
+            allBytes.append(contentsOf:
+                String(repeating: " ",
+                       count : 6 - self.digipeaters[i].utf8.count).utf8 <<! 1)
+            let thisSSID = self.digipeaterSSIDs[i] << 1
+            /* because swift complains if I do this inside the append(...)
+             Wut!? */
+            allBytes.append(thisSSID |
+                (self.digipeatersHasBeenRepeated[i] ? 0b11100000 : 0b01100000))
+        }
+        /* Can finally set the Extension bit to 1 since we're done with address
+         field. */
+        allBytes[allBytes.count - 1] |= 0b1
+        
+        allBytes.append(0b00000011) // Control
+        allBytes.append(0b11110000) // PID - No Layer 3 implemented
+        
+        allBytes.append(contentsOf: self.information.utf8)
+        
+        let everythingButFlag = Array(allBytes.suffix(allBytes.count - 1))
+        
+        FCS = crc16ccitt(data: everythingButFlag)
+        
+        allBytes.append(reverseByte(input: UInt8(FCS >> 8)))
+        allBytes.append(reverseByte(input: UInt8(FCS & 0b11111111)))
+        //allBytes.append(UInt8(FCS >> 8))
+        allBytes.append(flag)
+        
+    }

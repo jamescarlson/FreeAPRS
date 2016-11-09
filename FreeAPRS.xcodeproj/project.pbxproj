@@ -1,0 +1,936 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		14C7008439115A5970BE900D /* Pods_Modulator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35036DBFC71110DFF8B3A1CF /* Pods_Modulator.framework */; };
+		4786B4BFA1FD765563FA180B /* Pods_ModulatorUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACC164CB0E09125AC52315D3 /* Pods_ModulatorUITests.framework */; };
+		6105F8CA1DBF60CB001B4D1C /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 6105F8C91DBF60CB001B4D1C /* LICENSE */; };
+		611B8E8C1D6A3D530062E704 /* FIRFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611B8E8B1D6A3D530062E704 /* FIRFilter.swift */; };
+		611B8E8F1D6C31C60062E704 /* FIRFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611B8E8E1D6C31C60062E704 /* FIRFilterTests.swift */; };
+		611B8E911D6C375B0062E704 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611B8E901D6C375B0062E704 /* Utils.swift */; };
+		6120EE7F1D38BB0F003F92E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6120EE7E1D38BB0F003F92E8 /* AppDelegate.swift */; };
+		6120EE811D38BB0F003F92E8 /* ReceiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6120EE801D38BB0F003F92E8 /* ReceiveViewController.swift */; };
+		6120EE841D38BB0F003F92E8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6120EE821D38BB0F003F92E8 /* Main.storyboard */; };
+		6120EE861D38BB0F003F92E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6120EE851D38BB0F003F92E8 /* Assets.xcassets */; };
+		6120EE891D38BB0F003F92E8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6120EE871D38BB0F003F92E8 /* LaunchScreen.storyboard */; };
+		6120EE941D38BB0F003F92E8 /* ModulatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6120EE931D38BB0F003F92E8 /* ModulatorTests.swift */; };
+		6120EE9F1D38BB0F003F92E8 /* ModulatorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6120EE9E1D38BB0F003F92E8 /* ModulatorUITests.swift */; };
+		6124682B1D5AF73900D1E42A /* APRSListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6124682A1D5AF73900D1E42A /* APRSListener.swift */; };
+		612646011D92848F0081C6CE /* ComplexFIRFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612646001D92848F0081C6CE /* ComplexFIRFilter.swift */; };
+		612646031D9298AF0081C6CE /* BufferUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612646021D9298AF0081C6CE /* BufferUtils.swift */; };
+		6136EF521DBE26220057E58F /* Downsampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6136EF511DBE26220057E58F /* Downsampler.swift */; };
+		6136EF541DBE2C640057E58F /* FastMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6136EF531DBE2C640057E58F /* FastMath.swift */; };
+		6136EF561DBE2F750057E58F /* AudioProcessOperationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6136EF551DBE2F750057E58F /* AudioProcessOperationFactory.swift */; };
+		6136EF581DBE2FB10057E58F /* NRZIDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6136EF571DBE2FB10057E58F /* NRZIDecoder.swift */; };
+		615410551D920B8800A7ABFF /* SAMicrophoneInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 615410541D920B8800A7ABFF /* SAMicrophoneInput.m */; };
+		6155F16C1DB4B82E0097CEDC /* DesignDecisions.md in Sources */ = {isa = PBXBuildFile; fileRef = 6155F16B1DB4B82E0097CEDC /* DesignDecisions.md */; };
+		6155F16E1DB4C5E20097CEDC /* Sampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6155F16D1DB4C5E20097CEDC /* Sampler.swift */; };
+		6155F1701DB4E22B0097CEDC /* CircularBufferQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6155F16F1DB4E22B0097CEDC /* CircularBufferQueue.swift */; };
+		6155F1741DB5C40A0097CEDC /* BufferUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6155F1731DB5C40A0097CEDC /* BufferUtilsTests.swift */; };
+		6155F1761DB75D1B0097CEDC /* APRSPacketTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6155F1751DB75D1B0097CEDC /* APRSPacketTests.swift */; };
+		61878FBB1D40B850003EE788 /* PLL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61878FBA1D40B850003EE788 /* PLL.swift */; };
+		61878FBD1D40BD73003EE788 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61878FBC1D40BD73003EE788 /* Accelerate.framework */; };
+		61AEF8651D99041C00D5CBBC /* SplitComplex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEF8641D99041C00D5CBBC /* SplitComplex.swift */; };
+		61AEF8671D99435F00D5CBBC /* ComplexFIRFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEF8661D99435F00D5CBBC /* ComplexFIRFilterTests.swift */; };
+		61AEF86A1D9B0FD700D5CBBC /* SplitComplexTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEF8691D9B0FD700D5CBBC /* SplitComplexTests.swift */; };
+		61AEF86F1DA3B1DF00D5CBBC /* APRSPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEF86E1DA3B1DF00D5CBBC /* APRSPacket.swift */; };
+		61AEF8711DA7304300D5CBBC /* APRSPacketBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEF8701DA7304300D5CBBC /* APRSPacketBuilder.swift */; };
+		61C417151DCAB8F40014B3E4 /* PacketTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C417141DCAB8F40014B3E4 /* PacketTableViewController.swift */; };
+		61D235F51DBA127B00A1ABB3 /* AudioDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D235F41DBA127B00A1ABB3 /* AudioDispatcher.swift */; };
+		61D235F71DBDB42B00A1ABB3 /* AudioProcessOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D235F61DBDB42B00A1ABB3 /* AudioProcessOperation.swift */; };
+		61E758FA1D930F220009E22B /* SignalUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E758F91D930F220009E22B /* SignalUtils.swift */; };
+		61E758FC1D93A7560009E22B /* UtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E758FB1D93A7560009E22B /* UtilsTests.swift */; };
+		AC6AD7773549B6C14BA3B2C4 /* Pods_ModulatorTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 499684DDA3969358C3DBE9D9 /* Pods_ModulatorTests.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6120EE901D38BB0F003F92E8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6120EE731D38BB0F003F92E8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6120EE7A1D38BB0F003F92E8;
+			remoteInfo = Modulator;
+		};
+		6120EE9B1D38BB0F003F92E8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6120EE731D38BB0F003F92E8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6120EE7A1D38BB0F003F92E8;
+			remoteInfo = Modulator;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		6120EEB61D38BBF3003F92E8 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		1E008B2CC4354A0E95CC395E /* Pods-Modulator.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Modulator.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Modulator/Pods-Modulator.debug.xcconfig"; sourceTree = "<group>"; };
+		35036DBFC71110DFF8B3A1CF /* Pods_Modulator.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Modulator.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		499684DDA3969358C3DBE9D9 /* Pods_ModulatorTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ModulatorTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		57DEC61C3FB0CD0D5FCEACAF /* Pods-ModulatorTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ModulatorTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ModulatorTests/Pods-ModulatorTests.debug.xcconfig"; sourceTree = "<group>"; };
+		6105F8C91DBF60CB001B4D1C /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		611B8E8B1D6A3D530062E704 /* FIRFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FIRFilter.swift; sourceTree = "<group>"; };
+		611B8E8E1D6C31C60062E704 /* FIRFilterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FIRFilterTests.swift; sourceTree = "<group>"; };
+		611B8E901D6C375B0062E704 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		6120EE7B1D38BB0F003F92E8 /* FreeAPRS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FreeAPRS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6120EE7E1D38BB0F003F92E8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		6120EE801D38BB0F003F92E8 /* ReceiveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveViewController.swift; sourceTree = "<group>"; };
+		6120EE831D38BB0F003F92E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		6120EE851D38BB0F003F92E8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6120EE881D38BB0F003F92E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		6120EE8A1D38BB0F003F92E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6120EE8F1D38BB0F003F92E8 /* FreeAPRSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FreeAPRSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6120EE931D38BB0F003F92E8 /* ModulatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModulatorTests.swift; sourceTree = "<group>"; };
+		6120EE951D38BB0F003F92E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6120EE9A1D38BB0F003F92E8 /* FreeAPRSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FreeAPRSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6120EE9E1D38BB0F003F92E8 /* ModulatorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModulatorUITests.swift; sourceTree = "<group>"; };
+		6120EEA01D38BB0F003F92E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6124682A1D5AF73900D1E42A /* APRSListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APRSListener.swift; sourceTree = "<group>"; };
+		612646001D92848F0081C6CE /* ComplexFIRFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComplexFIRFilter.swift; sourceTree = "<group>"; };
+		612646021D9298AF0081C6CE /* BufferUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferUtils.swift; sourceTree = "<group>"; };
+		6136EF511DBE26220057E58F /* Downsampler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downsampler.swift; sourceTree = "<group>"; };
+		6136EF531DBE2C640057E58F /* FastMath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FastMath.swift; sourceTree = "<group>"; };
+		6136EF551DBE2F750057E58F /* AudioProcessOperationFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioProcessOperationFactory.swift; sourceTree = "<group>"; };
+		6136EF571DBE2FB10057E58F /* NRZIDecoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NRZIDecoder.swift; sourceTree = "<group>"; };
+		615410521D920B8700A7ABFF /* Modulator-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Modulator-Bridging-Header.h"; sourceTree = "<group>"; };
+		615410531D920B8800A7ABFF /* SAMicrophoneInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMicrophoneInput.h; sourceTree = "<group>"; };
+		615410541D920B8800A7ABFF /* SAMicrophoneInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMicrophoneInput.m; sourceTree = "<group>"; };
+		6155F16B1DB4B82E0097CEDC /* DesignDecisions.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = DesignDecisions.md; sourceTree = "<group>"; };
+		6155F16D1DB4C5E20097CEDC /* Sampler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sampler.swift; sourceTree = "<group>"; };
+		6155F16F1DB4E22B0097CEDC /* CircularBufferQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircularBufferQueue.swift; sourceTree = "<group>"; };
+		6155F1731DB5C40A0097CEDC /* BufferUtilsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferUtilsTests.swift; sourceTree = "<group>"; };
+		6155F1751DB75D1B0097CEDC /* APRSPacketTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APRSPacketTests.swift; sourceTree = "<group>"; };
+		61878FBA1D40B850003EE788 /* PLL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PLL.swift; sourceTree = "<group>"; };
+		61878FBC1D40BD73003EE788 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		61AEF8641D99041C00D5CBBC /* SplitComplex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplitComplex.swift; sourceTree = "<group>"; };
+		61AEF8661D99435F00D5CBBC /* ComplexFIRFilterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComplexFIRFilterTests.swift; sourceTree = "<group>"; };
+		61AEF8691D9B0FD700D5CBBC /* SplitComplexTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplitComplexTests.swift; sourceTree = "<group>"; };
+		61AEF86E1DA3B1DF00D5CBBC /* APRSPacket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APRSPacket.swift; sourceTree = "<group>"; };
+		61AEF8701DA7304300D5CBBC /* APRSPacketBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APRSPacketBuilder.swift; sourceTree = "<group>"; };
+		61C417141DCAB8F40014B3E4 /* PacketTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PacketTableViewController.swift; sourceTree = "<group>"; };
+		61D235F41DBA127B00A1ABB3 /* AudioDispatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioDispatcher.swift; sourceTree = "<group>"; };
+		61D235F61DBDB42B00A1ABB3 /* AudioProcessOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioProcessOperation.swift; sourceTree = "<group>"; };
+		61E758F91D930F220009E22B /* SignalUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignalUtils.swift; sourceTree = "<group>"; };
+		61E758FB1D93A7560009E22B /* UtilsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilsTests.swift; sourceTree = "<group>"; };
+		63369230077A4336F2617234 /* Pods-ModulatorUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ModulatorUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ModulatorUITests/Pods-ModulatorUITests.release.xcconfig"; sourceTree = "<group>"; };
+		805D6F3148405E3F687B1179 /* Pods-Modulator.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Modulator.release.xcconfig"; path = "Pods/Target Support Files/Pods-Modulator/Pods-Modulator.release.xcconfig"; sourceTree = "<group>"; };
+		ACC164CB0E09125AC52315D3 /* Pods_ModulatorUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ModulatorUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B3A1D17246E4769A7FA0EE44 /* Pods-ModulatorUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ModulatorUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ModulatorUITests/Pods-ModulatorUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		E9EC1BFF91F432A2D334F22F /* Pods-ModulatorTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ModulatorTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ModulatorTests/Pods-ModulatorTests.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6120EE781D38BB0F003F92E8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61878FBD1D40BD73003EE788 /* Accelerate.framework in Frameworks */,
+				14C7008439115A5970BE900D /* Pods_Modulator.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6120EE8C1D38BB0F003F92E8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC6AD7773549B6C14BA3B2C4 /* Pods_ModulatorTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6120EE971D38BB0F003F92E8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4786B4BFA1FD765563FA180B /* Pods_ModulatorUITests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		26B21C2DB3DFB481CB75A8E8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				35036DBFC71110DFF8B3A1CF /* Pods_Modulator.framework */,
+				499684DDA3969358C3DBE9D9 /* Pods_ModulatorTests.framework */,
+				ACC164CB0E09125AC52315D3 /* Pods_ModulatorUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		611B8E8D1D6C31B30062E704 /* ModelTests */ = {
+			isa = PBXGroup;
+			children = (
+				611B8E8E1D6C31C60062E704 /* FIRFilterTests.swift */,
+				61E758FB1D93A7560009E22B /* UtilsTests.swift */,
+				61AEF8661D99435F00D5CBBC /* ComplexFIRFilterTests.swift */,
+				61AEF8691D9B0FD700D5CBBC /* SplitComplexTests.swift */,
+				6155F1731DB5C40A0097CEDC /* BufferUtilsTests.swift */,
+				6155F1751DB75D1B0097CEDC /* APRSPacketTests.swift */,
+			);
+			name = ModelTests;
+			sourceTree = "<group>";
+		};
+		6120EE721D38BB0F003F92E8 = {
+			isa = PBXGroup;
+			children = (
+				61878FBC1D40BD73003EE788 /* Accelerate.framework */,
+				6120EE7D1D38BB0F003F92E8 /* FreeAPRS */,
+				6120EE921D38BB0F003F92E8 /* ModulatorTests */,
+				6120EE9D1D38BB0F003F92E8 /* ModulatorUITests */,
+				6120EE7C1D38BB0F003F92E8 /* Products */,
+				975B8DA6A330C7CC26447931 /* Pods */,
+				26B21C2DB3DFB481CB75A8E8 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		6120EE7C1D38BB0F003F92E8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6120EE7B1D38BB0F003F92E8 /* FreeAPRS.app */,
+				6120EE8F1D38BB0F003F92E8 /* FreeAPRSTests.xctest */,
+				6120EE9A1D38BB0F003F92E8 /* FreeAPRSUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6120EE7D1D38BB0F003F92E8 /* FreeAPRS */ = {
+			isa = PBXGroup;
+			children = (
+				61C417131DCAB8C90014B3E4 /* View Controllers */,
+				6155F16A1DB4B7E30097CEDC /* Docs */,
+				612468271D5AF6F700D1E42A /* Models */,
+				6120EE7E1D38BB0F003F92E8 /* AppDelegate.swift */,
+				6120EE801D38BB0F003F92E8 /* ReceiveViewController.swift */,
+				6120EE821D38BB0F003F92E8 /* Main.storyboard */,
+				6120EE851D38BB0F003F92E8 /* Assets.xcassets */,
+				6120EE871D38BB0F003F92E8 /* LaunchScreen.storyboard */,
+				6120EE8A1D38BB0F003F92E8 /* Info.plist */,
+			);
+			name = FreeAPRS;
+			path = Modulator;
+			sourceTree = "<group>";
+		};
+		6120EE921D38BB0F003F92E8 /* ModulatorTests */ = {
+			isa = PBXGroup;
+			children = (
+				611B8E8D1D6C31B30062E704 /* ModelTests */,
+				6120EE931D38BB0F003F92E8 /* ModulatorTests.swift */,
+				6120EE951D38BB0F003F92E8 /* Info.plist */,
+				611B8E901D6C375B0062E704 /* Utils.swift */,
+			);
+			path = ModulatorTests;
+			sourceTree = "<group>";
+		};
+		6120EE9D1D38BB0F003F92E8 /* ModulatorUITests */ = {
+			isa = PBXGroup;
+			children = (
+				6120EE9E1D38BB0F003F92E8 /* ModulatorUITests.swift */,
+				6120EEA01D38BB0F003F92E8 /* Info.plist */,
+			);
+			path = ModulatorUITests;
+			sourceTree = "<group>";
+		};
+		612468271D5AF6F700D1E42A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				61AEF8681D9A6CBA00D5CBBC /* Types */,
+				61AEF86D1DA3B1AC00D5CBBC /* APRS */,
+				61AEF86C1DA3B18700D5CBBC /* IO */,
+				61AEF86B1DA3B15900D5CBBC /* SignalProcessing */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		6155F16A1DB4B7E30097CEDC /* Docs */ = {
+			isa = PBXGroup;
+			children = (
+				6155F16B1DB4B82E0097CEDC /* DesignDecisions.md */,
+				6105F8C91DBF60CB001B4D1C /* LICENSE */,
+			);
+			name = Docs;
+			sourceTree = "<group>";
+		};
+		61AEF8681D9A6CBA00D5CBBC /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				61AEF8641D99041C00D5CBBC /* SplitComplex.swift */,
+				6155F16F1DB4E22B0097CEDC /* CircularBufferQueue.swift */,
+				61D235F61DBDB42B00A1ABB3 /* AudioProcessOperation.swift */,
+				6136EF551DBE2F750057E58F /* AudioProcessOperationFactory.swift */,
+			);
+			name = Types;
+			sourceTree = "<group>";
+		};
+		61AEF86B1DA3B15900D5CBBC /* SignalProcessing */ = {
+			isa = PBXGroup;
+			children = (
+				61878FBA1D40B850003EE788 /* PLL.swift */,
+				611B8E8B1D6A3D530062E704 /* FIRFilter.swift */,
+				612646001D92848F0081C6CE /* ComplexFIRFilter.swift */,
+				612646021D9298AF0081C6CE /* BufferUtils.swift */,
+				61E758F91D930F220009E22B /* SignalUtils.swift */,
+				6155F16D1DB4C5E20097CEDC /* Sampler.swift */,
+				6136EF511DBE26220057E58F /* Downsampler.swift */,
+				6136EF531DBE2C640057E58F /* FastMath.swift */,
+				6136EF571DBE2FB10057E58F /* NRZIDecoder.swift */,
+			);
+			name = SignalProcessing;
+			sourceTree = "<group>";
+		};
+		61AEF86C1DA3B18700D5CBBC /* IO */ = {
+			isa = PBXGroup;
+			children = (
+				615410531D920B8800A7ABFF /* SAMicrophoneInput.h */,
+				615410541D920B8800A7ABFF /* SAMicrophoneInput.m */,
+				615410521D920B8700A7ABFF /* Modulator-Bridging-Header.h */,
+				61D235F41DBA127B00A1ABB3 /* AudioDispatcher.swift */,
+			);
+			name = IO;
+			sourceTree = "<group>";
+		};
+		61AEF86D1DA3B1AC00D5CBBC /* APRS */ = {
+			isa = PBXGroup;
+			children = (
+				6124682A1D5AF73900D1E42A /* APRSListener.swift */,
+				61AEF86E1DA3B1DF00D5CBBC /* APRSPacket.swift */,
+				61AEF8701DA7304300D5CBBC /* APRSPacketBuilder.swift */,
+			);
+			name = APRS;
+			sourceTree = "<group>";
+		};
+		61C417131DCAB8C90014B3E4 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				61C417141DCAB8F40014B3E4 /* PacketTableViewController.swift */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		975B8DA6A330C7CC26447931 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				1E008B2CC4354A0E95CC395E /* Pods-Modulator.debug.xcconfig */,
+				805D6F3148405E3F687B1179 /* Pods-Modulator.release.xcconfig */,
+				57DEC61C3FB0CD0D5FCEACAF /* Pods-ModulatorTests.debug.xcconfig */,
+				E9EC1BFF91F432A2D334F22F /* Pods-ModulatorTests.release.xcconfig */,
+				B3A1D17246E4769A7FA0EE44 /* Pods-ModulatorUITests.debug.xcconfig */,
+				63369230077A4336F2617234 /* Pods-ModulatorUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6120EE7A1D38BB0F003F92E8 /* FreeAPRS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6120EEA31D38BB0F003F92E8 /* Build configuration list for PBXNativeTarget "FreeAPRS" */;
+			buildPhases = (
+				AAA47D2FB101F3669B2A038E /* [CP] Check Pods Manifest.lock */,
+				6120EE771D38BB0F003F92E8 /* Sources */,
+				6120EE781D38BB0F003F92E8 /* Frameworks */,
+				6120EE791D38BB0F003F92E8 /* Resources */,
+				6120EEB61D38BBF3003F92E8 /* Embed Frameworks */,
+				3B3032E753CD9228103FFD90 /* [CP] Embed Pods Frameworks */,
+				84300D1D799DFD05B3EEC9CA /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FreeAPRS;
+			productName = Modulator;
+			productReference = 6120EE7B1D38BB0F003F92E8 /* FreeAPRS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6120EE8E1D38BB0F003F92E8 /* FreeAPRSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6120EEA61D38BB0F003F92E8 /* Build configuration list for PBXNativeTarget "FreeAPRSTests" */;
+			buildPhases = (
+				B663FD56653E50D4D3814F5E /* [CP] Check Pods Manifest.lock */,
+				6120EE8B1D38BB0F003F92E8 /* Sources */,
+				6120EE8C1D38BB0F003F92E8 /* Frameworks */,
+				6120EE8D1D38BB0F003F92E8 /* Resources */,
+				4946B2ABCF2E43544068939C /* [CP] Embed Pods Frameworks */,
+				7E8EA2FFC4681A1ECFA06C0B /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6120EE911D38BB0F003F92E8 /* PBXTargetDependency */,
+			);
+			name = FreeAPRSTests;
+			productName = ModulatorTests;
+			productReference = 6120EE8F1D38BB0F003F92E8 /* FreeAPRSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		6120EE991D38BB0F003F92E8 /* FreeAPRSUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6120EEA91D38BB0F003F92E8 /* Build configuration list for PBXNativeTarget "FreeAPRSUITests" */;
+			buildPhases = (
+				AD8E9F3C50C61EEBF890C27F /* [CP] Check Pods Manifest.lock */,
+				6120EE961D38BB0F003F92E8 /* Sources */,
+				6120EE971D38BB0F003F92E8 /* Frameworks */,
+				6120EE981D38BB0F003F92E8 /* Resources */,
+				254B2B62A3E34464369F2C14 /* [CP] Embed Pods Frameworks */,
+				167A49209E125A9F92823CF0 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6120EE9C1D38BB0F003F92E8 /* PBXTargetDependency */,
+			);
+			name = FreeAPRSUITests;
+			productName = ModulatorUITests;
+			productReference = 6120EE9A1D38BB0F003F92E8 /* FreeAPRSUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6120EE731D38BB0F003F92E8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0730;
+				LastUpgradeCheck = 0800;
+				ORGANIZATIONNAME = dimnsionofsound;
+				TargetAttributes = {
+					6120EE7A1D38BB0F003F92E8 = {
+						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = YR937RG9QX;
+						LastSwiftMigration = 0800;
+					};
+					6120EE8E1D38BB0F003F92E8 = {
+						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
+						TestTargetID = 6120EE7A1D38BB0F003F92E8;
+					};
+					6120EE991D38BB0F003F92E8 = {
+						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
+						TestTargetID = 6120EE7A1D38BB0F003F92E8;
+					};
+				};
+			};
+			buildConfigurationList = 6120EE761D38BB0F003F92E8 /* Build configuration list for PBXProject "FreeAPRS" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6120EE721D38BB0F003F92E8;
+			productRefGroup = 6120EE7C1D38BB0F003F92E8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6120EE7A1D38BB0F003F92E8 /* FreeAPRS */,
+				6120EE8E1D38BB0F003F92E8 /* FreeAPRSTests */,
+				6120EE991D38BB0F003F92E8 /* FreeAPRSUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6120EE791D38BB0F003F92E8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6120EE891D38BB0F003F92E8 /* LaunchScreen.storyboard in Resources */,
+				6120EE861D38BB0F003F92E8 /* Assets.xcassets in Resources */,
+				6105F8CA1DBF60CB001B4D1C /* LICENSE in Resources */,
+				6120EE841D38BB0F003F92E8 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6120EE8D1D38BB0F003F92E8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6120EE981D38BB0F003F92E8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		167A49209E125A9F92823CF0 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ModulatorUITests/Pods-ModulatorUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		254B2B62A3E34464369F2C14 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ModulatorUITests/Pods-ModulatorUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3B3032E753CD9228103FFD90 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Modulator/Pods-Modulator-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4946B2ABCF2E43544068939C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ModulatorTests/Pods-ModulatorTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7E8EA2FFC4681A1ECFA06C0B /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ModulatorTests/Pods-ModulatorTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		84300D1D799DFD05B3EEC9CA /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Modulator/Pods-Modulator-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AAA47D2FB101F3669B2A038E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		AD8E9F3C50C61EEBF890C27F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		B663FD56653E50D4D3814F5E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6120EE771D38BB0F003F92E8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				612646011D92848F0081C6CE /* ComplexFIRFilter.swift in Sources */,
+				61878FBB1D40B850003EE788 /* PLL.swift in Sources */,
+				6155F16C1DB4B82E0097CEDC /* DesignDecisions.md in Sources */,
+				615410551D920B8800A7ABFF /* SAMicrophoneInput.m in Sources */,
+				61AEF86F1DA3B1DF00D5CBBC /* APRSPacket.swift in Sources */,
+				61C417151DCAB8F40014B3E4 /* PacketTableViewController.swift in Sources */,
+				61AEF8651D99041C00D5CBBC /* SplitComplex.swift in Sources */,
+				6136EF541DBE2C640057E58F /* FastMath.swift in Sources */,
+				6124682B1D5AF73900D1E42A /* APRSListener.swift in Sources */,
+				61D235F71DBDB42B00A1ABB3 /* AudioProcessOperation.swift in Sources */,
+				6136EF521DBE26220057E58F /* Downsampler.swift in Sources */,
+				61E758FA1D930F220009E22B /* SignalUtils.swift in Sources */,
+				6155F1701DB4E22B0097CEDC /* CircularBufferQueue.swift in Sources */,
+				61D235F51DBA127B00A1ABB3 /* AudioDispatcher.swift in Sources */,
+				6155F16E1DB4C5E20097CEDC /* Sampler.swift in Sources */,
+				6136EF561DBE2F750057E58F /* AudioProcessOperationFactory.swift in Sources */,
+				6120EE811D38BB0F003F92E8 /* ReceiveViewController.swift in Sources */,
+				611B8E8C1D6A3D530062E704 /* FIRFilter.swift in Sources */,
+				612646031D9298AF0081C6CE /* BufferUtils.swift in Sources */,
+				6120EE7F1D38BB0F003F92E8 /* AppDelegate.swift in Sources */,
+				61AEF8711DA7304300D5CBBC /* APRSPacketBuilder.swift in Sources */,
+				6136EF581DBE2FB10057E58F /* NRZIDecoder.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6120EE8B1D38BB0F003F92E8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6120EE941D38BB0F003F92E8 /* ModulatorTests.swift in Sources */,
+				6155F1761DB75D1B0097CEDC /* APRSPacketTests.swift in Sources */,
+				61AEF86A1D9B0FD700D5CBBC /* SplitComplexTests.swift in Sources */,
+				611B8E8F1D6C31C60062E704 /* FIRFilterTests.swift in Sources */,
+				6155F1741DB5C40A0097CEDC /* BufferUtilsTests.swift in Sources */,
+				611B8E911D6C375B0062E704 /* Utils.swift in Sources */,
+				61E758FC1D93A7560009E22B /* UtilsTests.swift in Sources */,
+				61AEF8671D99435F00D5CBBC /* ComplexFIRFilterTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6120EE961D38BB0F003F92E8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6120EE9F1D38BB0F003F92E8 /* ModulatorUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6120EE911D38BB0F003F92E8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6120EE7A1D38BB0F003F92E8 /* FreeAPRS */;
+			targetProxy = 6120EE901D38BB0F003F92E8 /* PBXContainerItemProxy */;
+		};
+		6120EE9C1D38BB0F003F92E8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6120EE7A1D38BB0F003F92E8 /* FreeAPRS */;
+			targetProxy = 6120EE9B1D38BB0F003F92E8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		6120EE821D38BB0F003F92E8 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6120EE831D38BB0F003F92E8 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		6120EE871D38BB0F003F92E8 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6120EE881D38BB0F003F92E8 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		6120EEA11D38BB0F003F92E8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6120EEA21D38BB0F003F92E8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6120EEA41D38BB0F003F92E8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1E008B2CC4354A0E95CC395E /* Pods-Modulator.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = YR937RG9QX;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = Modulator/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dimnsionofsound.Modulator;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Modulator/Modulator-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		6120EEA51D38BB0F003F92E8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 805D6F3148405E3F687B1179 /* Pods-Modulator.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = YR937RG9QX;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = Modulator/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dimnsionofsound.Modulator;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Modulator/Modulator-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		6120EEA71D38BB0F003F92E8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 57DEC61C3FB0CD0D5FCEACAF /* Pods-ModulatorTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = ModulatorTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dimnsionofsound.ModulatorTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FreeAPRS.app/FreeAPRS";
+			};
+			name = Debug;
+		};
+		6120EEA81D38BB0F003F92E8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E9EC1BFF91F432A2D334F22F /* Pods-ModulatorTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = ModulatorTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dimnsionofsound.ModulatorTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FreeAPRS.app/FreeAPRS";
+			};
+			name = Release;
+		};
+		6120EEAA1D38BB0F003F92E8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B3A1D17246E4769A7FA0EE44 /* Pods-ModulatorUITests.debug.xcconfig */;
+			buildSettings = {
+				INFOPLIST_FILE = ModulatorUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dimnsionofsound.ModulatorUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = Modulator;
+			};
+			name = Debug;
+		};
+		6120EEAB1D38BB0F003F92E8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 63369230077A4336F2617234 /* Pods-ModulatorUITests.release.xcconfig */;
+			buildSettings = {
+				INFOPLIST_FILE = ModulatorUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dimnsionofsound.ModulatorUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = Modulator;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6120EE761D38BB0F003F92E8 /* Build configuration list for PBXProject "FreeAPRS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6120EEA11D38BB0F003F92E8 /* Debug */,
+				6120EEA21D38BB0F003F92E8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6120EEA31D38BB0F003F92E8 /* Build configuration list for PBXNativeTarget "FreeAPRS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6120EEA41D38BB0F003F92E8 /* Debug */,
+				6120EEA51D38BB0F003F92E8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6120EEA61D38BB0F003F92E8 /* Build configuration list for PBXNativeTarget "FreeAPRSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6120EEA71D38BB0F003F92E8 /* Debug */,
+				6120EEA81D38BB0F003F92E8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6120EEA91D38BB0F003F92E8 /* Build configuration list for PBXNativeTarget "FreeAPRSUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6120EEAA1D38BB0F003F92E8 /* Debug */,
+				6120EEAB1D38BB0F003F92E8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6120EE731D38BB0F003F92E8 /* Project object */;
+}

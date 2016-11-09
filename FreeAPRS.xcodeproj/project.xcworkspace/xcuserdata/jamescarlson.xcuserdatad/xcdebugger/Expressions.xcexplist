@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "ComplexFIRFilter.getKernelFft(forLog2Size : Int) -&gt; DSPSplitComplex:ComplexFIRFilter.swift">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

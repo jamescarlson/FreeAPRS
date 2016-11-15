@@ -24,6 +24,7 @@ class CircularBufferQueue <T> {
     private var elements : [T?]
     private var writeIndex = 0
     private var readIndex = 0
+    let notificationIdentifier = Notification.Name("new item")
     
     init (withCapacity: Int) {
         elements = [T?](repeating: nil, count: withCapacity)
@@ -41,6 +42,9 @@ class CircularBufferQueue <T> {
         
         elements[writeIndex % elements.count] = e
         writeIndex += 1
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: self.notificationIdentifier, object: nil)
+        }
         NSLog("\(e)")
     }
     

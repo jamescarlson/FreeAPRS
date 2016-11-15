@@ -30,13 +30,13 @@ import Foundation
      
     */
     
-    @objc func process(samples: UnsafePointer<Int16>, length: Int, channels: Int) {
+    @objc func process(samples: UnsafePointer<Int16>, length: Int, channels: Int, channelIndex: Int = 0) {
         //Do something
         
         let bufferPointer = UnsafeBufferPointer(start: samples, count: length)
         let samples = [Int16](bufferPointer)
         
-        let floatSamples = int16toFloat(samples, channels: channels)
+        let floatSamples = int16toFloat(samples, channels: channels, channelIndex: channelIndex)
         
         let operation = opFactory.getOperation()
         operation.inputSamples = floatSamples

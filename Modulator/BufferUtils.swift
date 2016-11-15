@@ -156,11 +156,11 @@ func sign(input: [Float]) -> [Bool] {
     return output
 }
 
-func int16toFloat(_ input: [Int16], channels: Int) -> [Float] {
+func int16toFloat(_ input: [Int16], channels: Int, channelIndex: Int = 0) -> [Float] {
     var output = [Float](repeating: 0, count: input.count)
 
-    if (channels == 2) {
-        vDSP_vflt16(UnsafePointer<Int16>(input).advanced(by: 1), vDSP_Stride(channels), &output, 1, vDSP_Length(input.count / channels))
+    if (channels >= 2) {
+        vDSP_vflt16(UnsafePointer<Int16>(input).advanced(by: channelIndex), vDSP_Stride(channels), &output, 1, vDSP_Length(input.count / channels))
     } else {
         vDSP_vflt16(input, 1, &output, 1, vDSP_Length(input.count))
     }

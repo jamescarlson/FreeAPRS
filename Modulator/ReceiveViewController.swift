@@ -10,11 +10,14 @@ import UIKit
 
 class ReceiveViewController: UIViewController {
 
+    @IBOutlet weak var textView: UITextView!
     let opQueue = OperationQueue()
     let packetQueue = CircularBufferQueue<APRSPacket>(withCapacity: 16)
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(updateTextView), name: packetQueue.notificationIdentifier, object: nil)
         // Do any additional setup after loading the view, typically from a nib.
         NSLog("Lit")
         
@@ -23,12 +26,29 @@ class ReceiveViewController: UIViewController {
         let opQueue = OperationQueue()
         opQueue.maxConcurrentOperationCount = 1
         
-        let fs = 44100
-        let downsampleFactor = 7
-        let newFs = fs / downsampleFactor
+        let audioInput : SAMicrophoneInput = SAMicrophoneInput();
+        
+        let preferredFs = 44100.0
+        audioInput.configureAudioIn(withPreferredSampleRate: Float(preferredFs),
+                                    preferredNumberOfChannels: 1,
+                                    singleChannelOutput: true,
+                                    channelIndexForSingleChannelOutput: 0,
+                                    preferredSamplesPerBuffer: 4096)
+
+        
+        let fs = Int(audioInput.sampleRate)
+        
         let tbw = 1.5
         let prefilterLowLimit = 900
         let prefilterHighLimit = 2500
+        
+        /* How much downsampling to fit 1.25x the bandwidth of the prefilter
+            into the new signal? */
+        let downsampleFactor = Float(fs) / (Float(prefilterHighLimit) * Float(2.5))
+        
+        /* When in doubt, don't downsample too far (flooring the downsampleFactor) */
+        let newFs = fs / Int(downsampleFactor)
+        
         let prefilterHalfBandwidth = (prefilterHighLimit - prefilterLowLimit) / 2
         let prefilterCenter = (prefilterHighLimit + prefilterLowLimit) / 2
         let markFreq = 1200
@@ -55,9 +75,9 @@ class ReceiveViewController: UIViewController {
                                           cutoff: Float(markSpaceHalfBandwidth),
                                           center: Float(spaceFreq))
         
-        let downsampler = Downsampler<Float>(factor: downsampleFactor, defaultValue: 0)
+        let downsampler = Downsampler<Float>(factor: Int(downsampleFactor), defaultValue: 0)
         
-        let pll = PLL(sampleRate: Float(newFs), baud: 1200, a: 0.96)
+        let pll = PLL(sampleRate: Float(newFs), baud: 1200, a: 0.85)
         
         let nrziDecoder = NRZIDecoder()
         
@@ -75,9 +95,9 @@ class ReceiveViewController: UIViewController {
         
         let dispatcher = AudioDispatcher(operationQueue: opQueue, opFactory: factory)
         
+        audioInput.add(dispatcher)
         
-        let ai : SAMicrophoneInput = SAMicrophoneInput(dispatcher)
-        ai.startAudioIn()
+        audioInput.startAudioIn()
     }
 
     @IBAction func logReceivedPacketCount(_ sender: AnyObject) {
@@ -85,6 +105,13 @@ class ReceiveViewController: UIViewController {
         NSLog("Number of received packets: \(self.packetQueue.size())")
         
     }
+    
+    func updateTextView() {
+        if let newPacket = packetQueue.pop() {
+            textView.text.append("\n" + String(describing: newPacket))
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

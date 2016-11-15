@@ -415,7 +415,7 @@ struct APRSPacket : CustomStringConvertible {
             
                 var digipeater = ""
                 
-                if (doEndIndex + 7 > unstuffedBytes.count) {
+                if (doEndIndex + 7 >= unstuffedBytes.count) {
                     // Decoded that digipeater info was longer than in actuality
                     return nil
                 }
@@ -547,7 +547,7 @@ struct APRSPacket : CustomStringConvertible {
                 
                 var digipeater = ""
                 
-                if (doEndIndex + 7 > unstuffedBytes.count) {
+                if (doEndIndex + 7 >= unstuffedBytes.count) {
                     // Decoded that digipeater info was longer than in actuality
                     return nil
                 }

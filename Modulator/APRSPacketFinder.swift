@@ -8,7 +8,7 @@
 
 import Foundation
 
-class APRSListener {
+class APRSPacketFinder {
     /*
     Min length between flags: 19 bytes, 152 bits (assuming no bits stuffed.)
     Max length between flags: 330 Bytes, 2640 bits (assuming no bits stuffed.)

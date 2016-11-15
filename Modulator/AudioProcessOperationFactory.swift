@@ -15,7 +15,7 @@ class AudioProcessOperationFactory {
     let complex2200Filter: ComplexFIRFilter
     let pll: PLL
     let nrziDecoder: NRZIDecoder
-    let aprsListener: APRSListener
+    let aprsPacketFinder: APRSPacketFinder
     let outputQueue: CircularBufferQueue<APRSPacket>
     
     init(prefilter: FIRFilter,
@@ -24,7 +24,7 @@ class AudioProcessOperationFactory {
          complex2200Filter: ComplexFIRFilter,
          pll: PLL,
          nrziDecoder: NRZIDecoder,
-         aprsListener: APRSListener,
+         aprsPacketFinder: APRSPacketFinder,
          outputQueue: CircularBufferQueue<APRSPacket>) {
         self.prefilter = prefilter
         self.downsampler = downsampler
@@ -32,7 +32,7 @@ class AudioProcessOperationFactory {
         self.complex2200Filter = complex2200Filter
         self.pll = pll
         self.nrziDecoder = nrziDecoder
-        self.aprsListener = aprsListener
+        self.aprsPacketFinder = aprsPacketFinder
         self.outputQueue = outputQueue
     }
     
@@ -44,7 +44,7 @@ class AudioProcessOperationFactory {
             complex2200Filter: complex2200Filter,
             pll: pll,
             nrziDecoder: nrziDecoder,
-            aprsListener: aprsListener,
+            APRSPacketFinder: aprsPacketFinder,
             outputQueue: outputQueue)
         
     }

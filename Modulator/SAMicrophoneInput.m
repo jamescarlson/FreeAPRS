@@ -12,7 +12,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 #include <Accelerate/Accelerate.h>
-#import <Modulator-Swift.h>
+#import <FreeAPRS-Swift.h>
 
 #define FAIL_ON_ERR(_X_) if ((status = (_X_)) != noErr) { goto failed; }
 
@@ -47,7 +47,7 @@ struct AQInputState state;
 #pragma mark -- Audio session stuff
 
 
-- (SAMicrophoneInput *)initWith:(AudioDispatcher *) audioDispatcher{
+- (SAMicrophoneInput *)init{
     if (self = [super init]) {
         [[NSNotificationCenter defaultCenter]
          addObserver:self
@@ -60,21 +60,42 @@ struct AQInputState state;
                 name:@"AVAudioSessionMediaServicesWereResetNotification"
               object:nil];
         NSLog(@"SAMicrophoneInput was initialized");
-        self.dispatcher = audioDispatcher;
         [[AVAudioSession sharedInstance] addObserver:self forKeyPath:@"sampleRate" options:NSKeyValueObservingOptionNew context:NULL];
     }
     return self;
 }
 
+- (void)configureAudioInWithPreferredSampleRate:(float)sampleRate
+                      preferredNumberOfChannels:(int)numChannels
+                            singleChannelOutput:(BOOL)singleChannelOutput
+             channelIndexForSingleChannelOutput:(int)channelIndex
+                      preferredSamplesPerBuffer:(int)preferredSamplesPerBuffer {
+    self.preferredSampleRate = sampleRate;
+    self.preferredNumberOfChannels = numChannels;
+    self.singleChannelOutput = singleChannelOutput;
+    self.channelIndexForSingleChannelOutput = channelIndex;
+    self.preferredSamplesPerBuffer = preferredSamplesPerBuffer;
+
+    [self configureAudioSession];
+    
+}
+
+- (void)configureAudioSession {
+    [self configureAudioSessionCategoryMode];
+    [self activateAudioSession];
+    [self ensureRecordPermission];
+    [self configureAudioSessionParameters];
+    [self setupBasicDescription];
+}
+
+- (void)addAudioDispatcher:(AudioDispatcher *) audioDispatcher {
+    self.dispatcher = audioDispatcher;
+}
 
 - (void)ensureRecordPermission {
     [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
         NSLog(@"Permission %u", granted);
     }];
-}
-
-- (void)configureAudioInput {
-
 }
 
 - (void)configureAudioSessionCategoryMode {
@@ -99,6 +120,7 @@ struct AQInputState state;
 
 - (void)handleMediaServerReset:(NSNotification *)note {
     BOOL success = [self endAudioIn];
+    [self configureAudioSession];
     success = success && [self startAudioIn];
     if (!success) {
         NSLog(@"Failed to reinstate Audio Queue after media server reset");
@@ -125,6 +147,7 @@ struct AQInputState state;
 }
 
 - (void)handleInterruptionEnd {
+    [self configureAudioSession];
     [self startAudioIn];
     //FIXME??
 }
@@ -152,39 +175,45 @@ struct AQInputState state;
     }
 }
 
+/* Should be called after the AudioSession is activated to get correct values
+ of sampleRate and numberOfChannels. Would assert this but there is no way to
+ check. */
+- (void) configureAudioSessionParameters {
+    [[AVAudioSession sharedInstance] setPreferredInputNumberOfChannels:self.preferredNumberOfChannels error:nil];
+    [[AVAudioSession sharedInstance] setPreferredSampleRate:self.preferredSampleRate error:nil];
+    
+    /* Cast because if we have more channels than 2**31 we're having other issues. */
+    self.numberOfChannels = (int)[[AVAudioSession sharedInstance] inputNumberOfChannels];
+    self.sampleRate = [[AVAudioSession sharedInstance] sampleRate];
+    
+    NSLog(@"Number of channels: %d", self.numberOfChannels);
+    NSLog(@"sampleRate: %f", self.sampleRate);
+}
+
+/* Should be called after AudioSession's parameters have been set and verified. */
 - (void) setupBasicDescription {
     UInt32 formatFlags = (0
                           | kAudioFormatFlagIsPacked
                           | kAudioFormatFlagIsSignedInteger
                           | 0 //kAudioFormatFlagsNativeEndian
                           );
-    [[AVAudioSession sharedInstance] setPreferredInputNumberOfChannels:1 error:nil];
-    [[AVAudioSession sharedInstance] setPreferredSampleRate:44100 error:nil];
-    NSInteger numChannelsP = [[AVAudioSession sharedInstance] inputNumberOfChannels];
-    int numChannels = numChannelsP;
-    NSLog(@"Number of channels: %d", numChannels);
-    NSLog(@"sampleRate: %f", [[AVAudioSession sharedInstance] sampleRate]);
-    
-    
+
     state.mDataFormat = (AudioStreamBasicDescription) {
         .mFormatID = kAudioFormatLinearPCM,
         .mFormatFlags = formatFlags,
-        .mSampleRate = [[AVAudioSession sharedInstance] sampleRate],
+        .mSampleRate = self.sampleRate,
         .mBitsPerChannel = 16,
-        .mChannelsPerFrame = numChannels,
-        .mBytesPerFrame = 2*numChannels,
-        .mBytesPerPacket = 2*numChannels,
+        .mChannelsPerFrame = self.numberOfChannels,
+        .mBytesPerFrame = 2*self.numberOfChannels,
+        .mBytesPerPacket = 2*self.numberOfChannels,
         .mFramesPerPacket = 1,
     };
-    self.sampleRate = state.mDataFormat.mSampleRate;
-    
     
 }
 
 - (void) setupState {
-    [self setupBasicDescription];
     state.mIsRunning = YES;
-    state.bufferByteSize = [self deriveBufferSizeForSamples:FFT_LEN];
+    state.bufferByteSize = self.preferredSamplesPerBuffer;
     state.audioDispatcher = self.dispatcher;
 }
 
@@ -203,10 +232,13 @@ struct AQInputState state;
                                  0,                                          // 9
                                  NULL                                        // 10
                                  ));
+        
     }
+    
+    return;
+    
 failed:
     NSLog(@"Failed to allocate buffers, code %d", (int)status);
-    //NSLog(@"Buffer byte size for buffer 1: %d", (uint)state.mBuffers[0]->mAudioDataByteSize);
 }
 
 
@@ -257,9 +289,6 @@ static void HandleInputBuffer (
 #pragma mark - Start and Stop
 
 - (BOOL) startAudioIn {
-    [self configureAudioSessionCategoryMode];
-    [self activateAudioSession];
-    [self ensureRecordPermission];
     [self setupState];
     
     NSAssert(state.mQueue == NULL, @"Queue is already setup");

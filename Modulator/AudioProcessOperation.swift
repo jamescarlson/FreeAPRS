@@ -17,7 +17,7 @@ class AudioProcessOperation : Operation {
     let complex2200Filter: ComplexFIRFilter
     let pll: PLL
     let nrziDecoder: NRZIDecoder
-    let aprsListener: APRSListener
+    let aprsPacketFinder: APRSPacketFinder
     var inputSamples : [Float]?
     var outputPackets : [APRSPacket]?
     var outputQueue : CircularBufferQueue<APRSPacket>
@@ -28,7 +28,7 @@ class AudioProcessOperation : Operation {
          complex2200Filter: ComplexFIRFilter,
          pll: PLL,
          nrziDecoder: NRZIDecoder,
-         aprsListener: APRSListener,
+         aprsPacketFinder: APRSPacketFinder,
          outputQueue: CircularBufferQueue<APRSPacket>) {
         self.prefilter = prefilter
         self.downsampler = downsampler
@@ -36,7 +36,7 @@ class AudioProcessOperation : Operation {
         self.complex2200Filter = complex2200Filter
         self.pll = pll
         self.nrziDecoder = nrziDecoder
-        self.aprsListener = aprsListener
+        self.aprsPacketFinder = aprsPacketFinder
         self.outputQueue = outputQueue
     }
     
@@ -82,7 +82,7 @@ class AudioProcessOperation : Operation {
         
         if (self.isCancelled) { return }
         
-        self.outputPackets = aprsListener.findPackets(nrz)
+        self.outputPackets = aprsPacketFinder.findPackets(nrz)
         
         if (self.outputPackets != nil) {
             for packet in self.outputPackets! {

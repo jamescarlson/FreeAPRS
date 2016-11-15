@@ -1,6 +1,0 @@
-framework module Bitter {
-  umbrella header "Bitter-umbrella.h"
-
-  export *
-  module * { export * }
-}

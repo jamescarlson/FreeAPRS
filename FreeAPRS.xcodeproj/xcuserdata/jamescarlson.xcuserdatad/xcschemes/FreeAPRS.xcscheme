@@ -28,6 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "6120EE8E1D38BB0F003F92E8"
+               BuildableName = "FreeAPRSTests.xctest"
+               BlueprintName = "FreeAPRSTests"
+               ReferencedContainer = "container:FreeAPRS.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "6120EE991D38BB0F003F92E8"
+               BuildableName = "FreeAPRSUITests.xctest"
+               BlueprintName = "FreeAPRSUITests"
+               ReferencedContainer = "container:FreeAPRS.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

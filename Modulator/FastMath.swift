@@ -38,6 +38,19 @@ func -(left: [Float], right: [Float]) -> [Float] {
     return output
 }
 
+func *(left: [Float], right: Float) -> [Float] {
+    var output = [Float](repeating: 0.0, count: left.count)
+    
+    var scalar = right
+    vDSP_vsmul(left, 1, &scalar, &output, 1, vDSP_Length(left.count))
+    
+    return output
+}
+
+func *(left: Float, right: [Float]) -> [Float] {
+    return right * left
+}
+
 func sampleValues<T>(input: [T], sampleLocations: [Int]) -> [T] {
     var output = [T]()
     output.reserveCapacity(sampleLocations.count)

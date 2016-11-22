@@ -281,7 +281,8 @@ static void HandleInputBuffer (
     int lengthSamples = inBuffer->mAudioDataByteSize / 2;
     
     [this.dispatcher processWithSamples:frame length:lengthSamples
-                               channels:state.mDataFormat.mChannelsPerFrame];
+                               channels:state.mDataFormat.mChannelsPerFrame
+                           channelIndex:this.channelIndexForSingleChannelOutput];
     
     AudioQueueEnqueueBuffer(inAQ, inBuffer, 0, NULL);
 }

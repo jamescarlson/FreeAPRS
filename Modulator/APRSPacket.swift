@@ -56,9 +56,11 @@ func | (left: [UInt8], right: UInt8) -> [UInt8] {
     return output
 }
 
+func ==(lhs: APRSPacket, rhs: APRSPacket) -> Bool {
+    return lhs.getAllBytes() == rhs.getAllBytes()
+}
 
-
-struct APRSPacket : CustomStringConvertible {
+struct APRSPacket : CustomStringConvertible, Equatable {
     /* APRS Frames, for our use, are only Information frames. They look like
         this, each byte is sent LSB first, down along the packet, with bit
         stuffing. Bit stuffing is not shown here.

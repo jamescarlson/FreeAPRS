@@ -10,7 +10,7 @@ import Foundation
 
 import XCTest
 import Accelerate
-@testable import Modulator
+@testable import FreeAPRS
 
 class ComplexFIRFilterTests : XCTestCase {
     

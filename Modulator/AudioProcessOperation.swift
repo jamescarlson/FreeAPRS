@@ -15,28 +15,25 @@ class AudioProcessOperation : Operation {
     let downsampler: Downsampler<Float>
     let complex1200Filter: ComplexFIRFilter
     let complex2200Filter: ComplexFIRFilter
-    let pll: PLL
-    let nrziDecoder: NRZIDecoder
-    let aprsPacketFinder: APRSPacketFinder
+    let skewedDecoders: [APRSSkewedDecoder]
+    let deduplicator: APRSPacketSimpleDeduplicator
     var inputSamples : [Float]?
-    var outputPackets : [APRSPacket]?
-    var outputQueue : CircularBufferQueue<APRSPacket>
+    var outputPackets = [APRSPacket]()
+    var outputQueue : APRSPacketDataStore
     
     init(prefilter: FIRFilter,
          downsampler: Downsampler<Float>,
          complex1200Filter: ComplexFIRFilter,
          complex2200Filter: ComplexFIRFilter,
-         pll: PLL,
-         nrziDecoder: NRZIDecoder,
-         aprsPacketFinder: APRSPacketFinder,
-         outputQueue: CircularBufferQueue<APRSPacket>) {
+         skewedDecoders: [APRSSkewedDecoder],
+         deduplicator: APRSPacketSimpleDeduplicator,
+         outputQueue: APRSPacketDataStore) {
         self.prefilter = prefilter
         self.downsampler = downsampler
         self.complex1200Filter = complex1200Filter
         self.complex2200Filter = complex2200Filter
-        self.pll = pll
-        self.nrziDecoder = nrziDecoder
-        self.aprsPacketFinder = aprsPacketFinder
+        self.skewedDecoders = skewedDecoders
+        self.deduplicator = deduplicator
         self.outputQueue = outputQueue
     }
     
@@ -66,29 +63,15 @@ class AudioProcessOperation : Operation {
         let absMark = abs(input: &filteredMark)
         let absSpace = abs(input: &filteredSpace)
         
-        if (self.isCancelled) { return }
-        
-        let difference = absMark - absSpace
-        
-        let sampleLocations = pll.findSamples(data: difference)
-        
-        if (self.isCancelled) { return }
-        
-        let nrziFloat = sampleValues(input: difference, sampleLocations: sampleLocations)
-        
-        let nrzi = sign(input: nrziFloat)
-        
-        let nrz = nrziDecoder.decode(input: nrzi)
-        
-        if (self.isCancelled) { return }
-        
-        self.outputPackets = aprsPacketFinder.findPackets(nrz)
-        
-        if (self.outputPackets != nil) {
-            for packet in self.outputPackets! {
-                outputQueue.push(packet)
-            }
+        for skewedDecoder in skewedDecoders {
+            if (self.isCancelled) { return }
+            
+            let decodedPackets = skewedDecoder.decode(absMark: absMark, absSpace: absSpace)
+            
+            self.outputPackets.append(contentsOf: deduplicator.add(packets: decodedPackets))
         }
+        
+        outputQueue.append(packets: self.outputPackets)
     }
 
 }

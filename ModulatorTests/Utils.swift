@@ -8,7 +8,7 @@
 
 import Foundation
 import Accelerate
-@testable import Modulator
+@testable import FreeAPRS
 
 public func approximatelyEqualTo(_ a : Float, b : Float, eps: Float) -> Bool {
     return fabs(a - b) <= eps

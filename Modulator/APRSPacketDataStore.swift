@@ -11,6 +11,8 @@ import Foundation
 class APRSPacketDataStore: Sequence, Collection {
     var backingArray = [APRSPacket]()
     private let accessQueue = DispatchQueue(label: "ThreadSafeArrayAccess", attributes: .concurrent)
+    let notificationIdentifier = Notification.Name("NewAPRSPacket")
+
     
     var startIndex : Int { return 0 }
     var endIndex : Int { return backingArray.count - 1 }
@@ -23,6 +25,15 @@ class APRSPacketDataStore: Sequence, Collection {
         return count
     }
     
+    var last : APRSPacket? {
+        var element: APRSPacket?
+        self.accessQueue.sync {
+            element = backingArray.last
+        }
+        
+        return element
+    }
+    
     func index(after i: Int) -> Int {
         guard i != endIndex else { fatalError("Cannot increment endIndex") }
         return i + 1
@@ -31,18 +42,27 @@ class APRSPacketDataStore: Sequence, Collection {
     func append(packet: APRSPacket) {
         self.accessQueue.async(flags:.barrier) {
             self.backingArray.append(packet)
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: self.notificationIdentifier, object: nil)
+            }
+        }
+    }
+    
+    func append(packets: [APRSPacket]) {
+        for packet in packets {
+            self.append(packet: packet)
         }
     }
     
     subscript(index: Int) -> APRSPacket {
         get {
-            var element: APRSPacket!
+            var element: APRSPacket?
             self.accessQueue.sync {
                 assert(index >= 0 && index < self.backingArray.count)
                 element = backingArray[index]
             }
             
-            return element
+            return element!
         }
         
         set (newValue) {

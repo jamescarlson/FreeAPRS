@@ -8,7 +8,7 @@
 
 import XCTest
 
-@testable import Modulator
+@testable import FreeAPRS
 
 class BufferUtilsTests: XCTestCase {
     

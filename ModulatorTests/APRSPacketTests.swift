@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import Modulator
+@testable import FreeAPRS
 
 func - (left: [UInt8], right: [UInt8]) -> [Int] {
     let newLen = min(left.count, right.count)

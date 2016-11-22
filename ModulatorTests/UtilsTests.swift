@@ -8,7 +8,7 @@
 
 import XCTest
 
-@testable import Modulator
+@testable import FreeAPRS
 
 class UtilsTests: XCTestCase {
     let absoluteAdditivePrecision = Float(0.01)

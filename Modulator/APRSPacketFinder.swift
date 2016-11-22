@@ -64,7 +64,7 @@ class APRSPacketFinder {
                     Array(bitsBetweenFlags[0..<bitsAfterLastFoundFlag!.count +
                         afterFlagIndices[0] - 8])
                 
-                if let possiblePacket = APRSPacket(fromStuffedBitArrayUnchecked: bitsBetweenFlags) {
+                if let possiblePacket = APRSPacket(fromStuffedBitArray: bitsBetweenFlags) {
                     output.append(possiblePacket)
                 }
             }

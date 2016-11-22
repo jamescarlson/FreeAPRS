@@ -9,7 +9,7 @@
 import Foundation
 
 import XCTest
-@testable import Modulator
+@testable import FreeAPRS
 
 class FIRFilterTests: XCTestCase {
     

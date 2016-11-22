@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import Modulator
+@testable import FreeAPRS
 
 class SplitComplexTests: XCTestCase {
     let absoluteAdditivePrecision = Float(0.01)

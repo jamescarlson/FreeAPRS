@@ -33,25 +33,34 @@
                                     <action selector="logReceivedPacketCount:" destination="tZX-B7-JKw" eventType="touchUpInside" id="T7B-in-4t6"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="In RMS: 0.0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZXg-pk-Cey">
+                                <frame key="frameInset" minX="274" minY="24" width="120" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="mFA-hX-2Xs" firstAttribute="top" secondItem="h3j-Xp-kxu" secondAttribute="bottom" id="3RB-uZ-apg"/>
+                            <constraint firstItem="ZXg-pk-Cey" firstAttribute="trailing" secondItem="S7W-oR-xT7" secondAttribute="trailing" id="9Bw-hp-Lna"/>
                             <constraint firstItem="CHc-xV-QfN" firstAttribute="top" secondItem="S7W-oR-xT7" secondAttribute="bottom" constant="8" symbolic="YES" id="FeI-qZ-187"/>
                             <constraint firstItem="mFA-hX-2Xs" firstAttribute="leading" secondItem="CMW-qq-Tr8" secondAttribute="leadingMargin" id="HnT-58-SNa"/>
                             <constraint firstItem="S7W-oR-xT7" firstAttribute="top" secondItem="mFA-hX-2Xs" secondAttribute="bottom" constant="16" id="MgB-HK-SXF"/>
                             <constraint firstItem="mFA-hX-2Xs" firstAttribute="leading" secondItem="S7W-oR-xT7" secondAttribute="leading" id="Sis-2K-w9B"/>
+                            <constraint firstItem="ZXg-pk-Cey" firstAttribute="baseline" secondItem="mFA-hX-2Xs" secondAttribute="baseline" id="WYQ-Mg-OUD"/>
                             <constraint firstItem="S7W-oR-xT7" firstAttribute="trailing" secondItem="CMW-qq-Tr8" secondAttribute="trailingMargin" id="uEq-Yw-fzR"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Transmit" id="sku-XZ-t5G"/>
                     <connections>
+                        <outlet property="rmsLabel" destination="ZXg-pk-Cey" id="oEh-bX-VbX"/>
                         <outlet property="textView" destination="S7W-oR-xT7" id="Jnw-wY-S7T"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Y5T-a1-CQG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-197.59999999999999" y="948.57571214392806"/>
+            <point key="canvasLocation" x="-198.55072463768118" y="948.09782608695662"/>
         </scene>
         <!--Settings-->
         <scene sceneID="V3o-NX-5VW">
@@ -68,7 +77,7 @@
                                         <rect key="frame" x="0.0" y="28" width="414" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="luO-q0-mfw" id="nwG-J2-4u9">
-                                            <frame key="frameInset" width="414" height="44"/>
+                                            <frame key="frameInset" width="414" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -76,7 +85,7 @@
                                         <rect key="frame" x="0.0" y="72" width="414" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="AcE-hY-GAa" id="dP1-0Y-kV6">
-                                            <frame key="frameInset" width="414" height="44"/>
+                                            <frame key="frameInset" width="414" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -84,7 +93,7 @@
                                         <rect key="frame" x="0.0" y="116" width="414" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8DV-Pq-lwl" id="YKl-eM-ZBb">
-                                            <frame key="frameInset" width="414" height="44"/>
+                                            <frame key="frameInset" width="414" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -134,7 +143,7 @@
                                 <rect key="frame" x="0.0" y="28" width="414" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XVy-Vl-pKx" id="9eE-pP-18I">
-                                    <frame key="frameInset" width="414" height="44"/>
+                                    <frame key="frameInset" width="414" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>

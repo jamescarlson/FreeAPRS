@@ -78,7 +78,7 @@ class APRSPacketSimpleDeduplicator {
             return nil
         }
         
-        if self.packetKeyQueue.size() >= self.numPacketsToRemember {
+        if self.packetKeyQueue.count >= self.numPacketsToRemember {
             let packetKeyToRemove = self.packetKeyQueue.pop()
             self.packets.removeValue(forKey: packetKeyToRemove!)
         }
@@ -119,7 +119,7 @@ class APRSPacketDigipeaterDeduplicator {
             return nil
         }
         
-        if self.packetKeyQueue.size() >= self.numPacketsToRemember {
+        if self.packetKeyQueue.count >= self.numPacketsToRemember {
             let packetKeyToRemove = self.packetKeyQueue.pop()
             self.packets.removeValue(forKey: packetKeyToRemove!)
         }

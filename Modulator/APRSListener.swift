@@ -47,7 +47,7 @@ class APRSListener {
         
         /* How much downsampling to fit 1.25x the bandwidth of the prefilter
          into the new signal? */
-        let downsampleFactor = Float(fs) / (Float(prefilterHighLimit) * Float(2.5))
+        let downsampleFactor = Float(fs) / (Float(prefilterHighLimit) * Float(5))
         
         /* When in doubt, don't downsample too far (flooring the downsampleFactor) */
         let newFs = fs / Int(downsampleFactor)
@@ -85,7 +85,7 @@ class APRSListener {
         var skewedDecoders = [APRSSkewedDecoder]()
         
         for skew in skews {
-            let thisPLL = PLL(sampleRate: Float(newFs), baud: 1200, a: 0.9)
+            let thisPLL = PLL(sampleRate: Float(newFs), baud: 1200, a: 0.7)
             let thisNrziDecoder = NRZIDecoder()
             let thisAprsPacketFinder = APRSPacketFinder()
             
@@ -98,7 +98,7 @@ class APRSListener {
         }
 
         
-        let factory = AudioProcessOperationFactory(
+        let factory = APRSDecodeOperationFactory(
             prefilter: prefilter,
             downsampler: downsampler,
             complex1200Filter: markFilter,

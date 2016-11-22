@@ -20,7 +20,7 @@ import Foundation
  enqueue more elements than the capacity, the array is resized to support it.
  */
 
-class CircularBufferQueue <T> {
+class CircularBufferQueue <T> : Queue {
     private var elements : [T?]
     private var writeIndex = 0
     private var readIndex = 0
@@ -30,7 +30,7 @@ class CircularBufferQueue <T> {
     }
     
     public func push(_ e: T) {
-        if (size() >= elements.count) {
+        if (self.count >= elements.count) {
             
             /*Double the array size to get more space
             Modulus indexing will still work: if the read index was about to
@@ -41,6 +41,12 @@ class CircularBufferQueue <T> {
         
         elements[writeIndex % elements.count] = e
         writeIndex += 1
+    }
+    
+    public func pushMultiple(_ e: [T]) {
+        for element in e {
+            self.push(element)
+        }
     }
     
     public func pop() -> T? {
@@ -57,8 +63,10 @@ class CircularBufferQueue <T> {
         return readIndex >= writeIndex
     }
     
-    public func size() -> Int {
-        return writeIndex - readIndex
+    public var count : Int {
+        get {
+            return writeIndex - readIndex
+        }
     }
     
 }

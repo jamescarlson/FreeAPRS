@@ -23,7 +23,7 @@
 		612646031D9298AF0081C6CE /* BufferUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612646021D9298AF0081C6CE /* BufferUtils.swift */; };
 		6136EF521DBE26220057E58F /* Downsampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6136EF511DBE26220057E58F /* Downsampler.swift */; };
 		6136EF541DBE2C640057E58F /* FastMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6136EF531DBE2C640057E58F /* FastMath.swift */; };
-		6136EF561DBE2F750057E58F /* AudioProcessOperationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6136EF551DBE2F750057E58F /* AudioProcessOperationFactory.swift */; };
+		6136EF561DBE2F750057E58F /* APRSDecodeOperationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6136EF551DBE2F750057E58F /* APRSDecodeOperationFactory.swift */; };
 		6136EF581DBE2FB10057E58F /* NRZIDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6136EF571DBE2FB10057E58F /* NRZIDecoder.swift */; };
 		615410551D920B8800A7ABFF /* SAMicrophoneInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 615410541D920B8800A7ABFF /* SAMicrophoneInput.m */; };
 		6155F16C1DB4B82E0097CEDC /* DesignDecisions.md in Sources */ = {isa = PBXBuildFile; fileRef = 6155F16B1DB4B82E0097CEDC /* DesignDecisions.md */; };
@@ -38,6 +38,9 @@
 		618E09C41DE329CC00C22E13 /* APRSPacketDeduplicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618E09C31DE329CC00C22E13 /* APRSPacketDeduplicator.swift */; };
 		618E09C81DE3B09C00C22E13 /* APRSPacketDeduplicatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618E09C71DE3B09C00C22E13 /* APRSPacketDeduplicatorTests.swift */; };
 		618E09CC1DE3BEAE00C22E13 /* APRSSkewedDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618E09CB1DE3BEAE00C22E13 /* APRSSkewedDecoder.swift */; };
+		618E09D01DE444EC00C22E13 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618E09CF1DE444EC00C22E13 /* Queue.swift */; };
+		618E09D21DE4576C00C22E13 /* AudioProcessOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618E09D11DE4576C00C22E13 /* AudioProcessOperation.swift */; };
+		618E09D41DE4578800C22E13 /* AudioProcessOperationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618E09D31DE4578800C22E13 /* AudioProcessOperationFactory.swift */; };
 		61AEF8651D99041C00D5CBBC /* SplitComplex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEF8641D99041C00D5CBBC /* SplitComplex.swift */; };
 		61AEF8671D99435F00D5CBBC /* ComplexFIRFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEF8661D99435F00D5CBBC /* ComplexFIRFilterTests.swift */; };
 		61AEF86A1D9B0FD700D5CBBC /* SplitComplexTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEF8691D9B0FD700D5CBBC /* SplitComplexTests.swift */; };
@@ -45,7 +48,7 @@
 		61AEF8711DA7304300D5CBBC /* APRSPacketBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEF8701DA7304300D5CBBC /* APRSPacketBuilder.swift */; };
 		61C417151DCAB8F40014B3E4 /* PacketTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C417141DCAB8F40014B3E4 /* PacketTableViewController.swift */; };
 		61D235F51DBA127B00A1ABB3 /* AudioDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D235F41DBA127B00A1ABB3 /* AudioDispatcher.swift */; };
-		61D235F71DBDB42B00A1ABB3 /* AudioProcessOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D235F61DBDB42B00A1ABB3 /* AudioProcessOperation.swift */; };
+		61D235F71DBDB42B00A1ABB3 /* APRSDecodeOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D235F61DBDB42B00A1ABB3 /* APRSDecodeOperation.swift */; };
 		61E758FA1D930F220009E22B /* SignalUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E758F91D930F220009E22B /* SignalUtils.swift */; };
 		61E758FC1D93A7560009E22B /* UtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E758FB1D93A7560009E22B /* UtilsTests.swift */; };
 /* End PBXBuildFile section */
@@ -103,7 +106,7 @@
 		612646021D9298AF0081C6CE /* BufferUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferUtils.swift; sourceTree = "<group>"; };
 		6136EF511DBE26220057E58F /* Downsampler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downsampler.swift; sourceTree = "<group>"; };
 		6136EF531DBE2C640057E58F /* FastMath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FastMath.swift; sourceTree = "<group>"; };
-		6136EF551DBE2F750057E58F /* AudioProcessOperationFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioProcessOperationFactory.swift; sourceTree = "<group>"; };
+		6136EF551DBE2F750057E58F /* APRSDecodeOperationFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APRSDecodeOperationFactory.swift; sourceTree = "<group>"; };
 		6136EF571DBE2FB10057E58F /* NRZIDecoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NRZIDecoder.swift; sourceTree = "<group>"; };
 		615410521D920B8700A7ABFF /* Modulator-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Modulator-Bridging-Header.h"; sourceTree = "<group>"; };
 		615410531D920B8800A7ABFF /* SAMicrophoneInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMicrophoneInput.h; sourceTree = "<group>"; };
@@ -120,6 +123,9 @@
 		618E09C31DE329CC00C22E13 /* APRSPacketDeduplicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APRSPacketDeduplicator.swift; sourceTree = "<group>"; };
 		618E09C71DE3B09C00C22E13 /* APRSPacketDeduplicatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APRSPacketDeduplicatorTests.swift; sourceTree = "<group>"; };
 		618E09CB1DE3BEAE00C22E13 /* APRSSkewedDecoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APRSSkewedDecoder.swift; sourceTree = "<group>"; };
+		618E09CF1DE444EC00C22E13 /* Queue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
+		618E09D11DE4576C00C22E13 /* AudioProcessOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioProcessOperation.swift; sourceTree = "<group>"; };
+		618E09D31DE4578800C22E13 /* AudioProcessOperationFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioProcessOperationFactory.swift; sourceTree = "<group>"; };
 		61AEF8641D99041C00D5CBBC /* SplitComplex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplitComplex.swift; sourceTree = "<group>"; };
 		61AEF8661D99435F00D5CBBC /* ComplexFIRFilterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComplexFIRFilterTests.swift; sourceTree = "<group>"; };
 		61AEF8691D9B0FD700D5CBBC /* SplitComplexTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplitComplexTests.swift; sourceTree = "<group>"; };
@@ -127,7 +133,7 @@
 		61AEF8701DA7304300D5CBBC /* APRSPacketBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APRSPacketBuilder.swift; sourceTree = "<group>"; };
 		61C417141DCAB8F40014B3E4 /* PacketTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PacketTableViewController.swift; sourceTree = "<group>"; };
 		61D235F41DBA127B00A1ABB3 /* AudioDispatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioDispatcher.swift; sourceTree = "<group>"; };
-		61D235F61DBDB42B00A1ABB3 /* AudioProcessOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioProcessOperation.swift; sourceTree = "<group>"; };
+		61D235F61DBDB42B00A1ABB3 /* APRSDecodeOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APRSDecodeOperation.swift; sourceTree = "<group>"; };
 		61E758F91D930F220009E22B /* SignalUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignalUtils.swift; sourceTree = "<group>"; };
 		61E758FB1D93A7560009E22B /* UtilsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilsTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -233,6 +239,7 @@
 		612468271D5AF6F700D1E42A /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				618E09D61DE45AAF00C22E13 /* AudioProcessOperation */,
 				61AEF8681D9A6CBA00D5CBBC /* Types */,
 				61AEF86D1DA3B1AC00D5CBBC /* APRS */,
 				61AEF86C1DA3B18700D5CBBC /* IO */,
@@ -250,12 +257,22 @@
 			name = Docs;
 			sourceTree = "<group>";
 		};
+		618E09D61DE45AAF00C22E13 /* AudioProcessOperation */ = {
+			isa = PBXGroup;
+			children = (
+				618E09D11DE4576C00C22E13 /* AudioProcessOperation.swift */,
+				618E09D31DE4578800C22E13 /* AudioProcessOperationFactory.swift */,
+			);
+			name = AudioProcessOperation;
+			sourceTree = "<group>";
+		};
 		61AEF8681D9A6CBA00D5CBBC /* Types */ = {
 			isa = PBXGroup;
 			children = (
 				61AEF8641D99041C00D5CBBC /* SplitComplex.swift */,
 				6155F16F1DB4E22B0097CEDC /* CircularBufferQueue.swift */,
 				618E09BF1DDB0F6A00C22E13 /* APRSPacketDataStore.swift */,
+				618E09CF1DE444EC00C22E13 /* Queue.swift */,
 			);
 			name = Types;
 			sourceTree = "<group>";
@@ -290,8 +307,8 @@
 		61AEF86D1DA3B1AC00D5CBBC /* APRS */ = {
 			isa = PBXGroup;
 			children = (
-				6136EF551DBE2F750057E58F /* AudioProcessOperationFactory.swift */,
-				61D235F61DBDB42B00A1ABB3 /* AudioProcessOperation.swift */,
+				6136EF551DBE2F750057E58F /* APRSDecodeOperationFactory.swift */,
+				61D235F61DBDB42B00A1ABB3 /* APRSDecodeOperation.swift */,
 				6124682A1D5AF73900D1E42A /* APRSPacketFinder.swift */,
 				61AEF86E1DA3B1DF00D5CBBC /* APRSPacket.swift */,
 				61AEF8701DA7304300D5CBBC /* APRSPacketBuilder.swift */,
@@ -450,6 +467,7 @@
 				612646011D92848F0081C6CE /* ComplexFIRFilter.swift in Sources */,
 				618E09C21DDB276100C22E13 /* APRSListener.swift in Sources */,
 				61878FBB1D40B850003EE788 /* PLL.swift in Sources */,
+				618E09D41DE4578800C22E13 /* AudioProcessOperationFactory.swift in Sources */,
 				6155F16C1DB4B82E0097CEDC /* DesignDecisions.md in Sources */,
 				615410551D920B8800A7ABFF /* SAMicrophoneInput.m in Sources */,
 				61AEF86F1DA3B1DF00D5CBBC /* APRSPacket.swift in Sources */,
@@ -459,13 +477,15 @@
 				6136EF541DBE2C640057E58F /* FastMath.swift in Sources */,
 				6124682B1D5AF73900D1E42A /* APRSPacketFinder.swift in Sources */,
 				618E09CC1DE3BEAE00C22E13 /* APRSSkewedDecoder.swift in Sources */,
-				61D235F71DBDB42B00A1ABB3 /* AudioProcessOperation.swift in Sources */,
+				61D235F71DBDB42B00A1ABB3 /* APRSDecodeOperation.swift in Sources */,
 				6136EF521DBE26220057E58F /* Downsampler.swift in Sources */,
+				618E09D01DE444EC00C22E13 /* Queue.swift in Sources */,
 				61E758FA1D930F220009E22B /* SignalUtils.swift in Sources */,
 				6155F1701DB4E22B0097CEDC /* CircularBufferQueue.swift in Sources */,
 				61D235F51DBA127B00A1ABB3 /* AudioDispatcher.swift in Sources */,
 				6155F16E1DB4C5E20097CEDC /* Sampler.swift in Sources */,
-				6136EF561DBE2F750057E58F /* AudioProcessOperationFactory.swift in Sources */,
+				618E09D21DE4576C00C22E13 /* AudioProcessOperation.swift in Sources */,
+				6136EF561DBE2F750057E58F /* APRSDecodeOperationFactory.swift in Sources */,
 				6120EE811D38BB0F003F92E8 /* ReceiveViewController.swift in Sources */,
 				611B8E8C1D6A3D530062E704 /* FIRFilter.swift in Sources */,
 				618E09C41DE329CC00C22E13 /* APRSPacketDeduplicator.swift in Sources */,

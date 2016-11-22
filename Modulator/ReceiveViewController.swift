@@ -11,6 +11,7 @@ import UIKit
 class ReceiveViewController: UIViewController {
 
     @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var rmsLabel: UILabel!
     let opQueue = OperationQueue()
     let packetStore = APRSPacketDataStore()
     var listener : APRSListener?
@@ -19,6 +20,7 @@ class ReceiveViewController: UIViewController {
         super.viewDidLoad()
         listener = APRSListener(withDataStore: packetStore, skews: [0.25, 0.5, 0.707, 0.9, 1.0, 1.12, 1.414, 2.0, 4.0])
         NotificationCenter.default.addObserver(self, selector: #selector(updateTextView), name: packetStore.notificationIdentifier, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateRmsLabel), name: Notification.Name("RMSValue"), object: nil)
         // Do any additional setup after loading the view, typically from a nib.
         
         listener?.startListening()
@@ -28,6 +30,12 @@ class ReceiveViewController: UIViewController {
     @IBAction func logReceivedPacketCount(_ sender: AnyObject) {
         NSLog("Number of received packets: \(self.packetStore.count)")
         
+    }
+    
+    func updateRmsLabel(note : Notification) {
+        if let value = note.userInfo?["value"] as? Float {
+            self.rmsLabel.text = "In RMS: \(value)"
+        }
     }
     
     func updateTextView() {

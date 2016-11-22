@@ -61,3 +61,14 @@ func sampleValues<T>(input: [T], sampleLocations: [Int]) -> [T] {
     
     return output
 }
+/*
+func sampleValues(input: [Float], sampleLocations: [Float]) -> [Float] {
+    var output = [Float]()
+    output.reserveCapacity(sampleLocations.count)
+    
+    for i in 0..<sampleLocations.count {
+        let previousSample = input[Int(floorf(sampleLocations[i]))]
+        let nextSample = input[Int(ceilf(sampleLocations[i]))]
+    }
+}
+ */

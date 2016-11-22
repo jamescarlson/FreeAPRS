@@ -29,7 +29,10 @@
     - See how many flags are required for detection at different PLL adjustment rates
     - Smaller alpha - faster lock on - More sampling jitter which is ultimately bad but if there aren't enough flags then it's unlit
 
-'
+
+- Implemented Skewed decoding
+- Still want adjustable PLL rate. 
+- Finer Grained Zero Crossing Detection - fractional samples.
 
 
 ## Concurrency and Processing Chain
@@ -65,8 +68,10 @@ Settable filtering of packets on map and in list
 - 
 
 Might want to redesign APRSPacket Class to allow easier filtering in this way
-- Core data/ database style filter
-- 
+- Core data/ database style filter ?
+
+
+
 
 
 

@@ -144,3 +144,10 @@ func complexExponential(_ length: Int, fs: Float, fc: Float, centered: Bool) -> 
     
     return result
 }
+
+func rmsValue(input: [Float]) -> Float {
+    var result : Float = 0.0
+    vDSP_rmsqv(input, 1, &result, vDSP_Length(input.count))
+    
+    return result
+}

@@ -18,7 +18,7 @@ class APRSListener {
         self.dataStore = dataStore
         opQueue.maxConcurrentOperationCount = 1
         audioInput = SAMicrophoneInput()
-        self.skews = [1.0]
+        self.skews = UserDefaults.standard.array(forKey: "spaceToneSkews") as? [Float] ?? [1.0]
     }
     
     init(withDataStore dataStore: APRSPacketDataStore,

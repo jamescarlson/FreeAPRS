@@ -70,9 +70,14 @@ Settable filtering of packets on map and in list
 Might want to redesign APRSPacket Class to allow easier filtering in this way
 - Core data/ database style filter ?
 
+## Settings view
 
-
-
+Decode
+- Use multiple space tone skew values. (Uses slightly more CPU but highly improves decode rate)
+    - Space Tone Skew Values >
+- Filter out duplicate digipeated packets
+- Store decoded packets
+- 
 
 
 

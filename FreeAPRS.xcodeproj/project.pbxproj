@@ -46,6 +46,9 @@
 		61AEF86A1D9B0FD700D5CBBC /* SplitComplexTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEF8691D9B0FD700D5CBBC /* SplitComplexTests.swift */; };
 		61AEF86F1DA3B1DF00D5CBBC /* APRSPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEF86E1DA3B1DF00D5CBBC /* APRSPacket.swift */; };
 		61AEF8711DA7304300D5CBBC /* APRSPacketBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AEF8701DA7304300D5CBBC /* APRSPacketBuilder.swift */; };
+		61B502901DE59653006FE144 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B5028F1DE59653006FE144 /* SettingsTableViewController.swift */; };
+		61B502921DE68C1E006FE144 /* SpaceToneSkewSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B502911DE68C1E006FE144 /* SpaceToneSkewSettingsTableViewController.swift */; };
+		61B502951DE6AC7F006FE144 /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B502941DE6AC7F006FE144 /* TextFieldTableViewCell.swift */; };
 		61C417151DCAB8F40014B3E4 /* PacketTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C417141DCAB8F40014B3E4 /* PacketTableViewController.swift */; };
 		61D235F51DBA127B00A1ABB3 /* AudioDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D235F41DBA127B00A1ABB3 /* AudioDispatcher.swift */; };
 		61D235F71DBDB42B00A1ABB3 /* APRSDecodeOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D235F61DBDB42B00A1ABB3 /* APRSDecodeOperation.swift */; };
@@ -131,6 +134,9 @@
 		61AEF8691D9B0FD700D5CBBC /* SplitComplexTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplitComplexTests.swift; sourceTree = "<group>"; };
 		61AEF86E1DA3B1DF00D5CBBC /* APRSPacket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APRSPacket.swift; sourceTree = "<group>"; };
 		61AEF8701DA7304300D5CBBC /* APRSPacketBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APRSPacketBuilder.swift; sourceTree = "<group>"; };
+		61B5028F1DE59653006FE144 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
+		61B502911DE68C1E006FE144 /* SpaceToneSkewSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpaceToneSkewSettingsTableViewController.swift; sourceTree = "<group>"; };
+		61B502941DE6AC7F006FE144 /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
 		61C417141DCAB8F40014B3E4 /* PacketTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PacketTableViewController.swift; sourceTree = "<group>"; };
 		61D235F41DBA127B00A1ABB3 /* AudioDispatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioDispatcher.swift; sourceTree = "<group>"; };
 		61D235F61DBDB42B00A1ABB3 /* APRSDecodeOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APRSDecodeOperation.swift; sourceTree = "<group>"; };
@@ -202,12 +208,13 @@
 		6120EE7D1D38BB0F003F92E8 /* FreeAPRS */ = {
 			isa = PBXGroup;
 			children = (
+				6120EE821D38BB0F003F92E8 /* Main.storyboard */,
+				61B502931DE6AC5F006FE144 /* Views */,
 				61C417131DCAB8C90014B3E4 /* View Controllers */,
 				6155F16A1DB4B7E30097CEDC /* Docs */,
 				612468271D5AF6F700D1E42A /* Models */,
 				6120EE7E1D38BB0F003F92E8 /* AppDelegate.swift */,
 				6120EE801D38BB0F003F92E8 /* ReceiveViewController.swift */,
-				6120EE821D38BB0F003F92E8 /* Main.storyboard */,
 				6120EE851D38BB0F003F92E8 /* Assets.xcassets */,
 				6120EE871D38BB0F003F92E8 /* LaunchScreen.storyboard */,
 				6120EE8A1D38BB0F003F92E8 /* Info.plist */,
@@ -319,10 +326,20 @@
 			name = APRS;
 			sourceTree = "<group>";
 		};
+		61B502931DE6AC5F006FE144 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				61B502941DE6AC7F006FE144 /* TextFieldTableViewCell.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		61C417131DCAB8C90014B3E4 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				61C417141DCAB8F40014B3E4 /* PacketTableViewController.swift */,
+				61B5028F1DE59653006FE144 /* SettingsTableViewController.swift */,
+				61B502911DE68C1E006FE144 /* SpaceToneSkewSettingsTableViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -398,6 +415,11 @@
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = YR937RG9QX;
 						LastSwiftMigration = 0800;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					6120EE8E1D38BB0F003F92E8 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -467,9 +489,11 @@
 				612646011D92848F0081C6CE /* ComplexFIRFilter.swift in Sources */,
 				618E09C21DDB276100C22E13 /* APRSListener.swift in Sources */,
 				61878FBB1D40B850003EE788 /* PLL.swift in Sources */,
+				61B502951DE6AC7F006FE144 /* TextFieldTableViewCell.swift in Sources */,
 				618E09D41DE4578800C22E13 /* AudioProcessOperationFactory.swift in Sources */,
 				6155F16C1DB4B82E0097CEDC /* DesignDecisions.md in Sources */,
 				615410551D920B8800A7ABFF /* SAMicrophoneInput.m in Sources */,
+				61B502921DE68C1E006FE144 /* SpaceToneSkewSettingsTableViewController.swift in Sources */,
 				61AEF86F1DA3B1DF00D5CBBC /* APRSPacket.swift in Sources */,
 				618E09C01DDB0F6A00C22E13 /* APRSPacketDataStore.swift in Sources */,
 				61C417151DCAB8F40014B3E4 /* PacketTableViewController.swift in Sources */,
@@ -490,6 +514,7 @@
 				611B8E8C1D6A3D530062E704 /* FIRFilter.swift in Sources */,
 				618E09C41DE329CC00C22E13 /* APRSPacketDeduplicator.swift in Sources */,
 				612646031D9298AF0081C6CE /* BufferUtils.swift in Sources */,
+				61B502901DE59653006FE144 /* SettingsTableViewController.swift in Sources */,
 				6120EE7F1D38BB0F003F92E8 /* AppDelegate.swift in Sources */,
 				61AEF8711DA7304300D5CBBC /* APRSPacketBuilder.swift in Sources */,
 				6136EF581DBE2FB10057E58F /* NRZIDecoder.swift in Sources */,
@@ -657,6 +682,7 @@
 				DEVELOPMENT_TEAM = YR937RG9QX;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Modulator/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dimnsionofsound.Modulator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -679,6 +705,7 @@
 				DEVELOPMENT_TEAM = YR937RG9QX;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Modulator/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dimnsionofsound.Modulator;
 				PRODUCT_NAME = "$(TARGET_NAME)";

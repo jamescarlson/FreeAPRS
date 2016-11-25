@@ -64,12 +64,20 @@ class APRSDecodeOperation : AudioProcessOperation {
         let absMark = abs(input: &filteredMark)
         let absSpace = abs(input: &filteredSpace)
         
+        var numDecodedPerSkew = [Int]()
         for skewedDecoder in skewedDecoders {
             if (self.isCancelled) { return }
             
             let decodedPackets = skewedDecoder.decode(absMark: absMark, absSpace: absSpace)
             
+            numDecodedPerSkew.append(decodedPackets.count)
+            
             self.outputPackets.append(contentsOf: deduplicator.add(packets: decodedPackets))
+        }
+        
+        
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: Notification.Name("DecodePerSkew"), object: nil, userInfo: ["decodes": numDecodedPerSkew])
         }
         
         outputQueue.append(packets: self.outputPackets)

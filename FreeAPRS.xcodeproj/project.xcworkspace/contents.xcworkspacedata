@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:Modulator.xcodeproj">
+      location = "self:/Users/jamescarlson/Documents/Programming/qam/modulator/Modulator/FreeAPRS.xcodeproj">
    </FileRef>
 </Workspace>

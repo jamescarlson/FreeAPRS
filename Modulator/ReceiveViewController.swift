@@ -19,7 +19,7 @@ class ReceiveViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        listener = APRSListener(withDataStore: packetStore, skews: [0.25, 0.5, 0.707, 0.9, 1.0, 1.12, 1.414, 2.0, 4.0])
+        listener = APRSListener(withDataStore: packetStore)
         NotificationCenter.default.addObserver(self, selector: #selector(updateTextView), name: packetStore.notificationIdentifier, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateRmsLabel), name: Notification.Name("RMSValue"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateDecodesLabel), name: Notification.Name("DecodePerSkew"), object: nil)

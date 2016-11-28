@@ -152,7 +152,7 @@ struct AQInputState state;
     //FIXME??
 }
 
-- (void)activateAudioSession;
+- (void)activateAudioSession
 {
     NSError * error = nil;
     AVAudioSession * session = [AVAudioSession sharedInstance];

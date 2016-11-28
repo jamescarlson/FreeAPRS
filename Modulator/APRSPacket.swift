@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 /* An immutable representation of an APRS packet. */
 
@@ -59,6 +60,9 @@ func | (left: [UInt8], right: UInt8) -> [UInt8] {
 func ==(lhs: APRSPacket, rhs: APRSPacket) -> Bool {
     return lhs.getAllBytes() == rhs.getAllBytes()
 }
+
+
+
 
 struct APRSPacket : CustomStringConvertible, Equatable {
     /* APRS Frames, for our use, are only Information frames. They look like
@@ -158,6 +162,11 @@ struct APRSPacket : CustomStringConvertible, Equatable {
     let digipeatersHasBeenRepeated : [Bool]
     let information : String
     let FCS : UInt16 //Computed on initialization
+    /*
+    let date : Date
+    let location : CLLocation
+    */
+    
     private var allBytes : [UInt8]
     private var stuffedBits : [Bool]
     private var passesCRC = true
@@ -591,6 +600,90 @@ struct APRSPacket : CustomStringConvertible, Equatable {
         self.information = information
         self.FCS = testFCS
     }
+    
+    static func informationFrom(destination: String, information: String) -> (CLLocation, Date) {
+        let firstByte = information[information.startIndex]
+        
+        switch firstByte {
+        case Character(UnicodeScalar(0x1c)):
+            // Current Mic-E data
+            break
+            
+        case Character(UnicodeScalar(0x1d)):
+            // Old Mic-E data
+            break
+            
+        case Character("!"):
+            // Position without timestamp
+            break
+        
+        case Character("$"):
+            // Raw GPS Data
+            break
+            
+        case Character("'"):
+            // Old Mic-E data
+            break
+            
+        case Character(")"):
+            // Item
+            break
+        
+        case Character("/"):
+            // Position with timestamp
+            break
+        
+        case Character(":"):
+            // Message
+            break
+    
+        case Character(";"):
+            // Object
+            break
+            
+        case Character("<"):
+            //Station Capabilities
+            break
+        
+        case Character("="):
+            // Position Without Timestamp (for APRS messaging)
+            break
+        
+        case Character(">"):
+            // Status
+            break
+        
+        case Character("?"):
+            // Query
+            break
+        
+        case Character("@"):
+            // Position with timestamp (for APRS messaging)
+            break
+        
+        case Character("T"):
+            // Telemetry Data
+            break
+        
+        case Character("["):
+            // Obsolete Maidenhead grid locator beacon
+            break
+        
+        case Character("`"):
+            // Current Mic-E data
+            break
+            
+        case Character("_"):
+            // Weather Report (without position)
+            break
+            
+        default:
+            break
+        }
+        
+        return (CLLocation(latitude: 0.0, longitude: 0.0), Date())
+    }
 
+    
     
 }

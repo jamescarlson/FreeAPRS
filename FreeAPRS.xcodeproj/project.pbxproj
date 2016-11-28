@@ -31,6 +31,7 @@
 		6155F1701DB4E22B0097CEDC /* CircularBufferQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6155F16F1DB4E22B0097CEDC /* CircularBufferQueue.swift */; };
 		6155F1741DB5C40A0097CEDC /* BufferUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6155F1731DB5C40A0097CEDC /* BufferUtilsTests.swift */; };
 		6155F1761DB75D1B0097CEDC /* APRSPacketTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6155F1751DB75D1B0097CEDC /* APRSPacketTests.swift */; };
+		61803F761DE9309E007890D1 /* PacketTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61803F751DE9309E007890D1 /* PacketTableViewController.swift */; };
 		61878FBB1D40B850003EE788 /* PLL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61878FBA1D40B850003EE788 /* PLL.swift */; };
 		61878FBD1D40BD73003EE788 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61878FBC1D40BD73003EE788 /* Accelerate.framework */; };
 		618E09C01DDB0F6A00C22E13 /* APRSPacketDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618E09BF1DDB0F6A00C22E13 /* APRSPacketDataStore.swift */; };
@@ -49,11 +50,15 @@
 		61B502901DE59653006FE144 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B5028F1DE59653006FE144 /* SettingsTableViewController.swift */; };
 		61B502921DE68C1E006FE144 /* SpaceToneSkewSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B502911DE68C1E006FE144 /* SpaceToneSkewSettingsTableViewController.swift */; };
 		61B502951DE6AC7F006FE144 /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B502941DE6AC7F006FE144 /* TextFieldTableViewCell.swift */; };
-		61C417151DCAB8F40014B3E4 /* PacketTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C417141DCAB8F40014B3E4 /* PacketTableViewController.swift */; };
 		61D235F51DBA127B00A1ABB3 /* AudioDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D235F41DBA127B00A1ABB3 /* AudioDispatcher.swift */; };
 		61D235F71DBDB42B00A1ABB3 /* APRSDecodeOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D235F61DBDB42B00A1ABB3 /* APRSDecodeOperation.swift */; };
 		61E758FA1D930F220009E22B /* SignalUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E758F91D930F220009E22B /* SignalUtils.swift */; };
 		61E758FC1D93A7560009E22B /* UtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E758FB1D93A7560009E22B /* UtilsTests.swift */; };
+		61FC940C1DEB046D0034A743 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61FC940B1DEB046D0034A743 /* CoreLocation.framework */; };
+		61FC940E1DEBCF9B0034A743 /* DateFunctionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC940D1DEBCF9B0034A743 /* DateFunctionsTests.swift */; };
+		61FC94101DEBCFC80034A743 /* DateFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC940F1DEBCFC80034A743 /* DateFunctions.swift */; };
+		61FC94121DEBDC2F0034A743 /* LocationFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC94111DEBDC2F0034A743 /* LocationFunctions.swift */; };
+		61FC94141DEC58820034A743 /* LocationFunctionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FC94131DEC58820034A743 /* LocationFunctionsTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -119,6 +124,7 @@
 		6155F16F1DB4E22B0097CEDC /* CircularBufferQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircularBufferQueue.swift; sourceTree = "<group>"; };
 		6155F1731DB5C40A0097CEDC /* BufferUtilsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferUtilsTests.swift; sourceTree = "<group>"; };
 		6155F1751DB75D1B0097CEDC /* APRSPacketTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APRSPacketTests.swift; sourceTree = "<group>"; };
+		61803F751DE9309E007890D1 /* PacketTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PacketTableViewController.swift; path = ../PacketTableViewController.swift; sourceTree = "<group>"; };
 		61878FBA1D40B850003EE788 /* PLL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PLL.swift; sourceTree = "<group>"; };
 		61878FBC1D40BD73003EE788 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		618E09BF1DDB0F6A00C22E13 /* APRSPacketDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APRSPacketDataStore.swift; sourceTree = "<group>"; };
@@ -137,11 +143,15 @@
 		61B5028F1DE59653006FE144 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		61B502911DE68C1E006FE144 /* SpaceToneSkewSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpaceToneSkewSettingsTableViewController.swift; sourceTree = "<group>"; };
 		61B502941DE6AC7F006FE144 /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
-		61C417141DCAB8F40014B3E4 /* PacketTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PacketTableViewController.swift; sourceTree = "<group>"; };
 		61D235F41DBA127B00A1ABB3 /* AudioDispatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioDispatcher.swift; sourceTree = "<group>"; };
 		61D235F61DBDB42B00A1ABB3 /* APRSDecodeOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APRSDecodeOperation.swift; sourceTree = "<group>"; };
 		61E758F91D930F220009E22B /* SignalUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignalUtils.swift; sourceTree = "<group>"; };
 		61E758FB1D93A7560009E22B /* UtilsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilsTests.swift; sourceTree = "<group>"; };
+		61FC940B1DEB046D0034A743 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		61FC940D1DEBCF9B0034A743 /* DateFunctionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFunctionsTests.swift; sourceTree = "<group>"; };
+		61FC940F1DEBCFC80034A743 /* DateFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFunctions.swift; sourceTree = "<group>"; };
+		61FC94111DEBDC2F0034A743 /* LocationFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationFunctions.swift; sourceTree = "<group>"; };
+		61FC94131DEC58820034A743 /* LocationFunctionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationFunctionsTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +159,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61FC940C1DEB046D0034A743 /* CoreLocation.framework in Frameworks */,
 				61878FBD1D40BD73003EE788 /* Accelerate.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -180,6 +191,8 @@
 				6155F1731DB5C40A0097CEDC /* BufferUtilsTests.swift */,
 				6155F1751DB75D1B0097CEDC /* APRSPacketTests.swift */,
 				618E09C71DE3B09C00C22E13 /* APRSPacketDeduplicatorTests.swift */,
+				61FC940D1DEBCF9B0034A743 /* DateFunctionsTests.swift */,
+				61FC94131DEC58820034A743 /* LocationFunctionsTests.swift */,
 			);
 			name = ModelTests;
 			sourceTree = "<group>";
@@ -192,6 +205,7 @@
 				6120EE921D38BB0F003F92E8 /* ModulatorTests */,
 				6120EE9D1D38BB0F003F92E8 /* ModulatorUITests */,
 				6120EE7C1D38BB0F003F92E8 /* Products */,
+				61FC940A1DEB046D0034A743 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -214,7 +228,6 @@
 				6155F16A1DB4B7E30097CEDC /* Docs */,
 				612468271D5AF6F700D1E42A /* Models */,
 				6120EE7E1D38BB0F003F92E8 /* AppDelegate.swift */,
-				6120EE801D38BB0F003F92E8 /* ReceiveViewController.swift */,
 				6120EE851D38BB0F003F92E8 /* Assets.xcassets */,
 				6120EE871D38BB0F003F92E8 /* LaunchScreen.storyboard */,
 				6120EE8A1D38BB0F003F92E8 /* Info.plist */,
@@ -251,6 +264,8 @@
 				61AEF86D1DA3B1AC00D5CBBC /* APRS */,
 				61AEF86C1DA3B18700D5CBBC /* IO */,
 				61AEF86B1DA3B15900D5CBBC /* SignalProcessing */,
+				61FC940F1DEBCFC80034A743 /* DateFunctions.swift */,
+				61FC94111DEBDC2F0034A743 /* LocationFunctions.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -337,11 +352,20 @@
 		61C417131DCAB8C90014B3E4 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				61C417141DCAB8F40014B3E4 /* PacketTableViewController.swift */,
+				61803F751DE9309E007890D1 /* PacketTableViewController.swift */,
+				6120EE801D38BB0F003F92E8 /* ReceiveViewController.swift */,
 				61B5028F1DE59653006FE144 /* SettingsTableViewController.swift */,
 				61B502911DE68C1E006FE144 /* SpaceToneSkewSettingsTableViewController.swift */,
 			);
 			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		61FC940A1DEB046D0034A743 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				61FC940B1DEB046D0034A743 /* CoreLocation.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -487,6 +511,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				612646011D92848F0081C6CE /* ComplexFIRFilter.swift in Sources */,
+				61FC94101DEBCFC80034A743 /* DateFunctions.swift in Sources */,
 				618E09C21DDB276100C22E13 /* APRSListener.swift in Sources */,
 				61878FBB1D40B850003EE788 /* PLL.swift in Sources */,
 				61B502951DE6AC7F006FE144 /* TextFieldTableViewCell.swift in Sources */,
@@ -496,7 +521,6 @@
 				61B502921DE68C1E006FE144 /* SpaceToneSkewSettingsTableViewController.swift in Sources */,
 				61AEF86F1DA3B1DF00D5CBBC /* APRSPacket.swift in Sources */,
 				618E09C01DDB0F6A00C22E13 /* APRSPacketDataStore.swift in Sources */,
-				61C417151DCAB8F40014B3E4 /* PacketTableViewController.swift in Sources */,
 				61AEF8651D99041C00D5CBBC /* SplitComplex.swift in Sources */,
 				6136EF541DBE2C640057E58F /* FastMath.swift in Sources */,
 				6124682B1D5AF73900D1E42A /* APRSPacketFinder.swift in Sources */,
@@ -506,12 +530,14 @@
 				618E09D01DE444EC00C22E13 /* Queue.swift in Sources */,
 				61E758FA1D930F220009E22B /* SignalUtils.swift in Sources */,
 				6155F1701DB4E22B0097CEDC /* CircularBufferQueue.swift in Sources */,
+				61FC94121DEBDC2F0034A743 /* LocationFunctions.swift in Sources */,
 				61D235F51DBA127B00A1ABB3 /* AudioDispatcher.swift in Sources */,
 				6155F16E1DB4C5E20097CEDC /* Sampler.swift in Sources */,
 				618E09D21DE4576C00C22E13 /* AudioProcessOperation.swift in Sources */,
 				6136EF561DBE2F750057E58F /* APRSDecodeOperationFactory.swift in Sources */,
 				6120EE811D38BB0F003F92E8 /* ReceiveViewController.swift in Sources */,
 				611B8E8C1D6A3D530062E704 /* FIRFilter.swift in Sources */,
+				61803F761DE9309E007890D1 /* PacketTableViewController.swift in Sources */,
 				618E09C41DE329CC00C22E13 /* APRSPacketDeduplicator.swift in Sources */,
 				612646031D9298AF0081C6CE /* BufferUtils.swift in Sources */,
 				61B502901DE59653006FE144 /* SettingsTableViewController.swift in Sources */,
@@ -526,12 +552,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				6120EE941D38BB0F003F92E8 /* ModulatorTests.swift in Sources */,
+				61FC940E1DEBCF9B0034A743 /* DateFunctionsTests.swift in Sources */,
 				6155F1761DB75D1B0097CEDC /* APRSPacketTests.swift in Sources */,
 				61AEF86A1D9B0FD700D5CBBC /* SplitComplexTests.swift in Sources */,
 				618E09C81DE3B09C00C22E13 /* APRSPacketDeduplicatorTests.swift in Sources */,
 				611B8E8F1D6C31C60062E704 /* FIRFilterTests.swift in Sources */,
 				6155F1741DB5C40A0097CEDC /* BufferUtilsTests.swift in Sources */,
 				611B8E911D6C375B0062E704 /* Utils.swift in Sources */,
+				61FC94141DEC58820034A743 /* LocationFunctionsTests.swift in Sources */,
 				61E758FC1D93A7560009E22B /* UtilsTests.swift in Sources */,
 				61AEF8671D99435F00D5CBBC /* ComplexFIRFilterTests.swift in Sources */,
 			);
@@ -687,9 +715,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.dimnsionofsound.Modulator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Modulator/Modulator-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
+				WARNING_CFLAGS = (
+					"-Wextra",
+					"-Wall",
+				);
 			};
 			name = Debug;
 		};
@@ -710,8 +743,13 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.dimnsionofsound.Modulator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Modulator/Modulator-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
+				WARNING_CFLAGS = (
+					"-Wextra",
+					"-Wall",
+				);
 			};
 			name = Release;
 		};

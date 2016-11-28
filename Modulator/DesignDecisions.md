@@ -79,6 +79,19 @@ Decode
 - Store decoded packets
 - 
 
+# Design Patterns to Consider
+
+## Frameworks 
+Reactive Swift/Cocoa - somewhat emobidies a more general sense of the blocks I write about earlier in this document
+- Bind UI changes to ViewModel and vice versa
+http://www.sprynthesis.com/2014/12/06/reactivecocoa-mvvm-introduction/
+
+
+
+## Patterns
+MVVM - Get rid of massive view controllers by splitting validation of user data, and transformation from model data to view strings into ModelView. Controller interacts with ViewModel and View. 
+
+
 
 
 

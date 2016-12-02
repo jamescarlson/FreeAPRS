@@ -11,6 +11,12 @@
 		611B8E8C1D6A3D530062E704 /* FIRFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611B8E8B1D6A3D530062E704 /* FIRFilter.swift */; };
 		611B8E8F1D6C31C60062E704 /* FIRFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611B8E8E1D6C31C60062E704 /* FIRFilterTests.swift */; };
 		611B8E911D6C375B0062E704 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611B8E901D6C375B0062E704 /* Utils.swift */; };
+		6120E8831DEF85E100CE873C /* SymbolTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6120E8821DEF85E100CE873C /* SymbolTable.swift */; };
+		6120E8901DF1559F00CE873C /* fap.c in Sources */ = {isa = PBXBuildFile; fileRef = 6120E8871DF1559F00CE873C /* fap.c */; };
+		6120E8911DF1559F00CE873C /* helpers.c in Sources */ = {isa = PBXBuildFile; fileRef = 6120E8891DF1559F00CE873C /* helpers.c */; };
+		6120E8921DF1559F00CE873C /* helpers2.c in Sources */ = {isa = PBXBuildFile; fileRef = 6120E88B1DF1559F00CE873C /* helpers2.c */; };
+		6120E8931DF1559F00CE873C /* Makefile.am in Resources */ = {isa = PBXBuildFile; fileRef = 6120E88D1DF1559F00CE873C /* Makefile.am */; };
+		6120E8941DF1559F00CE873C /* Makefile.in in Resources */ = {isa = PBXBuildFile; fileRef = 6120E88E1DF1559F00CE873C /* Makefile.in */; };
 		6120EE7F1D38BB0F003F92E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6120EE7E1D38BB0F003F92E8 /* AppDelegate.swift */; };
 		6120EE811D38BB0F003F92E8 /* ReceiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6120EE801D38BB0F003F92E8 /* ReceiveViewController.swift */; };
 		6120EE841D38BB0F003F92E8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6120EE821D38BB0F003F92E8 /* Main.storyboard */; };
@@ -96,6 +102,16 @@
 		611B8E8B1D6A3D530062E704 /* FIRFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FIRFilter.swift; sourceTree = "<group>"; };
 		611B8E8E1D6C31C60062E704 /* FIRFilterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FIRFilterTests.swift; sourceTree = "<group>"; };
 		611B8E901D6C375B0062E704 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		6120E8821DEF85E100CE873C /* SymbolTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SymbolTable.swift; sourceTree = "<group>"; };
+		6120E8871DF1559F00CE873C /* fap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fap.c; sourceTree = "<group>"; };
+		6120E8881DF1559F00CE873C /* fap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fap.h; sourceTree = "<group>"; };
+		6120E8891DF1559F00CE873C /* helpers.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = helpers.c; sourceTree = "<group>"; };
+		6120E88A1DF1559F00CE873C /* helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = helpers.h; sourceTree = "<group>"; };
+		6120E88B1DF1559F00CE873C /* helpers2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = helpers2.c; sourceTree = "<group>"; };
+		6120E88C1DF1559F00CE873C /* helpers2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = helpers2.h; sourceTree = "<group>"; };
+		6120E88D1DF1559F00CE873C /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.am; sourceTree = "<group>"; };
+		6120E88E1DF1559F00CE873C /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; };
+		6120E88F1DF1559F00CE873C /* regs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = regs.h; sourceTree = "<group>"; };
 		6120EE7B1D38BB0F003F92E8 /* FreeAPRS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FreeAPRS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6120EE7E1D38BB0F003F92E8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6120EE801D38BB0F003F92E8 /* ReceiveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveViewController.swift; sourceTree = "<group>"; };
@@ -195,6 +211,22 @@
 				61FC94131DEC58820034A743 /* LocationFunctionsTests.swift */,
 			);
 			name = ModelTests;
+			sourceTree = "<group>";
+		};
+		6120E8861DF1558100CE873C /* libfap */ = {
+			isa = PBXGroup;
+			children = (
+				6120E8871DF1559F00CE873C /* fap.c */,
+				6120E8881DF1559F00CE873C /* fap.h */,
+				6120E8891DF1559F00CE873C /* helpers.c */,
+				6120E88A1DF1559F00CE873C /* helpers.h */,
+				6120E88B1DF1559F00CE873C /* helpers2.c */,
+				6120E88C1DF1559F00CE873C /* helpers2.h */,
+				6120E88D1DF1559F00CE873C /* Makefile.am */,
+				6120E88E1DF1559F00CE873C /* Makefile.in */,
+				6120E88F1DF1559F00CE873C /* regs.h */,
+			);
+			name = libfap;
 			sourceTree = "<group>";
 		};
 		6120EE721D38BB0F003F92E8 = {
@@ -329,6 +361,7 @@
 		61AEF86D1DA3B1AC00D5CBBC /* APRS */ = {
 			isa = PBXGroup;
 			children = (
+				6120E8861DF1558100CE873C /* libfap */,
 				6136EF551DBE2F750057E58F /* APRSDecodeOperationFactory.swift */,
 				61D235F61DBDB42B00A1ABB3 /* APRSDecodeOperation.swift */,
 				6124682A1D5AF73900D1E42A /* APRSPacketFinder.swift */,
@@ -337,6 +370,7 @@
 				618E09C11DDB276100C22E13 /* APRSListener.swift */,
 				618E09C31DE329CC00C22E13 /* APRSPacketDeduplicator.swift */,
 				618E09CB1DE3BEAE00C22E13 /* APRSSkewedDecoder.swift */,
+				6120E8821DEF85E100CE873C /* SymbolTable.swift */,
 			);
 			name = APRS;
 			sourceTree = "<group>";
@@ -485,6 +519,8 @@
 				6120EE891D38BB0F003F92E8 /* LaunchScreen.storyboard in Resources */,
 				6120EE861D38BB0F003F92E8 /* Assets.xcassets in Resources */,
 				6105F8CA1DBF60CB001B4D1C /* LICENSE in Resources */,
+				6120E8941DF1559F00CE873C /* Makefile.in in Resources */,
+				6120E8931DF1559F00CE873C /* Makefile.am in Resources */,
 				6120EE841D38BB0F003F92E8 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -512,6 +548,7 @@
 			files = (
 				612646011D92848F0081C6CE /* ComplexFIRFilter.swift in Sources */,
 				61FC94101DEBCFC80034A743 /* DateFunctions.swift in Sources */,
+				6120E8831DEF85E100CE873C /* SymbolTable.swift in Sources */,
 				618E09C21DDB276100C22E13 /* APRSListener.swift in Sources */,
 				61878FBB1D40B850003EE788 /* PLL.swift in Sources */,
 				61B502951DE6AC7F006FE144 /* TextFieldTableViewCell.swift in Sources */,
@@ -524,15 +561,18 @@
 				61AEF8651D99041C00D5CBBC /* SplitComplex.swift in Sources */,
 				6136EF541DBE2C640057E58F /* FastMath.swift in Sources */,
 				6124682B1D5AF73900D1E42A /* APRSPacketFinder.swift in Sources */,
+				6120E8911DF1559F00CE873C /* helpers.c in Sources */,
 				618E09CC1DE3BEAE00C22E13 /* APRSSkewedDecoder.swift in Sources */,
 				61D235F71DBDB42B00A1ABB3 /* APRSDecodeOperation.swift in Sources */,
 				6136EF521DBE26220057E58F /* Downsampler.swift in Sources */,
 				618E09D01DE444EC00C22E13 /* Queue.swift in Sources */,
 				61E758FA1D930F220009E22B /* SignalUtils.swift in Sources */,
 				6155F1701DB4E22B0097CEDC /* CircularBufferQueue.swift in Sources */,
+				6120E8901DF1559F00CE873C /* fap.c in Sources */,
 				61FC94121DEBDC2F0034A743 /* LocationFunctions.swift in Sources */,
 				61D235F51DBA127B00A1ABB3 /* AudioDispatcher.swift in Sources */,
 				6155F16E1DB4C5E20097CEDC /* Sampler.swift in Sources */,
+				6120E8921DF1559F00CE873C /* helpers2.c in Sources */,
 				618E09D21DE4576C00C22E13 /* AudioProcessOperation.swift in Sources */,
 				6136EF561DBE2F750057E58F /* APRSDecodeOperationFactory.swift in Sources */,
 				6120EE811D38BB0F003F92E8 /* ReceiveViewController.swift in Sources */,

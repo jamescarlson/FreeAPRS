@@ -601,7 +601,7 @@ struct APRSPacket : CustomStringConvertible, Equatable {
         self.FCS = testFCS
     }
     
-    static func informationFrom(destination: String, information: String) -> (CLLocation, Date) {
+    static func informationFrom(destination: String, information: String) -> (CLLocation?, Date?) {
         let firstByte = information[information.startIndex]
         
         switch firstByte {

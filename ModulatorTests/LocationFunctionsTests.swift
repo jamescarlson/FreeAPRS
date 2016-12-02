@@ -37,7 +37,7 @@ class LocationFunctionsTests: XCTestCase {
         "1010.10S/02030.40E-",
         "0000.00N/00000.00W-",
         "3   .  N/01234.56E-",
-        "30  .  N/10234.56E-",
+        "30  .  N/01234.56E-",
         "301 .  N/01234.56E-",
         "3012.  N/01234.56E-",
         "3012.3 N/01234.56E-",
@@ -45,6 +45,8 @@ class LocationFunctionsTests: XCTestCase {
         
         let expectedOutputs : [CLLocation] = [
         CLLocation(
+     
+    
     }
     */
 }

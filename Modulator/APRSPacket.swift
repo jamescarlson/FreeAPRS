@@ -13,8 +13,9 @@ import CoreLocation
 
 let flag : UInt8 = 0b01111110
 
+// MARK: Operators
 
-/* Shift each byte in a UInt8 Array left by the amount on the right side */
+/// Shift each byte in a UInt8 Array left by the amount on the right side
 infix operator <<! : MultiplicationPrecedence
 
 func <<! (left: [UInt8], right: UInt8) -> [UInt8] {
@@ -29,7 +30,7 @@ func <<! (left: String.UTF8View, right: UInt8) -> [UInt8] {
     return [UInt8](left) <<! right
 }
 
-/* Shift each byte in a UInt8 Array right by the amount on the right side */
+/// Shift each byte in a UInt8 Array right by the amount on the right side
 infix operator >>! : MultiplicationPrecedence
 
 func >>! (left: [UInt8], right: UInt8) -> [UInt8] {
@@ -44,7 +45,7 @@ func >>! (left: String.UTF8View, right: UInt8) -> [UInt8] {
     return [UInt8](left) >>! right
 }
 
-/* Bitwise Or every item in a UInt8 Array. */
+/// Bitwise Or every item in a UInt8 Array.
 func | (left: String.UTF8View, right: UInt8) -> [UInt8] {
     return [UInt8](left) | right
 }
@@ -57,14 +58,99 @@ func | (left: [UInt8], right: UInt8) -> [UInt8] {
     return output
 }
 
+// Compare two APRSPackets by checking if their byte representation is equal
 func ==(lhs: APRSPacket, rhs: APRSPacket) -> Bool {
     return lhs.getAllBytes() == rhs.getAllBytes()
 }
 
 
+// MARK: Packet data and types
 
 
-struct APRSPacket : CustomStringConvertible, Equatable {
+/// Types of APRS Packets
+enum PacketType {
+    case location
+    case object
+    case item
+    case message
+    case status
+    case other
+}
+
+/// Types of APRS Messages
+enum MessageType {
+    case message
+    case ack
+    case rej
+}
+
+/// Struct representing an APRS Message of any of the `MessageType` types.
+struct APRSMessage {
+    /** Type of this message, if it's an ack or rej (reject), may not have a message body. */
+    var type : MessageType
+    
+    /** Destination of this message. May be different than the packet's
+    destination callsign. */
+    var destination : String
+    
+    /// Message Body
+    var message : String?
+    
+    /// ID of this message, will be nil for ack/rej
+    var messageID : Int?
+    
+    /// ID of the message ACKed by this packet
+    var messageACK : Int?
+    
+    /// ID of the message REJected by this packet
+    var messageNACK : Int?
+}
+
+/// Struct representing an APRS Object or Item
+struct APRSObject {
+    var name : String
+    var alive : Bool
+}
+
+/** Struct to store data from the APRS information field in usefule,
+ parsed form, such as location, timestamp, object/item information,
+ etc. */
+struct APRSData {
+    /// The type of packet this data represents j
+    var type : PacketType? = nil
+    
+    /** Date/Time this packet was received, or the one given in the
+    packet if present. */
+    var timestamp : Date? = nil
+    
+    /// Location contained in the packet,  if present
+    var location : CLLocation? = nil
+    
+    /// Comment contained in the packet, if present
+    var comment : String? = nil
+    
+    /// Status contained in the packet, if present
+    var status : String? = nil
+    
+    /// Message contained in the packet, if present
+    var message : APRSMessage? = nil
+    
+    /// Symbol for this packet, if present
+    var symbol : Symbol? = nil
+    
+    /// Object or item contained in this packet, if present
+    var object : APRSObject? = nil
+}
+
+
+/** Struct to store received and about-to-be-transmitted APRS Packets.
+ 
+ Does not know anything about the rest of the specification with regard
+ to what is stored in the Information field. Has an optional APRSData
+ member which can be filled in with .parsePacket() that contains parsed
+ data from the Information field. 
+ */
+struct APRSPacket : Equatable {
     /* APRS Frames, for our use, are only Information frames. They look like
         this, each byte is sent LSB first, down along the packet, with bit
         stuffing. Bit stuffing is not shown here.
@@ -72,6 +158,8 @@ struct APRSPacket : CustomStringConvertible, Equatable {
      Min length between flags: 19 bytes, 152 bits (assuming no bits stuffed.)
      Max length between flags: 330 Bytes, 2640 bits (assuming no bits stuffed.)
         3168 if the entire packet was stuffed (i.e. consisted of all 1s). 
+     
+     ------ Begin APRS Packet ------
      
      Flag: 01111110
      
@@ -122,7 +210,7 @@ struct APRSPacket : CustomStringConvertible, Equatable {
      
      Flag: 01111110
      
-     -------
+     ------ End APRS Packet ------
      
      Bit Stuffing:
         Any time any sequence of 5 contiguous one (1) bits is sent, a zero (0)
@@ -151,26 +239,67 @@ struct APRSPacket : CustomStringConvertible, Equatable {
         - If continuously transmitting without data, send Flags over and over
     */
     
-    let source : String
-    let sourceCommand: Bool
-    let destination : String
-    let destinationCommand: Bool
-    let sourceSSID : UInt8
-    let destinationSSID : UInt8
-    let digipeaters: [String]
-    let digipeaterSSIDs : [UInt8]
-    let digipeatersHasBeenRepeated : [Bool]
-    let information : String
-    let FCS : UInt16 //Computed on initialization
-    /*
-    let date : Date
-    let location : CLLocation
-    */
+    // MARK: instance variables
     
+    /// Source Callsign
+    let source : String
+    
+    /// Source Command/Response bit - doesn't seem to really do much for UI Frames
+    let sourceCommand : Bool
+    
+    /// Destination Callsign
+    let destination : String
+    
+    /// Destination Command/Response bit
+    let destinationCommand : Bool
+    
+    /// Source Secondary Station Identifier, from 0 to 15
+    let sourceSSID : UInt8
+    
+    /// Destination Secondary Station Identifier, from 0 to 15
+    let destinationSSID : UInt8
+    
+    /** Array of digipeaters representing the desired propagation
+    path for this packet */
+    let digipeaters : [String]
+    
+    /// Array of digipeater Secondary Station Identifiers
+    let digipeaterSSIDs : [UInt8]
+    
+    /** Each set to True if this packet has traversed the corresponding
+    digipeater from the `digipeaters` array */
+    let digipeatersHasBeenRepeated : [Bool]
+    
+    /** Information field containing most of the useful APRS data such
+    as timestamp, location, status, comment, etc. */
+    let information : String
+    
+    /** Frame Check Sequence, a checksum for the packet to ensure it
+    has not been corrupted in transit. Computed on initialization. */
+    let FCS : UInt16
+   
+    /** Contains all interesting infromation in parsed format from the
+    Information field. */
+    var data : APRSData? = nil
+    
+    /** Representation of this packet in bytes, for translation to and from
+    bit-stuffed on the wire format and instance variables. */
     private var allBytes : [UInt8]
+    
+    /** On the wire format including stuffing such that there are no more
+    than 5 ones in a row transmitted, with the exception of a flag byte. */
     private var stuffedBits : [Bool]
+    
+    /** In case the initializer is used that allows packets through which do
+    not pass the Frame Check Sequence, this is set to false if the packet
+    has correct formatting but is not considered "intact" by checksum 
+    standards */
     private var passesCRC = true
     
+    // MARK: Initialize from information
+    
+    /** Initialize an APRSPacket using human readable information for
+    each field. */
     init?(destination: String,
           destinationSSID: UInt8,
           destinationCommand: Bool,
@@ -308,37 +437,12 @@ struct APRSPacket : CustomStringConvertible, Equatable {
         
         stuffedBits.append(contentsOf: byteToBoolsLittleEndian(input: flag))
     }
-
-    func getAllBytes() -> [UInt8] {
-        return allBytes
-    }
     
-    func getStuffedBits() -> [Bool] {
-        return stuffedBits
-    }
+    /* MARK: Initialize from raw bits */
     
-    func getStuffedBitsWithoutFlags() -> [Bool] {
-        return Array(stuffedBits[8..<stuffedBits.count - 8])
-    }
-    
-    var description: String {
-        
-        let passesCRCString = (passesCRC) ? "" : "🆖"
-        var digipeaterString = ""
-        let destSuffix = (destinationSSID == 0) ? "" : "-" + String(destinationSSID)
-        let sourceSuffix = (sourceSSID == 0) ? "" : "-" + String(sourceSSID)
-        
-        for x in 0..<digipeaters.count {
-            digipeaterString.append("," +
-                digipeaters[x] + "-" + String(digipeaterSSIDs[x]) +
-                (digipeatersHasBeenRepeated[x] ? "*" : ""))
-        }
-        
-        return "\(passesCRCString)\(source)\(sourceSuffix)>\(destination)\(destSuffix)\(digipeaterString):\(information)"
-    }
-    
-    /* Given a string of bits from between two flags, unstuff the bits
-        and create an APRSPacket if everything matches up. */
+    /** Given a string of bits from between two flags, unstuff the bits
+        and create an APRSPacket if everything matches up and the checksum
+        passes. */
     init?(fromStuffedBitArray: [Bool]) {
         
         
@@ -470,7 +574,7 @@ struct APRSPacket : CustomStringConvertible, Equatable {
         
     }
     
-    /* Given a string of bits from between two flags, unstuff the bits
+    /** Given a string of bits from between two flags, unstuff the bits
      and create an APRSPacket if everything matches up. */
     init?(fromStuffedBitArrayUnchecked: [Bool]) {
         
@@ -601,89 +705,234 @@ struct APRSPacket : CustomStringConvertible, Equatable {
         self.FCS = testFCS
     }
     
-    static func informationFrom(destination: String, information: String) -> (CLLocation?, Date?) {
-        let firstByte = information[information.startIndex]
-        
-        switch firstByte {
-        case Character(UnicodeScalar(0x1c)):
-            // Current Mic-E data
-            break
-            
-        case Character(UnicodeScalar(0x1d)):
-            // Old Mic-E data
-            break
-            
-        case Character("!"):
-            // Position without timestamp
-            break
-        
-        case Character("$"):
-            // Raw GPS Data
-            break
-            
-        case Character("'"):
-            // Old Mic-E data
-            break
-            
-        case Character(")"):
-            // Item
-            break
-        
-        case Character("/"):
-            // Position with timestamp
-            break
-        
-        case Character(":"):
-            // Message
-            break
+
+    // MARK: Getters
+    func getAllBytes() -> [UInt8] {
+        return allBytes
+    }
     
-        case Character(";"):
-            // Object
-            break
+    func getStuffedBits() -> [Bool] {
+        return stuffedBits
+    }
+    
+    func getStuffedBitsWithoutFlags() -> [Bool] {
+        return Array(stuffedBits[8..<stuffedBits.count - 8])
+    }
+    
+    
+    // MARK: Parse information field
+    /** Parse the information field of the packet into an APRSData and
+    set the `data` member of this packet to it. */
+    mutating func parsePacket() {
+        var data = APRSData()
+        
+        var ptrToParsedPacket : UnsafeMutablePointer<fap_packet_t>
+        
+        var inputString = String(describing: self)
+        
+        ptrToParsedPacket = fap_parseaprs(inputString, UInt32(inputString.utf8.count), 0)
+        
+        let parsedPacket = ptrToParsedPacket.pointee
+        
+        if (parsedPacket.error_code != nil) {
+            var reason = [CChar](repeating: 0, count: 60)
             
-        case Character("<"):
-            //Station Capabilities
-            break
-        
-        case Character("="):
-            // Position Without Timestamp (for APRS messaging)
-            break
-        
-        case Character(">"):
-            // Status
-            break
-        
-        case Character("?"):
-            // Query
-            break
-        
-        case Character("@"):
-            // Position with timestamp (for APRS messaging)
-            break
-        
-        case Character("T"):
-            // Telemetry Data
-            break
-        
-        case Character("["):
-            // Obsolete Maidenhead grid locator beacon
-            break
-        
-        case Character("`"):
-            // Current Mic-E data
-            break
+            fap_explain_error(parsedPacket.error_code.pointee, &reason)
             
-        case Character("_"):
-            // Weather Report (without position)
-            break
+            var stringReason : String? = nil
             
+            /* Avoid ever having to interact with C APIs from Swift if you can. */
+            reason.withUnsafeBufferPointer({ (ptr) in
+                stringReason = String(cString: ptr.baseAddress!)
+            })
+            
+            NSLog("[parsePacket] Couldn't parse packet: \(inputString), error was: \(stringReason)")
+        }
+        
+        /* Determine the type of packet that we're dealing with. */
+        guard let type = parsedPacket.type?.pointee else {
+            NSLog("[parsePacket] Nil packet type for packet: \(inputString), returing.")
+            return
+        }
+        
+        switch type {
+        case fapLOCATION, fapMICE, fapNMEA:
+            data.type = .location
+            break
+        case fapOBJECT:
+            data.type = .object
+            break
+        case fapITEM:
+            data.type = .item
+            break
+        case fapMESSAGE:
+            data.type = .message
+            break
+        case fapSTATUS:
+            data.type = .status
+            break
         default:
+            data.type = .other
+            NSLog("[parsePacket] Unsupported packet type for: \(inputString), parsing any recognized parts.")
             break
         }
         
-        return (CLLocation(latitude: 0.0, longitude: 0.0), Date())
+        /* Add Timestamp to packet */
+        let packetTimestamp = parsedPacket.timestamp?.pointee
+        
+        if (packetTimestamp != nil) {
+            data.timestamp = Date(timeIntervalSince1970: Double(packetTimestamp!))
+        } else {
+            data.timestamp = Date(timeIntervalSinceNow: 0)
+        }
+        
+        /* Add location related fields to packet */
+        let latitude : Double? = parsedPacket.latitude?.pointee
+        let longitude : Double? = parsedPacket.longitude?.pointee
+        var positionResolution : Double? = parsedPacket.pos_resolution?.pointee
+        
+        let altitude : Double = parsedPacket.altitude?.pointee ?? 0
+        
+        /* Want course to be nil if unknown. fap says 0 is uknown, 360 is north */
+        var course : UInt32? = parsedPacket.course?.pointee
+        if (course == 0) {
+            course = nil
+        } else if (course == 360) {
+            course = 0
+        }
+        
+        var speed : Double? = parsedPacket.speed?.pointee
+        
+        /* Do we have basic location information? */
+        if (latitude != nil && longitude != nil && positionResolution != nil) {
+            
+            let locationCoordinate = CLLocationCoordinate2DMake(latitude!, longitude!)
+            
+            if (CLLocationCoordinate2DIsValid(locationCoordinate)) {
+                
+                /* Change uncertainty diameter to radius. */
+                positionResolution = positionResolution! / 2.0
+                
+                /* Change speed from km/h to m/s */
+                speed = speed! / 3.6
+                
+                if (course != nil && speed != nil) {
+                    data.location = CLLocation(coordinate: locationCoordinate, altitude: altitude, horizontalAccuracy: positionResolution!, verticalAccuracy: 0, timestamp: data.timestamp!)
+                } else {
+                    data.location = CLLocation(coordinate: locationCoordinate, altitude: altitude, horizontalAccuracy: positionResolution!, verticalAccuracy: 0, timestamp: data.timestamp!)
+                }
+            }
+        }
+        
+        
+        /* "/" == 47 == Primary Symbol Table
+           "\" == 92 == Secondary Symbol Table
+            Leave as nil if niether works. */
+        
+        let code = String(describing: UnicodeScalar(UInt8(parsedPacket.symbol_code)))
+        if (parsedPacket.symbol_table == 47) {
+            data.symbol = primarySymbolTable[code]
+        } else if (parsedPacket.symbol_table == 92) {
+            data.symbol = secondarySymbolTable[code]
+        }
+        
+        if let commmentPtr = parsedPacket.comment {
+            data.comment = String(cString: commmentPtr)
+        }
+        
+        if let statusPtr = parsedPacket.status {
+            data.status = String(cString: statusPtr)
+        }
+        
+        parseMessage : if let messagingEnabledPtr = parsedPacket.messaging {
+            if (messagingEnabledPtr.pointee != 0) {
+                
+                /* Make sure we have a destination and message body */
+                var message : String
+                if let messagePtr = parsedPacket.message {
+                    message = String(cString: messagePtr)
+                } else {
+                    break parseMessage
+                }
+                
+                var messageDest : String
+                if let destPtr = parsedPacket.destination {
+                    messageDest = String(cString: destPtr)
+                } else {
+                    break parseMessage
+                }
+                
+                var acked : Int? = nil
+                if let ackedPtr = parsedPacket.message_ack {
+                    let ackedString = String(cString: ackedPtr)
+                    
+                    acked = Int(ackedString)
+                }
+                
+                var rejected : Int? = nil
+                if let rejectedPtr = parsedPacket.message_nack {
+                    let rejectedString = String(cString: rejectedPtr)
+                    
+                    rejected = Int(rejectedString)
+                }
+                
+                var id : Int? = nil
+                if let idPtr = parsedPacket.message_id {
+                    let idString = String(cString: idPtr)
+                    
+                    id = Int(idString)
+                }
+                
+                var messageType : MessageType
+                if (rejected != nil) {
+                    messageType = .rej
+                } else if (acked != nil) {
+                    messageType = .ack
+                } else {
+                    messageType = .message
+                }
+                
+                data.message = APRSMessage(type: messageType, destination: messageDest, message: message, messageID: id, messageACK: acked, messageNACK: rejected)
+            }
+        }
+        
+        parseObjectItem : if (data.type == .object || data.type == .item) {
+            let name : String
+            if let namePtr = parsedPacket.object_or_item_name {
+                name = String(cString: namePtr)
+            } else {
+                break parseObjectItem
+            }
+            
+            let alive : Bool
+            if let alivePtr = parsedPacket.alive {
+                alive = Bool(alivePtr.pointee != 0)
+            } else {
+                break parseObjectItem
+            }
+            
+            data.object = APRSObject(name: name, alive: alive)
+        }
+        
+        self.data = data
+        
+        fap_free(ptrToParsedPacket)
     }
+}
 
-    
-    
+extension APRSPacket : CustomStringConvertible {
+    var description: String {
+        
+        var digipeaterString = ""
+        let destSuffix = (destinationSSID == 0) ? "" : "-" + String(destinationSSID)
+        let sourceSuffix = (sourceSSID == 0) ? "" : "-" + String(sourceSSID)
+        
+        for x in 0..<digipeaters.count {
+            digipeaterString.append("," +
+                digipeaters[x] + "-" + String(digipeaterSSIDs[x]) +
+                (digipeatersHasBeenRepeated[x] ? "*" : ""))
+        }
+        
+        return "\(source)\(sourceSuffix)>\(destination)\(destSuffix)\(digipeaterString):\(information)"
+    }
 }

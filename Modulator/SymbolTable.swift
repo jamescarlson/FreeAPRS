@@ -10,7 +10,7 @@ import Foundation
 
 //let SSIDSymbols : [Int : Symbols]
 
-enum Symbols : String {
+enum Symbol : String {
     case policeSheriff = "Police/Sheriff"
     case digiGreenStarWhiteCenter = "DIGI (Green Star, White Center)"
     case phone = "Phone"
@@ -160,7 +160,7 @@ enum Symbols : String {
     case fog = "Fog"
 }
 
-let overlaySymbols : [Symbols] = [
+let overlaySymbols : [Symbol] = [
 .digiGreenStarWithOverlay,
 .hfGatewayDiamondWithOverlay,
 .carWithOverlay,
@@ -176,7 +176,7 @@ let overlaySymbols : [Symbols] = [
 .vanWithOverlay
 ]
 
-let primarySymbolTable : [String : Symbols] = [
+let primarySymbolTable : [String : Symbol] = [
     "!" : .policeSheriff,
     "#" : .digiGreenStarWhiteCenter,
     "$" : .phone,
@@ -259,7 +259,7 @@ let primarySymbolTable : [String : Symbols] = [
     "y" : .yagiAtQTH,
     ]
 
-let secondarySymbolTable : [String : Symbols] = [
+let secondarySymbolTable : [String : Symbol] = [
     "!" : .emergency,
     "#" : .digiGreenStarWithOverlay,
     "$" : .bankATM,
@@ -329,7 +329,7 @@ let secondarySymbolTable : [String : Symbols] = [
     "{" : .fog,
 ]
 
-let symbolTableGPSxyz : [String : Symbols] = [
+let symbolTableGPSxyz : [String : Symbol] = [
     "BB" : .policeSheriff,
     "BD" : .digiGreenStarWhiteCenter,
     "BE" : .phone,
@@ -481,7 +481,7 @@ let symbolTableGPSxyz : [String : Symbols] = [
     
 ]
 
-let symbolTableGPSCnn : [String : Symbols] = [
+let symbolTableGPSCnn : [String : Symbol] = [
     "01" : .policeSheriff,
     "03" : .digiGreenStarWhiteCenter,
     "04" : .phone,
@@ -564,7 +564,7 @@ let symbolTableGPSCnn : [String : Symbols] = [
     "89" : .yagiAtQTH,
 ]
 
-let symbolTableGPSEnn : [String : Symbols] = [
+let symbolTableGPSEnn : [String : Symbol] = [
     "01" : .emergency,
     "03" : .digiGreenStarWithOverlay,
     "04" : .bankATM,

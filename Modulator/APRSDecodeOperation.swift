@@ -80,6 +80,10 @@ class APRSDecodeOperation : AudioProcessOperation {
             NotificationCenter.default.post(name: Notification.Name("DecodePerSkew"), object: nil, userInfo: ["decodes": numDecodedPerSkew])
         }
         
+        for index in 0..<self.outputPackets.count {
+            outputPackets[index].parsePacket()
+        }
+        
         outputQueue.append(packets: self.outputPackets)
     }
 

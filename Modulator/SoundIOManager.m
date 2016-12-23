@@ -8,7 +8,7 @@
 
 
 
-#import "SAMicrophoneInput.h"
+#import "SoundIOManager.h"
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 #include <Accelerate/Accelerate.h>
@@ -16,15 +16,16 @@
 
 #define FAIL_ON_ERR(_X_) if ((status = (_X_)) != noErr) { goto failed; }
 
-@interface SAMicrophoneInput()
+@interface SoundIOManager()
 
 @property (strong, nonatomic) AudioDispatcher* dispatcher;
+@property (strong, nonatomic) AudioSource* source;
 
 @end
 
 
 
-@implementation SAMicrophoneInput
+@implementation SoundIOManager
 
 const int kNumberBuffers = 3;
 
@@ -32,22 +33,28 @@ struct AQInputState {
 AudioStreamBasicDescription mDataFormat;                   // 2
 AudioQueueRef               mQueue;                        // 3
 AudioQueueBufferRef         mBuffers[kNumberBuffers];      // 4
-AudioFileID                 mAudioFile;                    // 5
 UInt32                      bufferByteSize;                // 6
-SInt64                      mCurrentPacket;                // 7
 bool                        mIsRunning;
 __unsafe_unretained
     AudioDispatcher*        audioDispatcher;
 };
 
+struct AQOutputState {
+    AudioStreamBasicDescription   mDataFormat;                    // 2
+    AudioQueueRef                 mQueue;                         // 3
+    AudioQueueBufferRef           mBuffers[kNumberBuffers];       // 4
+    UInt32                        bufferByteSize;                 // 6
+    bool                          mIsRunning;                     // 10
+};
 
 FFTSetup fftSupport;
-struct AQInputState state;
+struct AQInputState inputState;
+struct AQOutputState outputState;
 
 #pragma mark -- Audio session stuff
 
 
-- (SAMicrophoneInput *)init{
+- (SoundIOManager *)init{
     if (self = [super init]) {
         [[NSNotificationCenter defaultCenter]
          addObserver:self
@@ -65,15 +72,17 @@ struct AQInputState state;
     return self;
 }
 
-- (void)configureAudioInWithPreferredSampleRate:(float)sampleRate
-                      preferredNumberOfChannels:(int)numChannels
-                            singleChannelOutput:(BOOL)singleChannelOutput
-             channelIndexForSingleChannelOutput:(int)channelIndex
-                      preferredSamplesPerBuffer:(int)preferredSamplesPerBuffer {
+- (void)configureAudioInOutWithPreferredSampleRate:(float)sampleRate
+                    preferredNumberOfInputChannels:(int)inputChannels
+                   preferredNumberOfOutputChannels:(int)outputChannels
+                                singleChannelInput:(BOOL)singleChannelInput
+                 channelIndexForSingleChannelInput:(int)channelIndex
+                         preferredSamplesPerBuffer:(int)preferredSamplesPerBuffer {
     self.preferredSampleRate = sampleRate;
-    self.preferredNumberOfChannels = numChannels;
-    self.singleChannelOutput = singleChannelOutput;
-    self.channelIndexForSingleChannelOutput = channelIndex;
+    self.preferredNumberOfInputChannels = inputChannels;
+    self.preferredNumberOfOuputChannels = outputChannels;
+    self.singleChannelInput = singleChannelInput;
+    self.channelIndexForSingleChannelInput = channelIndex;
     self.preferredSamplesPerBuffer = preferredSamplesPerBuffer;
 
     [self configureAudioSession];
@@ -90,6 +99,10 @@ struct AQInputState state;
 
 - (void)addAudioDispatcher:(AudioDispatcher *) audioDispatcher {
     self.dispatcher = audioDispatcher;
+}
+
+- (void)addAudioSource:(AudioSource *)audioSource {
+    self.source = audioSource;
 }
 
 - (void)ensureRecordPermission {
@@ -144,6 +157,8 @@ struct AQInputState state;
 - (void)handleInterruptionStart {
     [self endAudioIn];
     //FIXME??
+    
+    
 }
 
 - (void)handleInterruptionEnd {
@@ -179,15 +194,17 @@ struct AQInputState state;
  of sampleRate and numberOfChannels. Would assert this but there is no way to
  check. */
 - (void) configureAudioSessionParameters {
-    [[AVAudioSession sharedInstance] setPreferredInputNumberOfChannels:self.preferredNumberOfChannels error:nil];
+    [[AVAudioSession sharedInstance] setPreferredInputNumberOfChannels:self.preferredNumberOfInputChannels error:nil];
     [[AVAudioSession sharedInstance] setPreferredSampleRate:self.preferredSampleRate error:nil];
-    
+    [[AVAudioSession sharedInstance] setPreferredOutputNumberOfChannels:self.preferredNumberOfOuputChannels error:nil];
     /* Cast because if we have more channels than 2**31 we're having other issues. */
-    self.numberOfChannels = (int)[[AVAudioSession sharedInstance] inputNumberOfChannels];
+    self.numberOfInputChannels = (int)[[AVAudioSession sharedInstance] inputNumberOfChannels];
     self.sampleRate = [[AVAudioSession sharedInstance] sampleRate];
+    self.numberOfOutputChannels = (int)[[AVAudioSession sharedInstance] outputNumberOfChannels];
     
-    NSLog(@"Number of channels: %d", self.numberOfChannels);
+    NSLog(@"Number of input channels: %d", self.numberOfInputChannels);
     NSLog(@"sampleRate: %f", self.sampleRate);
+    NSLog(@"Number of output channels: %d", self.numberOfOutputChannels);
 }
 
 /* Should be called after AudioSession's parameters have been set and verified. */
@@ -198,37 +215,53 @@ struct AQInputState state;
                           | 0 //kAudioFormatFlagsNativeEndian
                           );
 
-    state.mDataFormat = (AudioStreamBasicDescription) {
+    inputState.mDataFormat = (AudioStreamBasicDescription) {
         .mFormatID = kAudioFormatLinearPCM,
         .mFormatFlags = formatFlags,
         .mSampleRate = self.sampleRate,
         .mBitsPerChannel = 16,
-        .mChannelsPerFrame = self.numberOfChannels,
-        .mBytesPerFrame = 2*self.numberOfChannels,
-        .mBytesPerPacket = 2*self.numberOfChannels,
+        .mChannelsPerFrame = self.numberOfInputChannels,
+        .mBytesPerFrame = 2*self.numberOfInputChannels,
+        .mBytesPerPacket = 2*self.numberOfInputChannels,
+        .mFramesPerPacket = 1,
+    };
+    
+    outputState.mDataFormat = (AudioStreamBasicDescription) {
+        .mFormatID = kAudioFormatLinearPCM,
+        .mFormatFlags = formatFlags,
+        .mSampleRate = self.sampleRate,
+        .mBitsPerChannel = 16,
+        .mChannelsPerFrame = self.numberOfOutputChannels,
+        .mBytesPerFrame = 2*self.numberOfOutputChannels,
+        .mBytesPerPacket = 2*self.numberOfOutputChannels,
         .mFramesPerPacket = 1,
     };
     
 }
 
-- (void) setupState {
-    state.mIsRunning = YES;
-    state.bufferByteSize = self.preferredSamplesPerBuffer;
-    state.audioDispatcher = self.dispatcher;
+- (void) setupInputState {
+    inputState.mIsRunning = YES;
+    inputState.bufferByteSize = self.preferredSamplesPerBuffer;
+    inputState.audioDispatcher = self.dispatcher;
 }
 
-- (void) allocateBuffers {
+- (void) setupOutputState {
+    outputState.mIsRunning = YES;
+    outputState.bufferByteSize = self.preferredSamplesPerBuffer;
+}
+
+- (void) allocateInputBuffers {
     OSStatus status = noErr;
     for (int i = 0; i < kNumberBuffers; i += 1) {           // 1
         FAIL_ON_ERR(AudioQueueAllocateBuffer (                       // 2
-                                  state.mQueue,                              // 3
-                                  state.bufferByteSize,                      // 4
-                                  &state.mBuffers[i]                         // 5
+                                  inputState.mQueue,                              // 3
+                                  inputState.bufferByteSize,                      // 4
+                                  &inputState.mBuffers[i]                         // 5
                                               ));
         
         FAIL_ON_ERR(AudioQueueEnqueueBuffer (                        // 6
-                                 state.mQueue,                               // 7
-                                 state.mBuffers[i],                          // 8
+                                 inputState.mQueue,                               // 7
+                                 inputState.mBuffers[i],                          // 8
                                  0,                                          // 9
                                  NULL                                        // 10
                                  ));
@@ -241,21 +274,42 @@ failed:
     NSLog(@"Failed to allocate buffers, code %d", (int)status);
 }
 
+- (void) allocateOutputBuffers {
+    OSStatus status = noErr;
+    for (int i = 0; i < kNumberBuffers; i += 1) {
+        FAIL_ON_ERR(AudioQueueAllocateBuffer (
+                                  outputState.mQueue,
+                                  outputState.bufferByteSize,
+                                  &outputState.mBuffers[i]
+                                              ));
+    }
+    
+    return;
+    
+failed:
+    NSLog(@"Failed to allocate buffers, code %d", (int)status);
+}
+
+- (void) primeOutputBuffers {
+    for (int i = 0; i < kNumberBuffers; i += 1) {
+        HandleOutputBuffer(CFBridgingRetain(self), outputState.mQueue, outputState.mBuffers[i]);
+    }
+}
 
 - (UInt32) deriveBufferSizeForSeconds:(Float64) seconds {
     static const int maxBufferSize = 0x50000;
     
-    int maxPacketSize = state.mDataFormat.mBytesPerPacket;
+    int maxPacketSize = inputState.mDataFormat.mBytesPerPacket;
     
     Float64 numBytesForTime =
-    state.mDataFormat.mSampleRate * maxPacketSize * seconds;
+    inputState.mDataFormat.mSampleRate * maxPacketSize * seconds;
     UInt32 result = (numBytesForTime < maxBufferSize ?
                      numBytesForTime : maxBufferSize);
     return result;
 }
 
 - (UInt32) deriveBufferSizeForSamples:(UInt32) samples {
-    int maxPacketSize = state.mDataFormat.mBytesPerPacket;
+    int maxPacketSize = inputState.mDataFormat.mBytesPerPacket;
     UInt32 result = maxPacketSize * samples;
     return result;
 }
@@ -268,76 +322,157 @@ static void HandleInputBuffer (
                                UInt32                              inNumPackets,        // 5
                                const AudioStreamPacketDescription  *inPacketDesc        // 6
 ) {
-    //do stuff
-    
     int16_t *frame = inBuffer->mAudioData;
-    if (state.mIsRunning == 0 || frame == NULL) {
+    if (inputState.mIsRunning == 0 || frame == NULL) {
         NSLog(@"Audio queue callback called when AQ was not running");
         return;
     }
     
-    SAMicrophoneInput *this = (__bridge SAMicrophoneInput *)aqData;
+    SoundIOManager *this = (__bridge SoundIOManager *)aqData;
     
     int lengthSamples = inBuffer->mAudioDataByteSize / 2;
     
     [this.dispatcher processWithSamples:frame length:lengthSamples
-                               channels:state.mDataFormat.mChannelsPerFrame
-                           channelIndex:this.channelIndexForSingleChannelOutput];
+                               channels:inputState.mDataFormat.mChannelsPerFrame
+                           channelIndex:this.channelIndexForSingleChannelInput];
     
     AudioQueueEnqueueBuffer(inAQ, inBuffer, 0, NULL);
 }
 
+static void HandleOutputBuffer (
+                                void                 *aqData,
+                                AudioQueueRef        inAQ,
+                                AudioQueueBufferRef  inBuffer
+                                ) {
+    // Get Audio from Swift code
+    if (!outputState.mIsRunning) {
+        return;
+    }
+    
+    
+    int numBytes = 0;
+    
+    if (numBytes > 0) {
+        inBuffer->mAudioDataByteSize = numBytes;
+        AudioQueueEnqueueBuffer(outputState.mQueue, inBuffer, 0, NULL);
+    } else {
+        AudioQueueStop(outputState.mQueue, NO);
+        outputState.mIsRunning = NO;
+    }
+}
+
 #pragma mark - Start and Stop
 
-- (BOOL) startAudioIn {
-    [self setupState];
+- (BOOL) armAudioOut {
+    [self setupOutputState];
     
-    NSAssert(state.mQueue == NULL, @"Queue is already setup");
+    NSAssert(outputState.mQueue == NULL, @"Queue is already setup");
     
     OSStatus status;
     
-    FAIL_ON_ERR(AudioQueueNewInput(&state.mDataFormat,
+    FAIL_ON_ERR(AudioQueueNewOutput(&outputState.mDataFormat,
+                                    HandleOutputBuffer,
+                                    &outputState,
+                                    CFRunLoopGetCurrent(),
+                                    kCFRunLoopCommonModes,
+                                    0,
+                                    &outputState.mQueue))
+    
+    Float32 gain = 1.0;
+    AudioQueueSetParameter (
+                            outputState.mQueue,
+                            kAudioQueueParam_Volume,
+                            gain
+                            );
+    
+    [self allocateOutputBuffers];
+    return YES;
+    
+failed:
+    NSLog(@"Audio output failed to start");
+    
+    if (outputState.mQueue != NULL) {
+        AudioQueueDispose(outputState.mQueue, YES);
+        outputState.mQueue = NULL;
+    }
+    
+    return NO;
+}
+
+- (void) oneShotPlayAudioOut {
+    [self primeOutputBuffers];
+    
+    AudioQueueStart(outputState.mQueue, NULL);
+}
+
+- (BOOL) disarmAudioOut {
+    NSLog(@"Audio output disarmed");
+    NSAssert(outputState.mQueue != NULL, @"Queue is not setup");
+    
+    OSStatus status;
+    
+    FAIL_ON_ERR(AudioQueueDispose(outputState.mQueue, YES));
+    outputState.mQueue = NULL;
+    outputState.mIsRunning = NO;
+    return YES;
+    
+failed:
+    // Error handling...
+    
+    NSLog(@"Failed to stop input audio queue.");
+    
+    return NO;
+}
+
+- (BOOL) startAudioIn {
+    [self setupInputState];
+    
+    NSAssert(inputState.mQueue == NULL, @"Queue is already setup");
+    
+    OSStatus status;
+    
+    FAIL_ON_ERR(AudioQueueNewInput(&inputState.mDataFormat,
                        HandleInputBuffer,
                        CFBridgingRetain(self),
                        CFRunLoopGetMain(),
                        nil,
                        0,
-                                   &state.mQueue));
-    [self allocateBuffers];
+                                   &inputState.mQueue));
+    [self allocateInputBuffers];
     
-    FAIL_ON_ERR(AudioQueueStart(state.mQueue, NULL));
+    FAIL_ON_ERR(AudioQueueStart(inputState.mQueue, NULL));
     
-    state.mIsRunning = YES;
-    NSLog(@"Audio Started");
+    inputState.mIsRunning = YES;
+    NSLog(@"Audio input Started");
     return YES;
 
 failed:
-    NSLog(@"Aduio failed to start");
+    NSLog(@"Audio input failed to start");
     // Error handling...
-    if (state.mQueue != NULL) {
-        AudioQueueDispose(state.mQueue, YES);
-        state.mQueue = NULL;
+    if (inputState.mQueue != NULL) {
+        AudioQueueDispose(inputState.mQueue, YES);
+        inputState.mQueue = NULL;
     }
     
     return NO;
 }
 
 - (BOOL) endAudioIn {
-    NSLog(@"Audio stopped");
-    NSAssert(state.mQueue != NULL, @"Queue is not setup");
+    NSLog(@"Audio input stopped");
+    NSAssert(inputState.mQueue != NULL, @"Queue is not setup");
     
     OSStatus status;
     
-    FAIL_ON_ERR(AudioQueueStop(state.mQueue, YES));
-    FAIL_ON_ERR(AudioQueueDispose(state.mQueue, YES));
-    state.mQueue = NULL;
-    state.mIsRunning = NO;
+    FAIL_ON_ERR(AudioQueueStop(inputState.mQueue, YES));
+    FAIL_ON_ERR(AudioQueueDispose(inputState.mQueue, YES));
+    inputState.mQueue = NULL;
+    inputState.mIsRunning = NO;
     return YES;
     
 failed:
     // Error handling...
     
-    NSLog(@"Failed to stop audio queue.");
+    NSLog(@"Failed to stop input audio queue.");
     
     return NO;
 }

@@ -10,14 +10,14 @@ import Foundation
 
 class APRSListener {
     var dataStore : APRSPacketDataStore
-    var audioInput : SAMicrophoneInput
+    var audioInput : SoundIOManager
     let opQueue = OperationQueue()
     let skews : [Float]
     
     init(withDataStore dataStore: APRSPacketDataStore) {
         self.dataStore = dataStore
         opQueue.maxConcurrentOperationCount = 1
-        audioInput = SAMicrophoneInput()
+        audioInput = SoundIOManager()
         self.skews = UserDefaults.standard.array(forKey: "spaceToneSkews") as? [Float] ?? [1.0]
     }
     
@@ -25,7 +25,7 @@ class APRSListener {
          skews: [Float]) {
         self.dataStore = dataStore
         opQueue.maxConcurrentOperationCount = 1
-        audioInput = SAMicrophoneInput()
+        audioInput = SoundIOManager()
         self.skews = skews
     }
     

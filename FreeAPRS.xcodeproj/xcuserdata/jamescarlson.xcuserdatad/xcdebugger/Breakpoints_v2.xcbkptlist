@@ -133,7 +133,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ModulatorTests/ComplexFIRFilterTests.swift"
@@ -408,6 +408,54 @@
                   startingLineNumber = "833"
                   endingLineNumber = "833"
                   offsetFromSymbolStart = "12821">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ModulatorTests/APRSPacketTests.swift"
+            timestampString = "504512134.682271"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "165"
+            endingLineNumber = "165"
+            landmarkName = "testParsePacketLocationWithTimestamp()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "FreeAPRSTests.APRSPacketTests.testParsePacketLocationWithTimestamp () -&gt; ()"
+                  moduleName = "FreeAPRSTests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jamescarlson/Documents/Programming/qam/modulator/Modulator/ModulatorTests/APRSPacketTests.swift"
+                  timestampString = "504512135.225821"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "166"
+                  endingLineNumber = "166"
+                  offsetFromSymbolStart = "2981">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "FreeAPRSTests.APRSPacketTests.(testParsePacketLocationWithTimestamp () -&gt; ()).(implicit closure #4)"
+                  moduleName = "FreeAPRSTests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jamescarlson/Documents/Programming/qam/modulator/Modulator/ModulatorTests/APRSPacketTests.swift"
+                  timestampString = "504512135.227895"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "166"
+                  endingLineNumber = "166"
+                  offsetFromSymbolStart = "20">
                </Location>
             </Locations>
          </BreakpointContent>

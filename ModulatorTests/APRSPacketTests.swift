@@ -147,12 +147,21 @@ class APRSPacketTests: XCTestCase {
         XCTAssertEqual(packetLocal?.data?.symbol, Symbol.jeep)
         XCTAssert(expectedLocation.distance(from: (packetLocal?.data?.location)!) < 20)
         
+        /* If the date in the packet would be in the future if we just took the
+            day to be today, we need to make sure we compare it to a date in
+            the past. libfap seems to (correctly) only return dates in the past.
+            */
         var components = Calendar.current.dateComponents(in: TimeZone(secondsFromGMT: 0)!, from: Date(timeIntervalSinceNow: 0))
         components.setValue(23, for: .hour)
         components.setValue(45, for: .minute)
         components.setValue(17, for: .second)
         
+        
         var expectedTime = components.date!
+        
+        if (expectedTime > Date(timeIntervalSinceNow: 0)) {
+            expectedTime = expectedTime.addingTimeInterval(-86400)
+        }
         
         XCTAssert(abs(Double((packetLocal?.data?.timestamp!.timeIntervalSince(expectedTime))!)) < 2.0)
         
@@ -168,8 +177,11 @@ class APRSPacketTests: XCTestCase {
         components.setValue(45, for: .minute)
         
         expectedTime = components.date!
+        if (expectedTime > Date(timeIntervalSinceNow: 0)) {
+            expectedTime = expectedTime.addingTimeInterval(-86400)
+        }
         
-        XCTAssert(abs(Double((packetZulu?.data?.timestamp!.timeIntervalSince(expectedTime))!)) < 2.0)
+        XCTAssert(abs(Double((packetZulu?.data?.timestamp!.timeIntervalSince(expectedTime))!)) < 120.0)
     
     }
     

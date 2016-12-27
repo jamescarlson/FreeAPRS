@@ -168,8 +168,19 @@ func int16toFloat(_ input: [Int16], channels: Int, channelIndex: Int = 0) -> [Fl
     return output
 }
 
-extension String
-{
+extension Array {
+    func tile(numberOfTimes: Int) -> Array<Element> {
+        var output = Array<Element>()
+        for _ in 0..<numberOfTimes {
+            output.append(contentsOf: self)
+        }
+        
+        return output
+    }
+    
+}
+
+extension String {
     func trim() -> String
     {
         return self.trimmingCharacters(in: NSCharacterSet.whitespaces)

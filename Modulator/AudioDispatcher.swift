@@ -44,4 +44,11 @@ import Foundation
         operationQueue.addOperation(operation)
         
     }
+    
+    @objc func process(monoSamples: [Float]) {
+        let operation = opFactory.getOperation()
+        operation.inputSamples = monoSamples
+        
+        operationQueue.addOperation(operation)
+    }
 }

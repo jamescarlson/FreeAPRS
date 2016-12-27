@@ -268,5 +268,149 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Modulator/AudioSource.swift"
+            timestampString = "504369540.802739"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
+            landmarkName = "getSamples(buffer:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "FreeAPRS.AudioSource.getSamples (buffer : Swift.UnsafeMutablePointer&lt;__C.AudioQueueBuffer&gt;) -&gt; Swift.Int"
+                  moduleName = "FreeAPRS"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jamescarlson/Documents/Programming/qam/modulator/Modulator/Modulator/AudioSource.swift"
+                  timestampString = "504368888.76874"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "67"
+                  endingLineNumber = "67"
+                  offsetFromSymbolStart = "1940">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "FreeAPRS.AudioSource.(getSamples (buffer : Swift.UnsafeMutablePointer&lt;__C.AudioQueueBuffer&gt;) -&gt; Swift.Int).(closure #1)"
+                  moduleName = "FreeAPRS"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jamescarlson/Documents/Programming/qam/modulator/Modulator/Modulator/AudioSource.swift"
+                  timestampString = "504368888.769862"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "68"
+                  endingLineNumber = "68"
+                  offsetFromSymbolStart = "44">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Modulator/APRSEncoder.swift"
+            timestampString = "504368150.281845"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "118"
+            endingLineNumber = "118"
+            landmarkName = "encode(packet:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Modulator/APRSEncoder.swift"
+            timestampString = "504368150.281845"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
+            landmarkName = "encode(packet:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Modulator/AudioSource.swift"
+            timestampString = "504369540.802739"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
+            landmarkName = "getSamples(buffer:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Modulator/APRSPacket.swift"
+            timestampString = "504506344.210488"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "832"
+            endingLineNumber = "832"
+            landmarkName = "parsePacket()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "FreeAPRS.APRSPacket.parsePacket () -&gt; ()"
+                  moduleName = "FreeAPRS"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jamescarlson/Documents/Programming/qam/modulator/Modulator/Modulator/APRSPacket.swift"
+                  timestampString = "504506625.197597"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "833"
+                  endingLineNumber = "833"
+                  offsetFromSymbolStart = "12779">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "FreeAPRS.APRSPacket.parsePacket () -&gt; ()"
+                  moduleName = "FreeAPRS"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jamescarlson/Documents/Programming/qam/modulator/Modulator/Modulator/APRSPacket.swift"
+                  timestampString = "504506625.199706"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "833"
+                  endingLineNumber = "833"
+                  offsetFromSymbolStart = "12821">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

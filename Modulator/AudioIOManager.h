@@ -10,8 +10,9 @@
 
 @class AudioDispatcher;
 @class AudioSource;
+@protocol AudioIOManagerProtocol;
 
-@interface SoundIOManager : NSObject
+@interface AudioIOManager : NSObject <AudioIOManagerProtocol>
 
 @property (nonatomic) float preferredSampleRate;
 @property (nonatomic) float sampleRate;
@@ -31,7 +32,7 @@
 /* Used to pick which channel is passed to the AudioProcessOperation if there is
  more than one input channel present */
 
-@property (nonatomic) int preferredNumberOfOuputChannels;
+@property (nonatomic) int preferredNumberOfOutputChannels;
 @property (nonatomic) int numberOfOutputChannels;
 
 @property (nonatomic) int preferredSamplesPerBuffer;
@@ -77,7 +78,8 @@
  samples. */
 - (void) oneShotPlayAudioOut;
 
-- (instancetype) init;
+/** Get the shared instance of the object. */
++ (id<AudioIOManagerProtocol>) sharedInstance;
 
 @end
 

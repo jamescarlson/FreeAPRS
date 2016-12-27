@@ -19,7 +19,7 @@ class ReceiveViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        listener = APRSListener(withDataStore: packetStore)
+        listener = APRSListener(withDataStore: packetStore, audioIOManager: AudioIOManager.sharedInstance())
         NotificationCenter.default.addObserver(self, selector: #selector(updateTextView), name: packetStore.notificationIdentifier, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateRmsLabel), name: Notification.Name("RMSValue"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateDecodesLabel), name: Notification.Name("DecodePerSkew"), object: nil)

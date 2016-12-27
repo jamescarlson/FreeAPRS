@@ -8,7 +8,7 @@
 
 
 
-#import "SoundIOManager.h"
+#import "AudioIOManager.h"
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 #include <Accelerate/Accelerate.h>
@@ -16,7 +16,7 @@
 
 #define FAIL_ON_ERR(_X_) if ((status = (_X_)) != noErr) { goto failed; }
 
-@interface SoundIOManager()
+@interface AudioIOManager()
 
 @property (strong, nonatomic) AudioDispatcher* dispatcher;
 @property (strong, nonatomic) AudioSource* source;
@@ -25,7 +25,7 @@
 
 
 
-@implementation SoundIOManager
+@implementation AudioIOManager
 
 const int kNumberBuffers = 3;
 
@@ -45,6 +45,7 @@ struct AQOutputState {
     AudioQueueBufferRef           mBuffers[kNumberBuffers];       // 4
     UInt32                        bufferByteSize;                 // 6
     bool                          mIsRunning;                     // 10
+    bool                          primed;
 };
 
 FFTSetup fftSupport;
@@ -53,8 +54,16 @@ struct AQOutputState outputState;
 
 #pragma mark -- Audio session stuff
 
++ (id<AudioIOManagerProtocol>)sharedInstance {
+    static AudioIOManager *sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[self alloc] init];
+    });
+    return sharedInstance;
+}
 
-- (SoundIOManager *)init{
+- (AudioIOManager *)init{
     if (self = [super init]) {
         [[NSNotificationCenter defaultCenter]
          addObserver:self
@@ -80,13 +89,14 @@ struct AQOutputState outputState;
                          preferredSamplesPerBuffer:(int)preferredSamplesPerBuffer {
     self.preferredSampleRate = sampleRate;
     self.preferredNumberOfInputChannels = inputChannels;
-    self.preferredNumberOfOuputChannels = outputChannels;
+    self.preferredNumberOfOutputChannels = outputChannels;
     self.singleChannelInput = singleChannelInput;
     self.channelIndexForSingleChannelInput = channelIndex;
     self.preferredSamplesPerBuffer = preferredSamplesPerBuffer;
 
     [self configureAudioSession];
     
+    NSLog(@"AudioIOManager configured");
 }
 
 - (void)configureAudioSession {
@@ -196,7 +206,7 @@ struct AQOutputState outputState;
 - (void) configureAudioSessionParameters {
     [[AVAudioSession sharedInstance] setPreferredInputNumberOfChannels:self.preferredNumberOfInputChannels error:nil];
     [[AVAudioSession sharedInstance] setPreferredSampleRate:self.preferredSampleRate error:nil];
-    [[AVAudioSession sharedInstance] setPreferredOutputNumberOfChannels:self.preferredNumberOfOuputChannels error:nil];
+    [[AVAudioSession sharedInstance] setPreferredOutputNumberOfChannels:self.preferredNumberOfOutputChannels error:nil];
     /* Cast because if we have more channels than 2**31 we're having other issues. */
     self.numberOfInputChannels = (int)[[AVAudioSession sharedInstance] inputNumberOfChannels];
     self.sampleRate = [[AVAudioSession sharedInstance] sampleRate];
@@ -248,6 +258,7 @@ struct AQOutputState outputState;
 - (void) setupOutputState {
     outputState.mIsRunning = YES;
     outputState.bufferByteSize = self.preferredSamplesPerBuffer;
+    outputState.primed = NO;
 }
 
 - (void) allocateInputBuffers {
@@ -292,7 +303,7 @@ failed:
 
 - (void) primeOutputBuffers {
     for (int i = 0; i < kNumberBuffers; i += 1) {
-        HandleOutputBuffer(CFBridgingRetain(self), outputState.mQueue, outputState.mBuffers[i]);
+        HandleOutputBuffer((__bridge void *)(self), outputState.mQueue, outputState.mBuffers[i]);
     }
 }
 
@@ -328,7 +339,7 @@ static void HandleInputBuffer (
         return;
     }
     
-    SoundIOManager *this = (__bridge SoundIOManager *)aqData;
+    AudioIOManager *this = (__bridge AudioIOManager *)aqData;
     
     int lengthSamples = inBuffer->mAudioDataByteSize / 2;
     
@@ -344,21 +355,29 @@ static void HandleOutputBuffer (
                                 AudioQueueRef        inAQ,
                                 AudioQueueBufferRef  inBuffer
                                 ) {
-    // Get Audio from Swift code
+    AudioIOManager *this = (__bridge AudioIOManager *)aqData;
+    
     if (!outputState.mIsRunning) {
+        inBuffer->mAudioDataByteSize = 0;
         return;
     }
     
     
-    int numBytes = 0;
+    // Get audio to output from Swift Code
+    int numBytes = [this.source getSamplesWithBuffer:inBuffer];
     
     if (numBytes > 0) {
         inBuffer->mAudioDataByteSize = numBytes;
         AudioQueueEnqueueBuffer(outputState.mQueue, inBuffer, 0, NULL);
+        
+        // Stop the queue if there are no more samples to play
     } else {
         AudioQueueStop(outputState.mQueue, NO);
         outputState.mIsRunning = NO;
+        outputState.primed = NO;
     }
+    
+    
 }
 
 #pragma mark - Start and Stop
@@ -372,7 +391,7 @@ static void HandleOutputBuffer (
     
     FAIL_ON_ERR(AudioQueueNewOutput(&outputState.mDataFormat,
                                     HandleOutputBuffer,
-                                    &outputState,
+                                    CFBridgingRetain(self),
                                     CFRunLoopGetCurrent(),
                                     kCFRunLoopCommonModes,
                                     0,
@@ -386,6 +405,7 @@ static void HandleOutputBuffer (
                             );
     
     [self allocateOutputBuffers];
+    NSLog(@"Audio Out Ready");
     return YES;
     
 failed:
@@ -400,8 +420,11 @@ failed:
 }
 
 - (void) oneShotPlayAudioOut {
-    [self primeOutputBuffers];
-    
+    outputState.mIsRunning = YES;
+    if (!outputState.primed) {
+        [self primeOutputBuffers];
+        outputState.primed = YES;
+    }
     AudioQueueStart(outputState.mQueue, NULL);
 }
 
@@ -414,6 +437,7 @@ failed:
     FAIL_ON_ERR(AudioQueueDispose(outputState.mQueue, YES));
     outputState.mQueue = NULL;
     outputState.mIsRunning = NO;
+    outputState.primed = NO;
     return YES;
     
 failed:

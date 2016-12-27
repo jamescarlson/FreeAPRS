@@ -10,36 +10,29 @@ import Foundation
 
 class APRSListener {
     var dataStore : APRSPacketDataStore
-    var audioInput : SoundIOManager
+    var audioIOManager : AudioIOManagerProtocol
     let opQueue = OperationQueue()
     let skews : [Float]
     
-    init(withDataStore dataStore: APRSPacketDataStore) {
+    init(withDataStore dataStore: APRSPacketDataStore, audioIOManager: AudioIOManagerProtocol) {
         self.dataStore = dataStore
         opQueue.maxConcurrentOperationCount = 1
-        audioInput = SoundIOManager()
+        self.audioIOManager = audioIOManager
         self.skews = UserDefaults.standard.array(forKey: "spaceToneSkews") as? [Float] ?? [1.0]
     }
     
     init(withDataStore dataStore: APRSPacketDataStore,
-         skews: [Float]) {
+         skews: [Float],
+         audioIOManager: AudioIOManagerProtocol) {
         self.dataStore = dataStore
         opQueue.maxConcurrentOperationCount = 1
-        audioInput = SoundIOManager()
+        self.audioIOManager = audioIOManager
         self.skews = skews
     }
     
     func startListening() {
         
-        let preferredFs = 44100.0
-        audioInput.configureAudioIn(withPreferredSampleRate: Float(preferredFs),
-                                    preferredNumberOfChannels: 1,
-                                    singleChannelOutput: true,
-                                    channelIndexForSingleChannelOutput: 0,
-                                    preferredSamplesPerBuffer: 32768)
-        
-        
-        let fs = Int(audioInput.sampleRate)
+        let fs = Int(audioIOManager.sampleRate)
         
         let tbw = 2
         let prefilterLowLimit = 900
@@ -109,12 +102,12 @@ class APRSListener {
         
         let dispatcher = AudioDispatcher(operationQueue: opQueue, opFactory: factory)
         
-        audioInput.add(dispatcher)
+        audioIOManager.addAudioDispatcher(dispatcher)
         
-        audioInput.startAudioIn()
+        audioIOManager.startAudioIn()
     }
     
     func stopListening() {
-        audioInput.endAudioIn()
+        audioIOManager.endAudioIn()
     }
 }

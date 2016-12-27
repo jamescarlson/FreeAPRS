@@ -286,8 +286,8 @@ struct APRSPacket : Equatable {
     bit-stuffed on the wire format and instance variables. */
     private var allBytes : [UInt8]
     
-    /** On the wire format including stuffing such that there are no more
-    than 5 ones in a row transmitted, with the exception of a flag byte. */
+    /** On the wire format, sans flags, including stuffing such that there are
+    no more than 5 ones in a row transmitted. */
     private var stuffedBits : [Bool]
     
     /** In case the initializer is used that allows packets through which do
@@ -420,7 +420,6 @@ struct APRSPacket : Equatable {
         let littleEndianUnstuffedBytes = bytesToBoolsLittleEndian(input: allNonFlagBytes)
         
         stuffedBits = [Bool]()
-        stuffedBits.append(contentsOf: byteToBoolsLittleEndian(input: flag))
         
         for bit in littleEndianUnstuffedBytes { //All Bytes except flags
             stuffedBits.append(bit)
@@ -435,7 +434,6 @@ struct APRSPacket : Equatable {
             }
         }
         
-        stuffedBits.append(contentsOf: byteToBoolsLittleEndian(input: flag))
     }
     
     /* MARK: Initialize from raw bits */
@@ -448,9 +446,7 @@ struct APRSPacket : Equatable {
         
         /* ====== First need to unstuff the input bits. ====== */
         
-        self.stuffedBits = byteToBoolsLittleEndian(input: flag)
-        self.stuffedBits.append(contentsOf: fromStuffedBitArray)
-        self.stuffedBits.append(contentsOf: byteToBoolsLittleEndian(input: flag))
+        self.stuffedBits = fromStuffedBitArray
         
         var unstuffedBits = [Bool]()
         
@@ -581,9 +577,7 @@ struct APRSPacket : Equatable {
         
         /* ====== First need to unstuff the input bits. ====== */
         
-        self.stuffedBits = byteToBoolsLittleEndian(input: flag)
-        self.stuffedBits.append(contentsOf: fromStuffedBitArrayUnchecked)
-        self.stuffedBits.append(contentsOf: byteToBoolsLittleEndian(input: flag))
+        self.stuffedBits = fromStuffedBitArrayUnchecked
         
         var unstuffedBits = [Bool]()
         
@@ -715,11 +709,6 @@ struct APRSPacket : Equatable {
         return stuffedBits
     }
     
-    func getStuffedBitsWithoutFlags() -> [Bool] {
-        return Array(stuffedBits[8..<stuffedBits.count - 8])
-    }
-    
-    
     // MARK: Parse information field
     /** Parse the information field of the packet into an APRSData and
     set the `data` member of this packet to it. */
@@ -813,11 +802,12 @@ struct APRSPacket : Equatable {
                 /* Change uncertainty diameter to radius. */
                 positionResolution = positionResolution! / 2.0
                 
-                /* Change speed from km/h to m/s */
-                speed = speed! / 3.6
                 
                 if (course != nil && speed != nil) {
-                    data.location = CLLocation(coordinate: locationCoordinate, altitude: altitude, horizontalAccuracy: positionResolution!, verticalAccuracy: 0, timestamp: data.timestamp!)
+                    /* Change speed from km/h to m/s */
+                    speed = speed! / 3.6
+                    
+                    data.location = CLLocation(coordinate: locationCoordinate, altitude: altitude, horizontalAccuracy: positionResolution!, verticalAccuracy: 0, course: CLLocationDirection(course!), speed: speed!, timestamp: data.timestamp!)
                 } else {
                     data.location = CLLocation(coordinate: locationCoordinate, altitude: altitude, horizontalAccuracy: positionResolution!, verticalAccuracy: 0, timestamp: data.timestamp!)
                 }
@@ -841,59 +831,79 @@ struct APRSPacket : Equatable {
         }
         
         if let statusPtr = parsedPacket.status {
-            data.status = String(cString: statusPtr)
+            /* The status string in the fap library is not null terminated for
+                some reason so we have to give it special treatment here. */
+            
+            /* One longer to leave the null on the end */
+            var statusArray = [Int8](repeating: 0, count: Int(parsedPacket.status_len) + 1)
+            for index in 0..<statusArray.count - 1 {
+                statusArray[index] = statusPtr.advanced(by: index).pointee
+            }
+            
+            statusArray.withUnsafeBufferPointer({ptr in
+                data.status = String(cString: ptr.baseAddress!)
+            })
         }
         
-        parseMessage : if let messagingEnabledPtr = parsedPacket.messaging {
+        // Parse messaging portion of packet
+        
+        var doMessageParse = false
+        
+        if let messagingEnabledPtr = parsedPacket.messaging {
             if (messagingEnabledPtr.pointee != 0) {
-                
-                /* Make sure we have a destination and message body */
-                var message : String
-                if let messagePtr = parsedPacket.message {
-                    message = String(cString: messagePtr)
-                } else {
-                    break parseMessage
-                }
-                
-                var messageDest : String
-                if let destPtr = parsedPacket.destination {
-                    messageDest = String(cString: destPtr)
-                } else {
-                    break parseMessage
-                }
-                
-                var acked : Int? = nil
-                if let ackedPtr = parsedPacket.message_ack {
-                    let ackedString = String(cString: ackedPtr)
-                    
-                    acked = Int(ackedString)
-                }
-                
-                var rejected : Int? = nil
-                if let rejectedPtr = parsedPacket.message_nack {
-                    let rejectedString = String(cString: rejectedPtr)
-                    
-                    rejected = Int(rejectedString)
-                }
-                
-                var id : Int? = nil
-                if let idPtr = parsedPacket.message_id {
-                    let idString = String(cString: idPtr)
-                    
-                    id = Int(idString)
-                }
-                
-                var messageType : MessageType
-                if (rejected != nil) {
-                    messageType = .rej
-                } else if (acked != nil) {
-                    messageType = .ack
-                } else {
-                    messageType = .message
-                }
-                
-                data.message = APRSMessage(type: messageType, destination: messageDest, message: message, messageID: id, messageACK: acked, messageNACK: rejected)
+                doMessageParse = true
             }
+        }
+        
+        doMessageParse = doMessageParse || data.type == .message
+        
+        parseMessage : if (doMessageParse) {
+            /* Make sure we have a destination and message body */
+            var message : String
+            if let messagePtr = parsedPacket.message {
+                message = String(cString: messagePtr)
+            } else {
+                break parseMessage
+            }
+            
+            var messageDest : String
+            if let destPtr = parsedPacket.destination {
+                messageDest = String(cString: destPtr)
+            } else {
+                break parseMessage
+            }
+            
+            var acked : Int? = nil
+            if let ackedPtr = parsedPacket.message_ack {
+                let ackedString = String(cString: ackedPtr)
+                
+                acked = Int(ackedString)
+            }
+            
+            var rejected : Int? = nil
+            if let rejectedPtr = parsedPacket.message_nack {
+                let rejectedString = String(cString: rejectedPtr)
+                
+                rejected = Int(rejectedString)
+            }
+            
+            var id : Int? = nil
+            if let idPtr = parsedPacket.message_id {
+                let idString = String(cString: idPtr)
+                
+                id = Int(idString)
+            }
+            
+            var messageType : MessageType
+            if (rejected != nil) {
+                messageType = .rej
+            } else if (acked != nil) {
+                messageType = .ack
+            } else {
+                messageType = .message
+            }
+            
+            data.message = APRSMessage(type: messageType, destination: messageDest, message: message, messageID: id, messageACK: acked, messageNACK: rejected)
         }
         
         parseObjectItem : if (data.type == .object || data.type == .item) {
@@ -934,5 +944,13 @@ extension APRSPacket : CustomStringConvertible {
         }
         
         return "\(source)\(sourceSuffix)>\(destination)\(destSuffix)\(digipeaterString):\(information)"
+    }
+}
+
+extension APRSPacket : Hashable {
+    var hashValue : Int {
+        get {
+            return Int(self.FCS)
+        }
     }
 }

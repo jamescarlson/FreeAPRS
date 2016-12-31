@@ -66,6 +66,8 @@ class PLL {
     }
     
     func findZeroCrossings(data: [Float]) -> [Int32] {
+        /* Gratuitous vectorization that isn't actually needed (!)
+ 
         let coefficients: [Double] = [1.0, -1.0, 0.0, 0, 0]
         let biquadFilter: vDSP_biquad_Setup = vDSP_biquad_CreateSetup(
             coefficients, 1)!
@@ -110,6 +112,21 @@ class PLL {
         
         vDSP_biquad_DestroySetup(biquadFilter)
         return output
+ 
+        */
+        
+        var zeroCrossings = [Int32]()
+        
+        var prev = data[0]
+        
+        for index in 1..<data.count {
+            if (prev.sign != data[index].sign) {
+                zeroCrossings.append(Int32(index))
+            }
+            prev = data[index]
+        }
+        
+        return zeroCrossings
     }
     
 }

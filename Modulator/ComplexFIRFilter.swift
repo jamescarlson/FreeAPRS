@@ -7,8 +7,6 @@
 //
 
 
-/* TODO: clean up code style here */
-
 import Foundation
 import Accelerate
 

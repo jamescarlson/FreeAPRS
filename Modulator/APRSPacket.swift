@@ -68,13 +68,13 @@ func ==(lhs: APRSPacket, rhs: APRSPacket) -> Bool {
 
 
 /// Types of APRS Packets
-enum PacketType {
-    case location
-    case object
-    case item
-    case message
-    case status
-    case other
+enum PacketType : String {
+    case location = "Location"
+    case object = "Object"
+    case item = "Item"
+    case message = "Message"
+    case status = "Status"
+    case other = "Other"
 }
 
 /// Types of APRS Messages
@@ -143,14 +143,17 @@ struct APRSData {
 }
 
 
-/** Struct to store received and about-to-be-transmitted APRS Packets.
+/** Class to store received and about-to-be-transmitted APRS Packets.
+ 
+ Class instead of struct since these can get somewhat large with the array of
+ bools and all the contianed data.
  
  Does not know anything about the rest of the specification with regard
  to what is stored in the Information field. Has an optional APRSData
  member which can be filled in with .parsePacket() that contains parsed
  data from the Information field. 
  */
-struct APRSPacket : Equatable {
+class APRSPacket : Equatable {
     /* APRS Frames, for our use, are only Information frames. They look like
         this, each byte is sent LSB first, down along the packet, with bit
         stuffing. Bit stuffing is not shown here.
@@ -712,7 +715,7 @@ struct APRSPacket : Equatable {
     // MARK: Parse information field
     /** Parse the information field of the packet into an APRSData and
     set the `data` member of this packet to it. */
-    mutating func parsePacket() {
+    func parsePacket() {
         var data = APRSData()
         
         var ptrToParsedPacket : UnsafeMutablePointer<fap_packet_t>
@@ -858,19 +861,18 @@ struct APRSPacket : Equatable {
         doMessageParse = doMessageParse || data.type == .message
         
         parseMessage : if (doMessageParse) {
-            /* Make sure we have a destination and message body */
-            var message : String
-            if let messagePtr = parsedPacket.message {
-                message = String(cString: messagePtr)
-            } else {
-                break parseMessage
-            }
+            /* Make sure we have a destination */
             
             var messageDest : String
             if let destPtr = parsedPacket.destination {
                 messageDest = String(cString: destPtr)
             } else {
                 break parseMessage
+            }
+            
+            var message : String? = nil
+            if let messagePtr = parsedPacket.message {
+                message = String(cString: messagePtr)
             }
             
             var acked : Int? = nil

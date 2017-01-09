@@ -14,7 +14,7 @@ class ReceiveViewController: UIViewController {
     @IBOutlet weak var rmsLabel: UILabel!
     @IBOutlet weak var skewDecodesLabel: UILabel!
     let opQueue = OperationQueue()
-    let packetStore = APRSPacketDataStore()
+    let packetStore = APRSPacketDataStore.sharedInstance
     var listener : APRSListener?
     
     override func viewDidLoad() {

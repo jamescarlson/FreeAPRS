@@ -129,7 +129,7 @@ class ModemRoundtripTests: XCTestCase {
         
         packet2 = builder.build()!
         
-        dataStore = APRSPacketDataStore()
+        dataStore = APRSPacketDataStore.sharedInstance
         
         audioIOManager = MockAudioIOManager()
         

@@ -1,0 +1,6 @@
+framework module Pods_FreeAPRSTests {
+  umbrella header "Pods-FreeAPRSTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

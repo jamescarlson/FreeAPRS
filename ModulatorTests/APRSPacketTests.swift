@@ -109,11 +109,25 @@ class APRSPacketTests: XCTestCase {
         
         a.parsePacket()
         
+        var bBuilder = APRSPacketBuilder()
+        bBuilder.source = "KM6BLG"
+        bBuilder.information = ":ADDRESSEE:ack5"
+        var b = bBuilder.build()!
+        b.parsePacket()
+        
         XCTAssertEqual(a.data?.type, PacketType.message)
         XCTAssertEqual(a.data?.comment, nil)
         XCTAssertEqual(a.data?.message?.message, "@5555555555  James Carlson: ? THIS? IS__? AWESOME,,")
         XCTAssertEqual(a.data?.message?.destination, "SMSGTE")
         XCTAssertEqual(a.data?.message?.messageID, nil)
+        
+        XCTAssertEqual(b.data?.type, PacketType.message)
+        XCTAssertEqual(b.data?.message?.message, "ack5")
+        XCTAssertEqual(b.data?.message?.destination, "ADDRESSEE")
+        XCTAssertEqual(b.data?.message?.type, MessageType.ack)
+        XCTAssertEqual(b.data?.message?.messageACK, 5)
+        
+        
     }
     
     func testParsePacketLocation() {

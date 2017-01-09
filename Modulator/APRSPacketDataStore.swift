@@ -7,8 +7,18 @@
 //
 
 import Foundation
+import CoreLocation
 
 class APRSPacketDataStore: Sequence, Collection {
+    
+    private static var shared = APRSPacketDataStore()
+    
+    static var sharedInstance : APRSPacketDataStore {
+        get {
+            return shared
+        }
+    }
+    
     var backingArray = [APRSPacket]()
     private let accessQueue = DispatchQueue(label: "ThreadSafeArrayAccess", attributes: .concurrent)
     let notificationIdentifier = Notification.Name("NewAPRSPacket")
@@ -79,4 +89,5 @@ class APRSPacketDataStore: Sequence, Collection {
             self.backingArray.remove(at: at)
         }
     }
+    
 }

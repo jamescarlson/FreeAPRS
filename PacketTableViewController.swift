@@ -9,15 +9,26 @@
 import UIKit
 
 class PacketTableViewController: UITableViewController {
+  
+    let searchController = UISearchController(searchResultsController: nil)
 
+
+    var packetDataStore : APRSPacketDataStore!
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 100
+        packetDataStore = APRSPacketDataStore.sharedInstance
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        tableView.tableHeaderView = searchController.searchBar
     }
 
     override func didReceiveMemoryWarning() {
@@ -29,23 +40,44 @@ class PacketTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return 6 //packetDataStore.count
     }
 
-    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
+        let identifier : String
+        
+        switch indexPath.row {
+        case 0:
+            identifier = "locationPacketCell"
+            break
+        case 1:
+            identifier = "itemPacketCell"
+            break
+        case 2:
+            identifier = "objectPacketCell"
+            break
+        case 3:
+            identifier = "messagePacketCell"
+            break
+        case 4:
+            identifier = "statusPacketCell"
+            break
+        default:
+            identifier = "otherPacketCell"
+            break
+        }
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
+        
         // Configure the cell...
 
         return cell
     }
-    */
 
     /*
     // Override to support conditional editing of the table view.
@@ -91,5 +123,16 @@ class PacketTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    func filterContentForSearchText(searchText: String?) {
+        if searchText != nil {
+            // do something
+        }
+    }
+}
 
+extension PacketTableViewController : UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchText: searchController.searchBar.text)
+    }
 }

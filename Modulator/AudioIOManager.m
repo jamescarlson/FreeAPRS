@@ -303,7 +303,11 @@ failed:
 
 - (void) primeOutputBuffers {
     for (int i = 0; i < kNumberBuffers; i += 1) {
-        HandleOutputBuffer((__bridge void *)(self), outputState.mQueue, outputState.mBuffers[i]);
+        if (outputState.mIsRunning) {
+            NSLog(@"Calling callback to prime buffers, %d", i);
+            HandleOutputBuffer((__bridge void *)(self), outputState.mQueue, outputState.mBuffers[i]);
+            
+        }
     }
 }
 
@@ -357,31 +361,35 @@ static void HandleOutputBuffer (
                                 ) {
     AudioIOManager *this = (__bridge AudioIOManager *)aqData;
     
-    if (!outputState.mIsRunning) {
-        inBuffer->mAudioDataByteSize = 0;
-        return;
-    }
-    
-    
     // Get audio to output from Swift Code
-    int numBytes = [this.source getSamplesWithBuffer:inBuffer];
     
-    if (numBytes > 0) {
+    if (outputState.mIsRunning) {
+        int numBytes = [this.source getSamplesWithBuffer:inBuffer];
+        
+        if (numBytes <= 0) { outputState.mIsRunning = NO; }
+        
+        
         inBuffer->mAudioDataByteSize = numBytes;
         AudioQueueEnqueueBuffer(outputState.mQueue, inBuffer, 0, NULL);
         
-        // Stop the queue if there are no more samples to play
-    } else {
-        AudioQueueStop(outputState.mQueue, NO);
-        outputState.mIsRunning = NO;
-        outputState.primed = NO;
+        NSLog(@"Enqueued buffer with %d bytes", numBytes);
+        return;
     }
-    
+    // Stop the queue if there are no more samples to play
+    outputState.mIsRunning = NO;
+    if (outputState.primed) {
+        AudioQueueStop(outputState.mQueue, NO);
+        CFBridgingRelease(aqData);
+        
+        [this disarmAudioOut];
+    }
     
 }
 
 #pragma mark - Start and Stop
 
+    /** After configuration, arm the audio output. Allocates buffers and sets up
+     output queues. */
 - (BOOL) armAudioOut {
     [self setupOutputState];
     
@@ -419,22 +427,32 @@ failed:
     return NO;
 }
 
-- (void) oneShotPlayAudioOut {
+- (BOOL) oneShotPlayAudioOut {
+    if (outputState.mQueue != NULL) {
+        NSLog(@"Stop mashing this function!");
+        return NO;
+    }
+    
+    [self armAudioOut];
+    
     outputState.mIsRunning = YES;
     if (!outputState.primed) {
         [self primeOutputBuffers];
         outputState.primed = YES;
     }
     AudioQueueStart(outputState.mQueue, NULL);
+    return YES;
 }
 
+    /** Once Audio has finished playing (AudioSource supplies no more samples),
+     disarm the audio output. Deallocates buffers and shuts down output Queues. */
 - (BOOL) disarmAudioOut {
     NSLog(@"Audio output disarmed");
     NSAssert(outputState.mQueue != NULL, @"Queue is not setup");
     
     OSStatus status;
     
-    FAIL_ON_ERR(AudioQueueDispose(outputState.mQueue, YES));
+    FAIL_ON_ERR(AudioQueueDispose(outputState.mQueue, NO));
     outputState.mQueue = NULL;
     outputState.mIsRunning = NO;
     outputState.primed = NO;

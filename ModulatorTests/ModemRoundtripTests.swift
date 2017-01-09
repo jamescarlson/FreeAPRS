@@ -8,6 +8,7 @@
 
 import XCTest
 @testable import FreeAPRS
+import Swinject
 
 class ModemRoundtripTests: XCTestCase {
     
@@ -17,11 +18,10 @@ class ModemRoundtripTests: XCTestCase {
     var dataStore : APRSPacketDataStore! = nil
     var audioIOManager : MockAudioIOManager! = nil
     
+    var container : Container = Container()
     class MockAudioIOManager : AudioIOManagerProtocol {
         
         var samplesToPass : [Float]? = nil
-        
-        static var shared : MockAudioIOManager? = nil
         
         var dispatcher : AudioDispatcher! = nil
         var source : AudioSource! = nil
@@ -95,29 +95,67 @@ class ModemRoundtripTests: XCTestCase {
         func pass(samples: [Float]) {
             assert(dispatcher != nil)
             dispatcher.process(monoSamples: samples)
+            NSLog("Passing samples starting with: \(samples[0..<4])")
         }
         
-        static func sharedInstance() -> AudioIOManagerProtocol! {
-            if (shared == nil) {
-                shared = MockAudioIOManager()
-            }
-            
-            return shared
-            
-        }
     }
     
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
         
-        UserDefaults.standard.register(defaults: [
+        
+        container.register(UserDefaults.self) { _ in
+            let defaultSetings : [String: Any] = [
             "digipeaterFilterOut" : true,
             "spaceToneSkews" : [Float]([0.25, 0.5, 0.707, 0.9, 1.0, 1.11, 1.414, 2, 4]),
             "preferredFs" : 48000,
             "preFlagTime" : 0.2,
             "postFlagTime" : 0.2
-            ])
+            ]
+        
+            UserDefaults.standard.register(defaults: defaultSetings)
+            return UserDefaults.standard
+        }.inObjectScope(.container)
+        
+        container.register(AudioIOManagerProtocol.self) { r in
+            let audioIOManager = MockAudioIOManager()
+            
+            let ud = r.resolve(UserDefaults.self)
+            
+            audioIOManager.configureAudioInOut(withPreferredSampleRate: Float(ud!.integer(forKey: "preferredFs")),
+                                    preferredNumberOfInputChannels: 1,
+                                    preferredNumberOfOutputChannels: 1,
+                                    singleChannelInput: true,
+                                    channelIndexForSingleChannelInput: 0,
+                                    preferredSamplesPerBuffer: 32768)
+            return audioIOManager }
+            .inObjectScope(.container)
+        
+        // Modem Classes
+        container.register(AudioDispatcher.self) { r in
+            AudioDispatcher(operationQueue: r.resolve(OperationQueue.self)!, opFactory: r.resolve(AudioProcessOperationFactory.self)!)
+        }
+        
+        container.register(OperationQueue.self) { _ in
+            OperationQueue() }
+        
+        container.register(AudioSource.self) { r in
+            AudioSource(audioIOManager: r.resolve(AudioIOManagerProtocol.self)!)
+        }
+        
+        container.register(APRSListener.self) { r in
+            APRSListener(withDataStore: r.resolve(APRSPacketDataStore.self)!, audioIOManager: r.resolve(AudioIOManagerProtocol.self)!, userDefaults: r.resolve(UserDefaults.self)!)
+        }
+        
+        container.register(APRSEncoder.self) { r in
+            APRSEncoder(sampleRate: r.resolve(AudioIOManagerProtocol.self)!.sampleRate, userDefaults: r.resolve(UserDefaults.self)!)
+        }
+        
+        container.register(APRSPacketDataStore.self) { r in
+            APRSPacketDataStore()
+        }.inObjectScope(.container)
+        
         
         let builder = APRSPacketBuilder()
         builder.source = "CALL"
@@ -129,9 +167,9 @@ class ModemRoundtripTests: XCTestCase {
         
         packet2 = builder.build()!
         
-        dataStore = APRSPacketDataStore.sharedInstance
+        dataStore = container.resolve(APRSPacketDataStore.self)
         
-        audioIOManager = MockAudioIOManager()
+        audioIOManager = container.resolve(AudioIOManagerProtocol.self)! as! MockAudioIOManager
         
         audioIOManager.configureAudioInOut(withPreferredSampleRate: 48000,
                                            preferredNumberOfInputChannels: 1,
@@ -140,7 +178,7 @@ class ModemRoundtripTests: XCTestCase {
                                            channelIndexForSingleChannelInput: 0,
                                            preferredSamplesPerBuffer: 32768)
         
-        listener = APRSListener(withDataStore: dataStore, skews: [1.0], audioIOManager: audioIOManager)
+        listener = container.resolve(APRSListener.self)!
         
         listener.startListening()
         
@@ -152,7 +190,7 @@ class ModemRoundtripTests: XCTestCase {
     }
     
     func testRoundTripSimple() {
-        let encoder = APRSEncoder(sampleRate: audioIOManager.sampleRate)
+        let encoder = container.resolve(APRSEncoder.self)!
         
         let packet1Audio = encoder.encode(packet: packet1)
         let packet2Audio = encoder.encode(packet: packet2)
@@ -168,13 +206,6 @@ class ModemRoundtripTests: XCTestCase {
         usleep(500000)
         XCTAssertEqual(packet2, dataStore[1])
         
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
     }
     
 }

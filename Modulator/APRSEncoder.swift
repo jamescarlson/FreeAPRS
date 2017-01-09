@@ -13,6 +13,7 @@ import UIKit
  audio output. */
 class APRSEncoder {
     
+    let userDefaults : UserDefaults
     /// Duration of a flag octet
     static let flagTime : Float = 8.0 / 1200.0
     
@@ -33,12 +34,14 @@ class APRSEncoder {
     
     var nrziEncoder = NRZIEncoder()
     
-    init(sampleRate: Float, numPacketsToRemember: Int) {
+    init(sampleRate: Float, numPacketsToRemember: Int, userDefaults: UserDefaults) {
         self.sampleRate = sampleRate
         rememberedPackets = CircularBufferQueue<APRSPacket>(withCapacity: numPacketsToRemember)
+        self.userDefaults = userDefaults
     }
     
-    init(sampleRate: Float) {
+    init(sampleRate: Float, userDefaults: UserDefaults) {
+        self.userDefaults = userDefaults
         self.sampleRate = sampleRate
         rememberedPackets = CircularBufferQueue<APRSPacket>(withCapacity: self.numPacketsToRemember)
     }

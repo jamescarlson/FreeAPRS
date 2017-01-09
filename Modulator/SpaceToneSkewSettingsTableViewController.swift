@@ -10,6 +10,8 @@ import UIKit
 
 class SpaceToneSkewSettingsTableViewController: UITableViewController {
     
+    var userDefaults : UserDefaults!
+    
     @IBAction func spaceToneSkewEdited(_ sender: UITextField) {
         guard let text = sender.text else {
             return
@@ -22,9 +24,9 @@ class SpaceToneSkewSettingsTableViewController: UITableViewController {
         
         let index = sender.tag
         
-        if var previousSpaceToneSkews = UserDefaults.standard.value(forKey: "spaceToneSkews") as? [Float] {
+        if var previousSpaceToneSkews = userDefaults.value(forKey: "spaceToneSkews") as? [Float] {
             previousSpaceToneSkews[index] = skewValue
-            UserDefaults.standard.setValue(previousSpaceToneSkews, forKey: "spaceToneSkews")
+            userDefaults.setValue(previousSpaceToneSkews, forKey: "spaceToneSkews")
         }
         
         let thisIndexPath = IndexPath(row: index, section: 0)
@@ -41,7 +43,7 @@ class SpaceToneSkewSettingsTableViewController: UITableViewController {
         if var previousSpaceToneSkews = UserDefaults.standard.value(forKey: "spaceToneSkews") as? [Float] {
             previousSpaceToneSkews.append(1.0)
             
-            UserDefaults.standard.setValue(previousSpaceToneSkews, forKey: "spaceToneSkews")
+            userDefaults.setValue(previousSpaceToneSkews, forKey: "spaceToneSkews")
             
             self.tableView.reloadData()
         }
@@ -77,7 +79,7 @@ class SpaceToneSkewSettingsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        guard let spaceToneSkews = UserDefaults.standard.array(forKey: "spaceToneSkews") as? [Float] else {
+        guard let spaceToneSkews = userDefaults.array(forKey: "spaceToneSkews") as? [Float] else {
             NSLog("Could not retrieve space tone skews in numberOfRowsPerSection")
             return 0
         }
@@ -104,7 +106,7 @@ class SpaceToneSkewSettingsTableViewController: UITableViewController {
             return cell
         }
         
-        guard let spaceToneSkews = UserDefaults.standard.value(forKey: "spaceToneSkews") as? [Float] else {
+        guard let spaceToneSkews = userDefaults.value(forKey: "spaceToneSkews") as? [Float] else {
             NSLog("Failed to get user defaults for tone skews")
             return cell
         }
@@ -124,14 +126,14 @@ class SpaceToneSkewSettingsTableViewController: UITableViewController {
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         
-        var spaceToneSkews = UserDefaults.standard.value(forKey: "spaceToneSkews") as! [Float]
+        var spaceToneSkews = userDefaults.value(forKey: "spaceToneSkews") as! [Float]
         
         if editingStyle == .delete {
             // Delete the row from the data source
             
             spaceToneSkews.remove(at: indexPath.row)
             
-            UserDefaults.standard.set(spaceToneSkews, forKey: "spaceToneSkews")
+            userDefaults.set(spaceToneSkews, forKey: "spaceToneSkews")
             
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
@@ -144,13 +146,13 @@ class SpaceToneSkewSettingsTableViewController: UITableViewController {
     
     // Override to support rearranging the table view.
     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-        if var previousSpaceToneSkews = UserDefaults.standard.value(forKey: "spaceToneSkews") as? [Float] {
+        if var previousSpaceToneSkews = userDefaults.value(forKey: "spaceToneSkews") as? [Float] {
             
             let moveValue = previousSpaceToneSkews[fromIndexPath.row]
             previousSpaceToneSkews.remove(at: fromIndexPath.row)
             previousSpaceToneSkews.insert(moveValue, at: to.row)
             
-            UserDefaults.standard.setValue(previousSpaceToneSkews, forKey: "spaceToneSkews")
+            userDefaults.setValue(previousSpaceToneSkews, forKey: "spaceToneSkews")
         }
 
     }

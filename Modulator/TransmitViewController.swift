@@ -8,24 +8,29 @@
 
 import UIKit
 
-class TransmitViewController: UIViewController {
-    let audioIOManager = AudioIOManager.sharedInstance()!
-    let audioSource = AudioSource(audioIOManager: AudioIOManager.sharedInstance())
-    var encoder : APRSEncoder? = nil
+class TransmitViewController: UIViewController, UITextFieldDelegate {
+    var audioIOManager : AudioIOManagerProtocol!
+    var audioSource : AudioSource!
+    var encoder : APRSEncoder!
     
     @IBOutlet weak var callsignTextField: UITextField!
     @IBOutlet weak var informationTextField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        encoder = APRSEncoder(sampleRate: audioIOManager.sampleRate)
-        audioIOManager.armAudioOut()
-        // Do any additional setup after loading the view.
+        
+        self.callsignTextField.delegate = self
+        self.informationTextField.delegate = self
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return false
     }
     
 

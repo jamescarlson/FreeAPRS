@@ -22,6 +22,7 @@ class APRSSkewedDecoder {
         self.pll = pll
         self.nrziDecoder = nrziDecoder
         self.aprsPacketFinder = aprsPacketFinder
+        NSLog("Initialilzed Skewed Decoder with Skew: \(spaceToneSkew)")
     }
     
     func decode(absMark: [Float], absSpace: [Float]) -> [APRSPacket] {

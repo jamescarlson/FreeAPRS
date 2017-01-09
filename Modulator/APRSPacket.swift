@@ -718,6 +718,8 @@ class APRSPacket : Equatable {
     func parsePacket() {
         var data = APRSData()
         
+        data.timestamp = Date(timeIntervalSinceNow: 0)
+        
         var ptrToParsedPacket : UnsafeMutablePointer<fap_packet_t>
         
         var inputString = String(describing: self)
@@ -739,28 +741,29 @@ class APRSPacket : Equatable {
             })
             
             NSLog("[parsePacket] Couldn't parse packet: \(inputString), error was: \(stringReason)")
-        }
-        
-        /* Determine the type of packet that we're dealing with. */
-        guard let type = parsedPacket.type?.pointee else {
-            NSLog("[parsePacket] Nil packet type for packet: \(inputString), returing.")
+            
+            // At least give the default timestamp
+            self.data = data
             return
         }
         
+        /* Determine the type of packet that we're dealing with. */
+        let type = parsedPacket.type?.pointee
+            
         switch type {
-        case fapLOCATION, fapMICE, fapNMEA:
+        case .some(fapLOCATION), .some(fapMICE), .some(fapNMEA):
             data.type = .location
             break
-        case fapOBJECT:
+        case .some(fapOBJECT):
             data.type = .object
             break
-        case fapITEM:
+        case .some(fapITEM):
             data.type = .item
             break
-        case fapMESSAGE:
+        case .some(fapMESSAGE):
             data.type = .message
             break
-        case fapSTATUS:
+        case .some(fapSTATUS):
             data.type = .status
             break
         default:
@@ -774,8 +777,6 @@ class APRSPacket : Equatable {
         
         if (packetTimestamp != nil) {
             data.timestamp = Date(timeIntervalSince1970: Double(packetTimestamp!))
-        } else {
-            data.timestamp = Date(timeIntervalSinceNow: 0)
         }
         
         /* Add location related fields to packet */

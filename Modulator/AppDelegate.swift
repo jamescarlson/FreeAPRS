@@ -11,30 +11,15 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    var audioIOManager : AudioIOManagerProtocol = AudioIOManager.sharedInstance()
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        let defaultSetings : [String: Any] = [
-            "digipeaterFilterOut" : true,
-            "spaceToneSkews" : [Float]([0.25, 0.5, 0.707, 0.9, 1.0, 1.11, 1.414, 2, 4]),
-            "preferredFs" : 48000,
-            "preFlagTime" : 0.2,
-            "postFlagTime" : 0.2
-            ]
         
-        UserDefaults.standard.register(defaults: defaultSetings)
         
         fap_init()
         
-        audioIOManager.configureAudioInOut(withPreferredSampleRate: Float(UserDefaults.standard.integer(forKey: "preferredFs")),
-                                    preferredNumberOfInputChannels: 1,
-                                    preferredNumberOfOutputChannels: 1,
-                                    singleChannelInput: true,
-                                    channelIndexForSingleChannelInput: 0,
-                                    preferredSamplesPerBuffer: 32768)
         
         return true
     }

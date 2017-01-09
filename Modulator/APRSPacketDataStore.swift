@@ -8,21 +8,25 @@
 
 import Foundation
 import CoreLocation
+import ReactiveSwift
+import Result
+
+enum PacketUpdate {
+    case new
+    case removed
+    case changed
+}
 
 class APRSPacketDataStore: Sequence, Collection {
     
-    private static var shared = APRSPacketDataStore()
-    
-    static var sharedInstance : APRSPacketDataStore {
-        get {
-            return shared
-        }
-    }
+    var (packetUpdates, packetUpdateInput) = Signal<PacketUpdate, NoError>.pipe()
     
     var backingArray = [APRSPacket]()
     private let accessQueue = DispatchQueue(label: "ThreadSafeArrayAccess", attributes: .concurrent)
-    let notificationIdentifier = Notification.Name("NewAPRSPacket")
 
+    init() {
+        packetUpdates = packetUpdates.observe(on: UIScheduler())
+    }
     
     var startIndex : Int { return 0 }
     var endIndex : Int { return backingArray.count - 1 }
@@ -52,9 +56,7 @@ class APRSPacketDataStore: Sequence, Collection {
     func append(packet: APRSPacket) {
         self.accessQueue.async(flags:.barrier) {
             self.backingArray.append(packet)
-            DispatchQueue.main.async {
-                NotificationCenter.default.post(name: self.notificationIdentifier, object: nil)
-            }
+            self.packetUpdateInput.send(value: .new)
         }
     }
     
@@ -87,6 +89,7 @@ class APRSPacketDataStore: Sequence, Collection {
         self.accessQueue.async(flags:.barrier) {
             assert(at >= 0 && at < self.backingArray.count)
             self.backingArray.remove(at: at)
+            self.packetUpdateInput.send(value: .removed)
         }
     }
     

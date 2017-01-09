@@ -7,6 +7,23 @@
 //
 
 import Foundation
+import CoreLocation
+
+extension CLLocationCoordinate2D {
+    func humanReadableString(withDigitsOfAccuracy digits: Int) -> String {
+        let lat = String(format: "%.\(digits)f", self.latitude)
+        let long = String(format: "%.\(digits)f", self.longitude)
+        
+        return lat + ", " + long
+    }
+}
+
+let formatter : DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.timeZone = TimeZone.autoupdatingCurrent
+    formatter.dateFormat = "MM/dd HH:mm:ss"
+    return formatter
+}()
 
 class PacketCellViewModel {
     let packet : APRSPacket
@@ -29,7 +46,12 @@ class PacketCellViewModel {
     }()
     
     lazy var timestamp: String = {
-        return String(describing: self.packet.data?.timestamp)
+        let timestamp = self.packet.data?.timestamp
+        if timestamp != nil {
+            return formatter.string(from: timestamp!)
+        } else {
+            return "Invalid"
+        }
     }()
     
     lazy var type: String = {
@@ -40,11 +62,16 @@ class PacketCellViewModel {
 class LocationCellViewModel : PacketCellViewModel {
     
     lazy var symbol: String = {
-        return self.packet.data?.symbol?.rawValue ?? ""
+        return self.packet.data?.symbol?.rawValue ?? "[No Symbol]"
     }()
     
     lazy var location: String = {
-        return String(describing: self.packet.data?.location)
+        let coordinate = self.packet.data?.location?.coordinate
+        if coordinate != nil {
+            return coordinate!.humanReadableString(withDigitsOfAccuracy: 4)
+        } else {
+            return "Invalid"
+        }
     }()
     
     lazy var comment: String = {
@@ -78,7 +105,12 @@ class MessageCellViewModel : PacketCellViewModel {
 
 class ObjectCellViewModel : PacketCellViewModel {
     lazy var location: String = {
-        return String(describing: self.packet.data?.location)
+        let coordinate = self.packet.data?.location?.coordinate
+        if coordinate != nil {
+            return coordinate!.humanReadableString(withDigitsOfAccuracy: 4)
+        } else {
+            return "Invalid"
+        }
     }()
     
     lazy var alive: String = {

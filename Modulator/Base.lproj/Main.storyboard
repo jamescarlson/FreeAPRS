@@ -80,17 +80,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Callsign" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bU4-Iw-KZA">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Callsign" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="bU4-Iw-KZA">
                                 <rect key="frame" x="16" y="20" width="229" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Information Field" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="8Ar-fN-5UF">
                                 <rect key="frame" x="16" y="58" width="343" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pIL-cO-Zne">
                                 <rect key="frame" x="299" y="20" width="60" height="30"/>
@@ -311,10 +311,10 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="65"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XVy-Vl-pKx" id="9eE-pP-18I">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="64.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="65"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Source" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XLO-AK-NSw" userLabel="Source">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Source" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XLO-AK-NSw" userLabel="Source">
                                             <rect key="frame" x="8" y="8" width="46" height="17"/>
                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="14"/>
                                             <nil key="textColor"/>
@@ -338,8 +338,8 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i26-C5-jHf">
-                                            <rect key="frame" x="305" y="24" width="62" height="19.5"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i26-C5-jHf">
+                                            <rect key="frame" x="305" y="24" width="62" height="20"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -350,7 +350,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Comment" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9qh-JP-U81">
-                                            <rect key="frame" x="8" y="43" width="71" height="19.5"/>
+                                            <rect key="frame" x="8" y="43" width="71" height="20"/>
                                             <fontDescription key="fontDescription" type="italicSystem" pointSize="16"/>
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
@@ -374,6 +374,7 @@
                                         <constraint firstItem="i7o-mF-Fz4" firstAttribute="top" secondItem="9eE-pP-18I" secondAttribute="topMargin" id="An8-cS-jeh"/>
                                         <constraint firstItem="i26-C5-jHf" firstAttribute="trailing" secondItem="9eE-pP-18I" secondAttribute="trailingMargin" id="F08-9d-hPL"/>
                                         <constraint firstItem="Sbw-CH-TAr" firstAttribute="leading" secondItem="H3D-vi-nBG" secondAttribute="trailing" constant="8" id="G0T-ZG-L1v"/>
+                                        <constraint firstItem="i26-C5-jHf" firstAttribute="top" relation="greaterThanOrEqual" secondItem="xrt-sb-IU4" secondAttribute="bottom" constant="4" id="ITf-f6-GFM"/>
                                         <constraint firstItem="xrt-sb-IU4" firstAttribute="top" secondItem="9eE-pP-18I" secondAttribute="topMargin" id="IYi-9h-tv2"/>
                                         <constraint firstItem="OJg-3I-WGO" firstAttribute="top" secondItem="9eE-pP-18I" secondAttribute="topMargin" id="PKL-0K-4g1"/>
                                         <constraint firstItem="i7o-mF-Fz4" firstAttribute="leading" secondItem="Sbw-CH-TAr" secondAttribute="trailing" constant="8" id="Toe-h8-tAS"/>
@@ -384,9 +385,11 @@
                                         <constraint firstItem="XLO-AK-NSw" firstAttribute="top" secondItem="9eE-pP-18I" secondAttribute="topMargin" id="g53-eJ-HPW"/>
                                         <constraint firstItem="Ka8-YC-3MF" firstAttribute="leading" secondItem="9eE-pP-18I" secondAttribute="leadingMargin" constant="8" id="hkx-gn-3LD"/>
                                         <constraint firstItem="Sbw-CH-TAr" firstAttribute="top" secondItem="9eE-pP-18I" secondAttribute="topMargin" id="hqp-dS-ryT"/>
-                                        <constraint firstItem="i26-C5-jHf" firstAttribute="baseline" secondItem="Ka8-YC-3MF" secondAttribute="baseline" id="hz3-DZ-AFt"/>
+                                        <constraint firstItem="i26-C5-jHf" firstAttribute="baseline" relation="greaterThanOrEqual" secondItem="Ka8-YC-3MF" secondAttribute="baseline" id="hz3-DZ-AFt"/>
                                         <constraint firstItem="9qh-JP-U81" firstAttribute="leading" secondItem="9eE-pP-18I" secondAttribute="leadingMargin" constant="8" id="kCR-Ii-rc4"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="9qh-JP-U81" secondAttribute="bottom" id="noI-ht-j4p"/>
+                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="9qh-JP-U81" secondAttribute="trailing" id="us1-gY-yq7"/>
+                                        <constraint firstItem="XLO-AK-NSw" firstAttribute="baseline" secondItem="H3D-vi-nBG" secondAttribute="baseline" id="xNG-cw-k8x"/>
                                         <constraint firstItem="9qh-JP-U81" firstAttribute="top" secondItem="Ka8-YC-3MF" secondAttribute="bottom" constant="4" id="yNv-ob-PEw"/>
                                     </constraints>
                                 </tableViewCellContentView>
@@ -464,6 +467,7 @@
                                         <constraint firstItem="0de-2G-yeE" firstAttribute="top" secondItem="fRZ-3T-mYs" secondAttribute="topMargin" id="rmT-xJ-ba9"/>
                                         <constraint firstItem="evr-0I-Moz" firstAttribute="top" secondItem="fRZ-3T-mYs" secondAttribute="topMargin" id="u0E-8g-Bdg"/>
                                         <constraint firstItem="evr-0I-Moz" firstAttribute="leading" secondItem="hnG-0c-ReF" secondAttribute="trailing" constant="8" id="vEg-1Q-b33"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="fHv-PX-vTu" secondAttribute="trailing" id="xpV-0M-cGr"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
@@ -504,7 +508,7 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Information" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ngR-kF-gl6">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Information" textAlignment="natural" lineBreakMode="characterWrap" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ngR-kF-gl6">
                                             <rect key="frame" x="8" y="25" width="91" height="17"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <nil key="highlightedColor"/>
@@ -538,6 +542,7 @@
                                         <constraint firstItem="RNs-Cs-Fs4" firstAttribute="leading" secondItem="gHw-QT-pQp" secondAttribute="leadingMargin" id="mcF-8T-k3K"/>
                                         <constraint firstItem="gi6-z2-xXD" firstAttribute="top" secondItem="gHw-QT-pQp" secondAttribute="topMargin" id="pYP-hA-w7S"/>
                                         <constraint firstItem="ngR-kF-gl6" firstAttribute="top" secondItem="RNs-Cs-Fs4" secondAttribute="bottom" constant="4" id="qoV-gE-0cL"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="ngR-kF-gl6" secondAttribute="trailing" id="wnC-vG-pSb"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
@@ -811,6 +816,7 @@
                                         <constraint firstItem="c0L-zu-wVw" firstAttribute="leading" secondItem="8nh-gl-olk" secondAttribute="trailing" constant="8" id="aYs-du-Xc7"/>
                                         <constraint firstItem="7hL-Mv-Uuw" firstAttribute="leading" secondItem="SXu-TU-ebH" secondAttribute="trailing" constant="8" id="anl-oK-lv3"/>
                                         <constraint firstItem="8nh-gl-olk" firstAttribute="top" secondItem="X9h-Is-2i3" secondAttribute="topMargin" id="dNg-ch-dYc"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="eXq-zs-50q" secondAttribute="trailing" id="dfd-or-dsJ"/>
                                         <constraint firstItem="SXu-TU-ebH" firstAttribute="leading" secondItem="X9h-Is-2i3" secondAttribute="leadingMargin" constant="8" id="ePI-vK-4t9" userLabel="ADDRESSEE:.leading = leadingMargin"/>
                                         <constraint firstItem="iaR-B8-Gmb" firstAttribute="leading" secondItem="Md9-T8-D2d" secondAttribute="trailing" constant="8" id="fPT-zM-NHn"/>
                                         <constraint firstItem="Md9-T8-D2d" firstAttribute="top" secondItem="X9h-Is-2i3" secondAttribute="topMargin" id="goI-LU-bnp"/>

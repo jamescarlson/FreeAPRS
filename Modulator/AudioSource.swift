@@ -44,7 +44,10 @@ import Accelerate
         playingIndex = 0
         samplesToPlay = monoSamples
         vDSP_vsmul(&samplesToPlay!, 1, &floatToIntScaleFactor, &samplesToPlay!, 1, vDSP_Length(samplesToPlay!.count))
-        audioIOManager.oneShotPlayAudioOut()
+        if (!audioIOManager.oneShotPlayAudioOut()) {
+            samplesToPlay = nil
+            playingIndex = nil
+        }
     }
     
     /** AudioIOManager will call this to fill up a buffer with output samples

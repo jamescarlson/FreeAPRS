@@ -64,19 +64,11 @@
 /** End audio input. */
 - (BOOL) endAudioIn;
 
-/** After configuration, arm the audio output. Allocates buffers and sets up
- output queues. */
-- (BOOL) armAudioOut;
-
-/** Once Audio has finished playing (AudioSource supplies no more samples),
- disarm the audio output. Deallocates buffers and shuts down output Queues. */
-- (BOOL) disarmAudioOut;
-
 /** After configuration and adding an AudioSource, prime the output buffers and
  initiate playback/audio output for as long as the AudioSource supplies more
  than 0 samples. Stops the Audio Queue once AudioSource supplies no more 
  samples. */
-- (void) oneShotPlayAudioOut;
+- (BOOL) oneShotPlayAudioOut;
 
 /** Get the shared instance of the object. */
 + (id<AudioIOManagerProtocol>) sharedInstance;

@@ -14,11 +14,12 @@ class APRSListener {
     let opQueue = OperationQueue()
     let skews : [Float]
     
-    init(withDataStore dataStore: APRSPacketDataStore, audioIOManager: AudioIOManagerProtocol) {
+    init(withDataStore dataStore: APRSPacketDataStore, audioIOManager: AudioIOManagerProtocol,
+         userDefaults: UserDefaults) {
         self.dataStore = dataStore
         opQueue.maxConcurrentOperationCount = 1
         self.audioIOManager = audioIOManager
-        self.skews = UserDefaults.standard.array(forKey: "spaceToneSkews") as? [Float] ?? [1.0]
+        self.skews = userDefaults.array(forKey: "spaceToneSkews") as? [Float] ?? [1.0]
     }
     
     init(withDataStore dataStore: APRSPacketDataStore,
@@ -33,6 +34,7 @@ class APRSListener {
     func startListening() {
         
         let fs = Int(audioIOManager.sampleRate)
+        NSLog("Listener FS: \(fs)")
         
         let tbw = 2
         let prefilterLowLimit = 900
@@ -109,5 +111,9 @@ class APRSListener {
     
     func stopListening() {
         audioIOManager.endAudioIn()
+    }
+    
+    deinit {
+        self.stopListening()
     }
 }
